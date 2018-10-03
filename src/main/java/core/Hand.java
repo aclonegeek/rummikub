@@ -8,32 +8,32 @@ public class Hand {
     ArrayList<Tile> hand;
     
     public Hand(){
-        hand = new ArrayList<Tile>();
+        this.hand = new ArrayList<Tile>();
     }
     
     public void add(Tile tile) {
-        hand.add(tile);
-        sort();
+        this.hand.add(tile);
+        this.sort();
     } 
     
     public Tile remove(int index) {
-        if (hand.size() == 0 || index < 0 || index > hand.size()) {
+        if (this.hand.size() == 0 || index < 0 || index > this.hand.size()) {
             return null;
         }
         
-        return hand.remove(index);
+        return this.hand.remove(index);
     }
 
     public int getSize() {
-        return hand.size();
+        return this.hand.size();
     }
     
     public String toString() {
         
         String returnString = "[";
-        for (int i = 0; i < hand.size(); i++) {
-            returnString += hand.get(i).toString();
-            if (i < hand.size() - 1) {
+        for (int i = 0; i < this.hand.size(); i++) {
+            returnString += this.hand.get(i).toString();
+            if (i < this.hand.size() - 1) {
                 returnString += ", ";
             }
         }
@@ -49,15 +49,15 @@ public class Hand {
         order.put('R', 1); order.put('G', 2); order.put('B', 3); order.put('O', 4);
         
         // Sort by colour
-        int n = hand.size();
+        int n = this.hand.size();
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
-                int colourVal = order.get(hand.get(j).getColour());
+                int colourVal = order.get(this.hand.get(j).getColour());
                 
-                if (colourVal > order.get(hand.get(j+1).getColour())) {
-                    Tile temp = hand.get(j);
-                    hand.set(j, hand.get(j+1));
-                    hand.set(j + 1, temp);
+                if (colourVal > order.get(this.hand.get(j + 1).getColour())) {
+                    Tile temp = this.hand.get(j);
+                    this.hand.set(j, this.hand.get(j + 1));
+                    this.hand.set(j + 1, temp);
                 }
             }
         }
@@ -65,13 +65,13 @@ public class Hand {
         // Sort by value within colour
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
-                int colourVal = order.get(hand.get(j).getColour());
-                int value = hand.get(j).getValue();
+                int colourVal = order.get(this.hand.get(j).getColour());
+                int value = this.hand.get(j).getValue();
                 
-                if (value > hand.get(j+1).getValue() && colourVal == order.get(hand.get(j+1).getColour())) {
-                    Tile temp = hand.get(j);
-                    hand.set(j, hand.get(j+1));
-                    hand.set(j + 1, temp);
+                if (value > this.hand.get(j + 1).getValue() && colourVal == order.get(this.hand.get(j + 1).getColour())) {
+                    Tile temp = this.hand.get(j);
+                    this.hand.set(j, this.hand.get(j + 1));
+                    this.hand.set(j + 1, temp);
                 }
             }
         }
