@@ -2,8 +2,7 @@ package core;
 
 import junit.framework.TestCase;
 
-public class HandTest extends TestCase{
-    
+public class HandTest extends TestCase {
     //tests add(), in doing so also tests sort() and toString()
     public void testAdd() {
         Hand hand = new Hand();
@@ -19,14 +18,14 @@ public class HandTest extends TestCase{
         Tile tile7 = new Tile('O', 7);
         Tile tile8 = new Tile('O', 13);
         
-        hand.add(tile8);
         hand.add(tile7);
-        hand.add(tile6);
-        hand.add(tile5);
-        hand.add(tile4);
         hand.add(tile3);
-        hand.add(tile2);
+        hand.add(tile5);
+        hand.add(tile8);
         hand.add(tile1);
+        hand.add(tile4);
+        hand.add(tile2);
+        hand.add(tile6);
         assertEquals(8, hand.getSize());
         assertEquals("[R1, R2, G3, G5, B1, B10, O7, O13]", hand.toString());
     }
@@ -49,6 +48,5 @@ public class HandTest extends TestCase{
         assertEquals("R2", hand.remove(0).toString());
         assertEquals(null, hand.remove(0));
         assertEquals(0, hand.getSize());
-       
     }
 }
