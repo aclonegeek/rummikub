@@ -3,7 +3,8 @@ package core;
 import junit.framework.TestCase;
 
 public class HandTest extends TestCase {
-    //tests add(), in doing so also tests sort() and toString()
+    // Tests add()
+    // Also tests sort() and toString()
     public void testAdd() {
         Hand hand = new Hand();
         assertEquals(0, hand.getSize());
@@ -30,7 +31,8 @@ public class HandTest extends TestCase {
         assertEquals("[R1, R2, G3, G5, B1, B10, O7, O13]", hand.toString());
     }
     
-    //tests remove(), in doing so also tests add(), sort(), and toString()
+    // Tests remove()
+    // Also tests add(), sort(), and toString()
     public void testRemove() {
         Hand hand = new Hand();
         
