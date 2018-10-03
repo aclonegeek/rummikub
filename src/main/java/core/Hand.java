@@ -8,7 +8,7 @@ public class Hand {
     ArrayList<Tile> hand;
     
     public Hand(){
-        this.hand = new ArrayList<Tile>();
+        this.hand = new ArrayList<>();
     }
     
     public void add(Tile tile) {
@@ -45,7 +45,7 @@ public class Hand {
     private void sort() {
         
         // Map colour to its order
-        Map<Character, Integer> order = new HashMap<Character, Integer>();
+        Map<Character, Integer> order = new HashMap<>();
         order.put('R', 1); order.put('G', 2); order.put('B', 3); order.put('O', 4);
         
         // Sort by colour
