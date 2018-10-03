@@ -17,7 +17,7 @@ public class Hand {
     } 
     
     public Tile remove(int index) {
-        if(hand.size() == 0 || index < 0 || index > hand.size()) {
+        if (hand.size() == 0 || index < 0 || index > hand.size()) {
             return null;
         }
         
@@ -31,13 +31,13 @@ public class Hand {
     public String toString() {
         
         String returnString = "[";
-        for(int i = 0; i < hand.size(); i++) {
+        for (int i = 0; i < hand.size(); i++) {
             returnString += hand.get(i).toString();
-            if(i < hand.size() - 1) {
+            if (i < hand.size() - 1) {
                 returnString += ", ";
             }
         }
-        
+
         returnString += "]";
         return returnString;
     }
@@ -50,11 +50,11 @@ public class Hand {
         
         //sort by colour
         int n = hand.size();
-        for(int i = 0; i < n-1; i++) {
-            for(int j = 0; j < n-i-1; j++) {
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
                 int colourVal = order.get(hand.get(j).getColour());
                 
-                if(colourVal > order.get(hand.get(j+1).getColour())){
+                if (colourVal > order.get(hand.get(j+1).getColour())) {
                     Tile temp = hand.get(j);
                     hand.set(j, hand.get(j+1));
                     hand.set(j+1, temp);
@@ -63,12 +63,12 @@ public class Hand {
         }
         
         //sort by value within colour
-        for(int i = 0; i < n-1; i++) {
-            for(int j = 0; j < n-i-1; j++) {
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
                 int colourVal = order.get(hand.get(j).getColour());
                 int value = hand.get(j).getValue();
                 
-                if(value > order.get(hand.get(j+1).getColour()) && colourVal == order.get(hand.get(j+1).getColour())){
+                if (value > hand.get(j+1).getValue() && colourVal == order.get(hand.get(j+1).getColour())) {
                     Tile temp = hand.get(j);
                     hand.set(j, hand.get(j+1));
                     hand.set(j+1, temp);
