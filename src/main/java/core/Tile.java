@@ -1,16 +1,18 @@
 package core;
 
+import core.Globals.Colour;
+
 public class Tile {
-    private char colour;
+    private Colour colour;
     private int value;
     
-    public Tile (char colour, int value) {
+    public Tile (Colour colour, int value) {
         this.colour = colour;
         this.value = value;
     }
     
     public char getColour() {
-        return this.colour;
+        return this.colour.getSymbol();
     }
     
     public int getValue() {
@@ -19,6 +21,6 @@ public class Tile {
     
     @Override
     public String toString() {
-        return String.valueOf(this.colour) + String.valueOf(this.value);
+        return String.valueOf(this.colour.getSymbol()) + String.valueOf(this.value);
     }
 }
