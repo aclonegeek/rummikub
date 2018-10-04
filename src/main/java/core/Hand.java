@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Hand {
-    ArrayList<Tile> hand;
+    private ArrayList<Tile> hand;
     
     public Hand(){
         this.hand = new ArrayList<>();
@@ -29,7 +29,6 @@ public class Hand {
     }
     
     public String toString() {
-        
         String returnString = "[";
         for (int i = 0; i < this.hand.size(); i++) {
             returnString += this.hand.get(i).toString();
@@ -43,7 +42,6 @@ public class Hand {
     }
     
     private void sort() {
-        
         // Map colour to its order
         Map<Character, Integer> order = new HashMap<>();
         order.put('R', 1); order.put('G', 2); order.put('B', 3); order.put('O', 4);
