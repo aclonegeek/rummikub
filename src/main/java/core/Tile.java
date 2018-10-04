@@ -10,7 +10,7 @@ public class Tile {
     }
     
     public char getColour() {
-        return Character.toUpperCase(this.colour);
+        return this.colour;
     }
     
     public int getValue() {
@@ -19,6 +19,6 @@ public class Tile {
     
     @Override
     public String toString() {
-        return String.valueOf(this.getColour()) + String.valueOf(this.getValue());
+        return String.valueOf(this.colour) + String.valueOf(this.value);
     }
 }
