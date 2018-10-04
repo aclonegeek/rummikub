@@ -10,14 +10,14 @@ public class StockTest extends TestCase {
     public void testCreate() {
         Stock stock = new Stock();
 
-        assertTrue(stock.stock.isEmpty());
+        assertTrue(stock.getStock().isEmpty());
         stock.populate();
-        assertFalse(stock.stock.isEmpty());
-        assertEquals(104, stock.stock.size());
+        assertFalse(stock.getStock().isEmpty());
+        assertEquals(104, stock.getStock().size());
 
         // The first and last elements of a fresh stock should be R1 and O13
-        assertEquals("R1", stock.stock.get(0).toString());
-        assertEquals("O13", stock.stock.get(stock.stock.size() - 1).toString());
+        assertEquals("R1", stock.getStock().get(0).toString());
+        assertEquals("O13", stock.getStock().get(stock.getStock().size() - 1).toString());
     }
 
     public void testShuffle() {
@@ -27,11 +27,11 @@ public class StockTest extends TestCase {
         shuffledStock.populate();
 
         // Convert the stocks to strings so that we can compare them
-        String stockTiles = stock.stock.stream()
+        String stockTiles = stock.getStock().stream()
             .map(Object::toString)
             .collect(Collectors.joining(","));
 
-        String shuffledStockTiles = shuffledStock.stock.stream()
+        String shuffledStockTiles = shuffledStock.getStock().stream()
             .map(Object::toString)
             .collect(Collectors.joining(","));
 
@@ -39,7 +39,7 @@ public class StockTest extends TestCase {
         shuffledStock.shuffle();
         // Ensure that the shuffled stock gets shuffled properly
         while (stockTiles.equals(shuffledStockTiles)) {
-            shuffledStockTiles = shuffledStock.stock.stream()
+            shuffledStockTiles = shuffledStock.getStock().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(","));   
         }

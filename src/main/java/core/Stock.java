@@ -6,10 +6,14 @@ import java.util.Collections;
 import core.Globals.Colour;
 
 public class Stock {
-    ArrayList<Tile> stock;
+    private ArrayList<Tile> stock;
 
     public Stock() {
         this.stock = new ArrayList<>();
+    }
+
+    public ArrayList<Tile> getStock() {
+        return this.stock;
     }
 
     public Tile draw() {
