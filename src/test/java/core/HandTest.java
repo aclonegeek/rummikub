@@ -21,15 +21,15 @@ public class HandTest extends TestCase {
         Tile tile8 = new Tile(Colour.ORANGE, 12);
         Tile tile9 = new Tile(Colour.ORANGE, 13);
         
+        hand.add(tile9);
+        hand.add(tile1);
+        hand.add(tile8);
+        hand.add(tile2);
         hand.add(tile7);
         hand.add(tile3);
-        hand.add(tile5);
-        hand.add(tile8);
-        hand.add(tile1);
-        hand.add(tile4);
-        hand.add(tile2);
         hand.add(tile6);
-        hand.add(tile9);
+        hand.add(tile4);
+        hand.add(tile5);
         assertEquals(9, hand.getSize());
         assertEquals("[R1, R2, B1, B10, G3, G5, O7, O12, O13]", hand.toString());
     }
@@ -53,5 +53,6 @@ public class HandTest extends TestCase {
         assertEquals("R2", hand.remove(0).toString());
         assertEquals(null, hand.remove(0));
         assertEquals(0, hand.getSize());
+        assertEquals(null, hand.remove(-1));
     }
 }
