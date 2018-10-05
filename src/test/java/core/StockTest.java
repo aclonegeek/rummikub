@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.util.stream.Collectors;
 
+import core.Globals.Colour;
 import junit.framework.TestCase;
 
 public class StockTest extends TestCase {
@@ -15,9 +16,26 @@ public class StockTest extends TestCase {
         assertFalse(stock.getStock().isEmpty());
         assertEquals(104, stock.getStock().size());
 
-        // The first and last elements of a fresh stock should be R1 and O13
-        assertEquals("R1", stock.getStock().get(0).toString());
-        assertEquals("O13", stock.getStock().get(stock.getStock().size() - 1).toString());
+        int counter = 0;
+        // Check the first 52 tiles
+        for (Colour colour : Colour.values()) {
+            for (int value = 1; value < 14; value++) {
+                assertEquals(colour.getSymbol() + String.valueOf(value), stock.getStock().get(counter).toString());
+                counter++;
+            }
+        }
+
+        assertEquals(counter, 52);
+
+        // Check the remaining 52 tiles
+        for (Colour colour : Colour.values()) {
+            for (int value = 1; value < 14; value++) {
+                assertEquals(colour.getSymbol() + String.valueOf(value), stock.getStock().get(counter).toString());
+                counter++;
+            }
+        }
+
+        assertEquals(counter, 104);
     }
 
     public void testShuffle() {
