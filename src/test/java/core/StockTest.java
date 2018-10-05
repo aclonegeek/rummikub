@@ -36,9 +36,9 @@ public class StockTest extends TestCase {
             .collect(Collectors.joining(","));
 
         assertEquals(stockTiles, shuffledStockTiles);
-        shuffledStock.shuffle();
-        // Ensure that the shuffled stock gets shuffled properly
+        // Ensure that the shuffled stock gets shuffled differently
         while (stockTiles.equals(shuffledStockTiles)) {
+            shuffledStock.shuffle();
             shuffledStockTiles = shuffledStock.getStock().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(","));   
