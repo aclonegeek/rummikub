@@ -11,8 +11,9 @@ public class Tile {
         this.value = value;
     }
     
-    public char getColour() {
-        return this.colour.getSymbol();
+    public Colour getColour() {
+        //return this.colour.getSymbol();
+        return this.colour;
     }
     
     public int getValue() {
