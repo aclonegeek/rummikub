@@ -5,7 +5,7 @@ import core.Globals.Colour;
 public class Tile {
     private Colour colour;
     private int value;
-    private onTable;
+    private boolean onTable;
     
     public Tile (Colour colour, int value) {
         this.colour = colour;
@@ -25,8 +25,8 @@ public class Tile {
         return this.onTable;
     }
     
-    public void setOnTable() {
-        this.onTable = true;
+    public void setOnTable(boolean onTable) {
+        this.onTable = onTable;
     }
     
     @Override
