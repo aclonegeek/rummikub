@@ -276,6 +276,38 @@ public class MeldTest extends TestCase {
         assertEquals(MeldType.NONE, meld.getMeldType());
     }
     
+    public void testSplitMeld() {
+        Meld meld = new Meld();
+        ArrayList<Tile> meldTiles = new ArrayList<>();
+        
+        meldTiles.add(new Tile(Colour.RED, 1));
+        meldTiles.add(new Tile(Colour.RED, 2));
+        meldTiles.add(new Tile(Colour.RED, 3));
+        meldTiles.add(new Tile(Colour.RED, 4));
+        meldTiles.add(new Tile(Colour.RED, 5));
+        meldTiles.add(new Tile(Colour.RED, 6));
+        meld.addTile(meldTiles);
+        meldTiles = new ArrayList<>();
+       
+        // Split in half
+        Meld returnedMeld1;
+        returnedMeld1 = meld.splitMeld(meld.getSize() / 2);
+        assertEquals("{R1,R2,R3}", meld.toString());
+        assertEquals("{R4,R5,R6}", returnedMeld1.toString());
+        
+        // Split at front
+        Meld returnedMeld2;
+        returnedMeld2 = meld.splitMeld(0);
+        assertEquals("{}", meld.toString());
+        assertEquals("{R1,R2,R3}", returnedMeld2.toString());
+        
+        // Split at back
+        Meld returnedMeld3;
+        returnedMeld3 = returnedMeld2.splitMeld(returnedMeld2.getSize());
+        assertEquals("{R1,R2,R3}", returnedMeld2.toString());
+        assertEquals("{}", returnedMeld3.toString());
+    }
+    
     public void testToString() {
         Meld meld = new Meld();
         ArrayList<Tile> meldTiles = new ArrayList<>();
