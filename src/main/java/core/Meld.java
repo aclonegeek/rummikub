@@ -99,4 +99,11 @@ public class Meld {
     boolean isValidMeld() {
         return this.meldType == MeldType.RUN || this.meldType == MeldType.SET;
     }
+    
+    @Override
+    public String toString() {
+        return "{" + this.meld.stream()
+            .map(Object::toString)
+            .collect(Collectors.joining(",")) + "}";
+    }
 }
