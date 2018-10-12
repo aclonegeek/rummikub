@@ -298,14 +298,15 @@ public class MeldTest extends TestCase {
         // Split at front
         Meld returnedMeld2;
         returnedMeld2 = meld.splitMeld(0);
-        assertEquals("{}", meld.toString());
+        assertEquals(0, meld.getSize());
         assertEquals("{R1,R2,R3}", returnedMeld2.toString());
         
         // Split at back
         Meld returnedMeld3;
         returnedMeld3 = returnedMeld2.splitMeld(returnedMeld2.getSize());
         assertEquals("{R1,R2,R3}", returnedMeld2.toString());
-        assertEquals("{}", returnedMeld3.toString());
+        assertEquals(0, returnedMeld3.getSize());
+        
     }
     
     public void testToString() {
