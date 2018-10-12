@@ -110,6 +110,10 @@ public class Meld {
         return this.meld.size();
     }
     
+    public Tile getTileAt(int index) {
+        return this.meld.get(index);
+    }
+    
     public MeldType getMeldType() {
         return this.meldType;
     }
