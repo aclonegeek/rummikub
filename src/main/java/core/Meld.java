@@ -49,6 +49,24 @@ public class Meld {
         return removedTile;
     }
     
+    public Meld splitMeld(int index) {
+        Meld newMeld = new Meld();
+        ArrayList<Tile> secondHalf = new ArrayList<>();
+        int currMeldSize = this.meld.size();
+        
+        // Add the second chunk of the meld to a new ArrayList
+        for (int i = index; i < currMeldSize; i++) {
+            secondHalf.add(this.meld.remove(index));
+        }
+        
+        // Re-determine the meld type since the current meld has changed
+        this.meldType = determineMeldType(this.meld);
+        
+        // Check if the second half of the meld (which we split) is valid, return the new Meld
+        if (newMeld.addTile(secondHalf)) { return newMeld; }
+        else                             { return null;    }
+    }
+    
     private MeldType determineMeldType(ArrayList<Tile> tiles) {
         // Redundant melds
         if (tiles.size() <= 1) return MeldType.NONE;
