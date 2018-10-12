@@ -34,7 +34,7 @@ public class Table implements TableSubject {
     }
 
     public boolean setState(ArrayList<Meld> melds) {
-        if (validateMelds(melds)) {
+        if (validateState(melds)) {
             this.melds = melds;
             return true;
         } else {
@@ -42,7 +42,7 @@ public class Table implements TableSubject {
         }
     }
 
-    private boolean validateMelds(ArrayList<Meld> melds) {
+    private boolean validateState(ArrayList<Meld> melds) {
         for (int i = 0; i < melds.size(); i++) {
             if (melds.get(i).getSize() == 0) {
                 melds.remove(i);
