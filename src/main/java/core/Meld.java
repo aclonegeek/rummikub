@@ -38,7 +38,6 @@ public class Meld {
             this.meldType = tempMeldType;
             return true;
         } else {
-            //this.meldType = tempMeldType;
             return false;
         }
     }
