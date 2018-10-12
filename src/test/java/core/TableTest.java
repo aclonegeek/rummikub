@@ -21,16 +21,19 @@ public class TableTest extends TestCase {
         // Create new players and register them as table observers
         Player player1 = new Player();
         Player player2 = new Player();
+        ArrayList<Meld> player1Workspace = player1.getWorkspace();
+        ArrayList<Meld> player2Workspace = player2.getWorkspace();
         table.registerObserver(player1);
         table.registerObserver(player2);
         
+        assertEquals(0, player1Workspace.size());
+        assertEquals(0, player2Workspace.size());
         table.notifyObservers();
         
         // Player 1 and 2's workspace should have the new table state after notifying
-        ArrayList<Meld> player1Workspace = player1.getWorkspace();
+        player1Workspace = player1.getWorkspace();
+        player2Workspace = player2.getWorkspace();
         assertEquals(2, player1Workspace.size());
-        
-        ArrayList<Meld> player2Workspace = player2.getWorkspace();
         assertEquals(2, player2Workspace.size());
     }
     
@@ -46,18 +49,18 @@ public class TableTest extends TestCase {
         
         table.setState(melds);
         
-        // Create new players and register them as table observers
+        // Create new player and register it as a table observer
         Player player1 = new Player();
-        Player player2 = new Player();
+        ArrayList<Meld> player1Workspace = player1.getWorkspace();
+        assertEquals(0, player1Workspace.size());
         table.registerObserver(player1);
-        table.registerObserver(player2);
         
-        table.removeObserver(player2);
+        table.removeObserver(player1);
         table.notifyObservers();
         
         // Player 2's workspace shouldn't have the new table state after notifying
-        ArrayList<Meld> player2Workspace = player2.getWorkspace();
-        assertEquals(0, player2Workspace.size());
+        player1Workspace = player1.getWorkspace();
+        assertEquals(0, player1Workspace.size());
     }
     
     public void testSetState() {
