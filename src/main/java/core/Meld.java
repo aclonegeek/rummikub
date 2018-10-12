@@ -22,9 +22,8 @@ public class Meld {
     
     public boolean addTile(ArrayList<Tile> tiles) {
         MeldType tempMeldType;
-        ArrayList<Tile> tempMeld;
+        ArrayList<Tile> tempMeld = new ArrayList<>();
 
-        tempMeld = new ArrayList<>();
         tempMeld.addAll(this.meld);
         tempMeld.addAll(tiles);
 
@@ -37,9 +36,8 @@ public class Meld {
             this.meld = tempMeld;
             this.meldType = tempMeldType;
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
     
     public Tile removeTile(int index) {
@@ -105,11 +103,11 @@ public class Meld {
         else                                                                                          { return MeldType.INVALID; }
     }
     
-    int getSize() {
+    public int getSize() {
         return this.meld.size();
     }
     
-    public Tile getTileAt(int index) {
+    public Tile getTile(int index) {
         return this.meld.get(index);
     }
     
@@ -117,14 +115,14 @@ public class Meld {
         return this.meldType;
     }
     
-    boolean isValidMeld() {
+    public boolean isValidMeld() {
         return this.meldType == MeldType.RUN || this.meldType == MeldType.SET;
     }
     
     @Override
     public String toString() {
-        return "{" + this.meld.stream()
+        return this.meld.stream()
             .map(Object::toString)
-            .collect(Collectors.joining(",")) + "}";
+            .collect(Collectors.joining(",","{","}"));
     }
 }
