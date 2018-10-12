@@ -262,7 +262,7 @@ public class MeldTest extends TestCase {
         Meld meld = new Meld();
         ArrayList<Tile> meldTiles = new ArrayList<>();
         
-        // Initial case: a RUN with 3 tiles to the empty meld
+        // Initial case: a SET with 3 tiles to the empty meld
         meldTiles.add(new Tile(Colour.ORANGE, 1));
         meldTiles.add(new Tile(Colour.BLUE, 1));
         meldTiles.add(new Tile(Colour.RED, 1));
