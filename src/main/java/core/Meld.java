@@ -100,9 +100,9 @@ public class Meld {
                 .allMatch(tile -> tile.getColour() == tiles.get(0).getColour());
         
         if ((sameValues && differentColours || consecutiveValues && sameColours) && tiles.size() < 3) { return MeldType.NONE;    } 
-        else if (consecutiveValues && sameColours)                                                  { return MeldType.RUN;     } 
-        else if (sameValues && differentColours)                                                    { return MeldType.SET;     }
-        else                                                                                        { return MeldType.INVALID; }
+        else if (consecutiveValues && sameColours)                                                    { return MeldType.RUN;     } 
+        else if (sameValues && differentColours)                                                      { return MeldType.SET;     }
+        else                                                                                          { return MeldType.INVALID; }
     }
     
     int getSize() {
