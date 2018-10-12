@@ -62,13 +62,13 @@ public class Meld {
         this.meldType = determineMeldType(this.meld);
         
         // Check if the second half of the meld (which we split) is valid, return the new Meld
-        if (newMeld.addTile(secondHalf)) { return newMeld; }
-        else                             { return null;    }
+        newMeld.addTile(secondHalf);
+        return newMeld;
     }
     
     private MeldType determineMeldType(ArrayList<Tile> tiles) {
         // Redundant melds
-        if (tiles.size() <= 1) return MeldType.NONE;
+        if (tiles.size() <= 1) { return MeldType.NONE; }
         
         // Map each tile to its corresponding integer value and use this array to determine if it satisfies any Meld properties
         List<Integer> tilesByValue = tiles.stream()
