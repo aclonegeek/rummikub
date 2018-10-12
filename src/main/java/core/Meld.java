@@ -43,6 +43,12 @@ public class Meld {
         }
     }
     
+    public Tile removeTile(int index) {
+        Tile removedTile = this.meld.remove(index);
+        this.meldType = determineMeldType(this.meld);
+        return removedTile;
+    }
+    
     private MeldType determineMeldType(ArrayList<Tile> tiles) {
         // Redundant melds
         if (tiles.size() <= 1) return MeldType.NONE;
@@ -82,7 +88,15 @@ public class Meld {
         else                                                                                        { return MeldType.INVALID; }
     }
     
+    int getSize() {
+        return this.meld.size();
+    }
+    
     public MeldType getMeldType() {
         return this.meldType;
+    }
+    
+    boolean isValidMeld() {
+        return this.meldType == MeldType.RUN || this.meldType == MeldType.SET;
     }
 }
