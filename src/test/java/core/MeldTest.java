@@ -178,7 +178,7 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
     }
     
-    // Remove tiles from a RUN that will make it valid
+    // Remove tiles from a RUN and ensure validity
     public void testRemoveTileValidRun() {
         Meld meld = new Meld();
         ArrayList<Tile> meldTiles = new ArrayList<>();
@@ -201,7 +201,7 @@ public class MeldTest extends TestCase {
         assertEquals(MeldType.RUN, meld.getMeldType());   
     }
     
-    // Remove tiles from a SET that will make it valid
+    // Remove tiles from a SET and ensure validity
     public void testRemoveTileValidSet() {
         Meld meld = new Meld();
         ArrayList<Tile> meldTiles = new ArrayList<>();
