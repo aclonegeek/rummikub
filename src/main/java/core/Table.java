@@ -28,7 +28,7 @@ public class Table implements TableSubject {
             player.update(this.melds);
         }
     }
-    
+
     public ArrayList<Meld> getState() {
         return this.melds;
     }
@@ -37,13 +37,13 @@ public class Table implements TableSubject {
         if (validateState(melds)) {
             this.melds = melds;
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     private boolean validateState(ArrayList<Meld> melds) {
         for (int i = 0; i < melds.size(); i++) {
+            // Discard empty melds before validating them
             if (melds.get(i).getSize() == 0) {
                 melds.remove(i);
             } else if (!melds.get(i).isValidMeld()) {
