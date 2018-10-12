@@ -1,7 +1,6 @@
 package core;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import core.Globals.Colour;
 import core.Meld.MeldType;
@@ -275,5 +274,17 @@ public class MeldTest extends TestCase {
         // Expected NONE because melds less than size 3 are yet to be determined 
         // and may be part of an intermediate move
         assertEquals(MeldType.NONE, meld.getMeldType());
+    }
+    
+    public void testToString() {
+        Meld meld = new Meld();
+        ArrayList<Tile> meldTiles = new ArrayList<>();
+        
+        // Initial case: a RUN with 3 tiles to the empty meld
+        meldTiles.add(new Tile(Colour.ORANGE, 1));
+        meldTiles.add(new Tile(Colour.BLUE, 1));
+        meldTiles.add(new Tile(Colour.RED, 1));
+        meld.addTile(meldTiles);
+        assertEquals("{O1,B1,R1}", meld.toString());
     }
 }
