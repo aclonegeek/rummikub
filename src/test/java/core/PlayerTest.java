@@ -10,7 +10,7 @@ public class PlayerTest extends TestCase {
     // Tests Human's toString method
     // TODO: test Player's play method (can't until playBehaviour is implemented)
     public void testPlayerHuman() { 
-        // Create ArrayList of melds representing tha table
+        // Create ArrayList of melds representing the table
         ArrayList<Meld> melds = new ArrayList<>();
         
         ArrayList<Tile> tiles1 = new ArrayList<Tile>();
