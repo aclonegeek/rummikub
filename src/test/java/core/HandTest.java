@@ -34,9 +34,9 @@ public class HandTest extends TestCase {
         assertEquals("[R1, R2, B1, B10, G3, G5, O7, O12, O13]", hand.toString());
     }
     
-    // Tests remove()
+    // Tests remove() using index
     // Also tests add(), sort(), and toString()
-    public void testRemove() {
+    public void testRemoveByIndex() {
         Hand hand = new Hand();
         
         Tile tile1 = new Tile(Colour.RED, 1);
@@ -54,5 +54,27 @@ public class HandTest extends TestCase {
         assertEquals(null, hand.remove(0));
         assertEquals(0, hand.getSize());
         assertEquals(null, hand.remove(-1));
+    }
+    
+    // Tests remove() using Tile
+    // Also tests add(), sort(), and toString()
+    public void testRemoveByTile() {
+        Hand hand = new Hand();
+        Tile tile1 = new Tile(Colour.RED, 1);
+        Tile tile2 = new Tile(Colour.RED, 2);
+        Tile tile3 = new Tile(Colour.GREEN, 3);
+        Tile tile4 = new Tile(Colour.RED, 1);
+        hand.add(tile1);
+        hand.add(tile2);
+        hand.add(tile3);
+        hand.add(tile4);
+        
+        assertEquals("R1", hand.remove(tile1).toString());
+        assertEquals("[R1, R2, G3]", hand.toString());
+        assertEquals("R1", hand.remove(tile1).toString());
+        assertEquals(null, hand.remove(tile1));
+        assertEquals("R2", hand.remove(tile2).toString());
+        assertEquals("G3", hand.remove(tile3).toString());
+        assertEquals(0, hand.getSize());
     }
 }
