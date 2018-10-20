@@ -5,7 +5,7 @@ import java.util.ArrayList;
 // TODO: make Player a Subject
 public abstract class Player {
     protected Hand hand;
-    //protected PlayBehaviour playBehaviour;
+    protected PlayBehaviour playBehaviour;
     
     public void add(Tile tile) {
         this.hand.add(tile);
@@ -16,8 +16,7 @@ public abstract class Player {
     }
 
     public ArrayList<Meld> play(){
-        // ArrayList<Meld> newTableState = this.playBehaviour.determineMove();
-        ArrayList<Meld> newTableState = new ArrayList<>(); // Remove this line when playBehaviour is implemented
+        ArrayList<Meld> newTableState = this.playBehaviour.determineMove();
         this.removeTilesFromHand(newTableState);
         return newTableState;
     }
@@ -26,7 +25,7 @@ public abstract class Player {
     public void removeTilesFromHand(ArrayList<Meld> newTableState) {
         for (int i = 0; i < newTableState.size(); i++) {
             Meld meld = newTableState.get(i);
-            for(int j = 0; j < meld.getSize(); j++) {
+            for (int j = 0; j < meld.getSize(); j++) {
                 Tile tile = meld.getTile(j);
                 if(!tile.isOnTable()) {
                     this.hand.remove(tile);
