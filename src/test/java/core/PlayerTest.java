@@ -79,7 +79,7 @@ public class PlayerTest extends TestCase {
     }
     
     // Tests Player1's toString method
-    public void testPlayer1() {
+    public void testPlayer1toString() {
         Player p1 = new Player1();
         assertEquals("Player 1:\n# tiles: 0\n\n", p1.toString());
         p1.add(new Tile(Colour.GREEN, 1));
@@ -88,8 +88,7 @@ public class PlayerTest extends TestCase {
         assertEquals("Player 1:\n# tiles: 3\n\n", p1.toString());
     }
     
-    // Tests Player2's toString method
-    public void testPlayer2() {
+    public void testPlayer2toString() {
         Player p2 = new Player2();
         assertEquals("Player 2:\n# tiles: 0\n\n", p2.toString());
         p2.add(new Tile(Colour.RED, 10));
@@ -100,7 +99,7 @@ public class PlayerTest extends TestCase {
     }
     
     // Tests Player3's toString method
-    public void testPlayer3() {
+    public void testPlayer3toString() {
         Player p3 = new Player3();
         assertEquals("Player 3:\n# tiles: 0\n\n", p3.toString());
         p3.add(new Tile(Colour.RED, 1));
