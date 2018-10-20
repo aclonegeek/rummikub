@@ -33,7 +33,7 @@ public class HandTest extends TestCase {
         assertEquals(9, hand.getSize());
         assertEquals("[R1, R2, B1, B10, G3, G5, O7, O12, O13]", hand.toString());
     }
-    
+  
     // Tests remove() using index
     // Also tests add(), sort(), and toString()
     public void testRemoveByIndex() {
