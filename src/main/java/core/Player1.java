@@ -7,8 +7,6 @@ public class Player1 extends Player {
     }
     
     public String toString() {
-        String returnString = "Player 1:\n";
-        returnString += "# tiles: " + hand.getSize() + "\n\n";
-        return returnString;
+        return "Player 1:\n# tiles: " + hand.getSize() + "\n\n";
     }
 }
