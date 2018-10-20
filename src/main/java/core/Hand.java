@@ -14,12 +14,24 @@ public class Hand {
         this.sort();
     } 
     
+    // Removes tile at given index
     public Tile remove(int index) {
         if (this.hand.size() == 0 || index < 0 || index > this.hand.size()) {
             return null;
         }
         
         return this.hand.remove(index);
+    }
+    
+    // Removes first tile in hand that matches input tile
+    public Tile remove(Tile tile) {
+        for (int i = 0; i < this.hand.size(); i++) {
+            if (tile.toString().equals(hand.get(i).toString())) {
+                return hand.remove(i);
+            }
+        }
+        
+        return null;
     }
 
     public int getSize() {
