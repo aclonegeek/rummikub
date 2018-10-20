@@ -15,7 +15,7 @@ public abstract class Player {
         return this.hand.getSize();
     }
 
-    public ArrayList<Meld> play(){
+    public ArrayList<Meld> play() {
         ArrayList<Meld> newTableState = this.playBehaviour.determineMove();
         this.removeTilesFromHand(newTableState);
         return newTableState;
@@ -27,7 +27,7 @@ public abstract class Player {
             Meld meld = newTableState.get(i);
             for (int j = 0; j < meld.getSize(); j++) {
                 Tile tile = meld.getTile(j);
-                if(!tile.isOnTable()) {
+                if (!tile.isOnTable()) {
                     this.hand.remove(tile);
                 }
             }
