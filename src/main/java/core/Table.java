@@ -34,14 +34,14 @@ public class Table implements TableSubject {
     }
 
     public boolean setState(ArrayList<Meld> melds) {
-        if (validateState(melds)) {
+        if (isValidState(melds)) {
             this.melds = melds;
             return true;
         }
         return false;
     }
 
-    private boolean isValidateState(ArrayList<Meld> melds) {
+    private boolean isValidState(ArrayList<Meld> melds) {
         for (int i = 0; i < melds.size(); i++) {
             // Discard empty melds before validating them
             if (melds.get(i).getSize() == 0) {
