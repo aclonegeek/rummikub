@@ -2,7 +2,6 @@ package core;
 
 import java.util.ArrayList;
 
-// TODO: make Player a Subject
 public abstract class Player implements TableObserver {
     protected ArrayList<Meld> workspace;
     protected Hand hand;
