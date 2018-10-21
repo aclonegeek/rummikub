@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class Player2 extends Player {
     public Player2() {
-        workspace = new ArrayList<>();
-        hand = new Hand();
-        playBehaviour = new Strategy2();
+        this.workspace = new ArrayList<>();
+        this.hand = new Hand();
+        this.playBehaviour = new Strategy2();
     }
     
     public String toString() {
