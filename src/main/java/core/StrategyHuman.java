@@ -3,14 +3,8 @@ package core;
 import java.util.ArrayList;
 
 public class StrategyHuman implements PlayBehaviour {
-    ArrayList<Meld> workspace;
-    
-    public ArrayList<Meld> determineMove() {
+    public ArrayList<Meld> determineMove(ArrayList<Meld> workspace, Hand hand) {
         // Human logic goes here
         return null;
-    }
-    
-    public ArrayList<Meld> getWorkspace() {
-        return workspace;
     }
 }

@@ -3,7 +3,8 @@ package core;
 import java.util.ArrayList;
 
 // TODO: make Player a Subject
-public abstract class Player {
+public abstract class Player implements TableObserver {
+    protected ArrayList<Meld> workspace;
     protected Hand hand;
     protected PlayBehaviour playBehaviour;
     
@@ -14,9 +15,13 @@ public abstract class Player {
     public int getHandSize() {
         return this.hand.getSize();
     }
+    
+    public ArrayList<Meld> getWorkspace() {
+        return this.workspace;
+    }
 
     public ArrayList<Meld> play() {
-        ArrayList<Meld> newTableState = this.playBehaviour.determineMove();
+        ArrayList<Meld> newTableState = this.playBehaviour.determineMove(workspace, hand);
         this.removeTilesFromHand(newTableState);
         return newTableState;
     }
@@ -30,5 +35,9 @@ public abstract class Player {
                 }
             }
         }
+    }
+    
+    public void update(ArrayList<Meld> melds) {
+        this.workspace = melds;
     }
 }

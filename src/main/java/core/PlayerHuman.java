@@ -1,7 +1,10 @@
 package core;
 
+import java.util.ArrayList;
+
 public class PlayerHuman extends Player {
     public PlayerHuman() {
+        workspace = new ArrayList<>();
         hand = new Hand();
         playBehaviour = new StrategyHuman();
     }
