@@ -19,8 +19,8 @@ public class TableTest extends TestCase {
         table.setState(melds);
         
         // Create new players and register them as table observers
-        Player player1 = new Player();
-        Player player2 = new Player();
+        Player player1 = new Player1();
+        Player player2 = new Player1();
         ArrayList<Meld> player1Workspace = player1.getWorkspace();
         ArrayList<Meld> player2Workspace = player2.getWorkspace();
         table.registerObserver(player1);
@@ -50,7 +50,7 @@ public class TableTest extends TestCase {
         table.setState(melds);
         
         // Create new player and register it as a table observer
-        Player player1 = new Player();
+        Player player1 = new Player1();
         ArrayList<Meld> player1Workspace = player1.getWorkspace();
         assertEquals(0, player1Workspace.size());
         table.registerObserver(player1);
