@@ -38,6 +38,7 @@ public class HandTest extends TestCase {
     // Also tests add(), sort(), and toString()
     public void testRemoveByIndex() {
         Hand hand = new Hand();
+        assertEquals(null, hand.remove(0));
         
         Tile tile1 = new Tile(Colour.RED, 1);
         Tile tile2 = new Tile(Colour.RED, 2);
@@ -48,12 +49,12 @@ public class HandTest extends TestCase {
         
         assertEquals(3, hand.getSize());
         assertEquals(null, hand.remove(5));
+        assertEquals(null, hand.remove(-1));
         assertEquals("R1", hand.remove(0).toString());
         assertEquals("G3", hand.remove(1).toString());
         assertEquals("R2", hand.remove(0).toString());
         assertEquals(null, hand.remove(0));
         assertEquals(0, hand.getSize());
-        assertEquals(null, hand.remove(-1));
     }
     
     // Tests remove() using Tile
