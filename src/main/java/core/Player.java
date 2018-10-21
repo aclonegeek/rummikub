@@ -8,6 +8,11 @@ public abstract class Player implements TableObserver {
     protected Hand hand;
     protected PlayBehaviour playBehaviour;
     
+    public Player() {
+        this.workspace = new ArrayList<>();
+        this.hand = new Hand();
+    }
+    
     public void add(Tile tile) {
         this.hand.add(tile);
     }
