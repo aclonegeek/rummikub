@@ -19,7 +19,7 @@ public class Player2 extends Player implements PlayerSubject {
 	}
 
 	public void notifyObservers() {
-        this.observers.forEach(o -> o.update(this.getHandSize()));
+        this.observers.forEach(o -> o.update(this.hand.getSize()));
 	}
 
     public ArrayList<PlayerObserver> getObservers() {

@@ -18,6 +18,6 @@ public class Player3 extends Player implements PlayerObserver {
     }
 
     public String toString() {
-        return "Player 3:\n# tiles: " + hand.getSize() + "\n\n";
+        return "Player 3:\n# tiles: " + this.hand.getSize() + "\n\n";
     }
 }
