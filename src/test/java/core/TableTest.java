@@ -33,8 +33,8 @@ public class TableTest extends TestCase {
         // Player 1 and 2's workspace should have the new table state after notifying
         player1Workspace = player1.getWorkspace();
         player2Workspace = player2.getWorkspace();
-        assertEquals(2, player1Workspace.size());
-        assertEquals(2, player2Workspace.size());
+        assertEquals(1, player1Workspace.size());
+        assertEquals(1, player2Workspace.size());
     }
     
     public void testRemoveObserver() {
@@ -65,18 +65,35 @@ public class TableTest extends TestCase {
     
     public void testSetState() {
         Table table = new Table();
-        
-        // Create list of melds
-        ArrayList<Meld> melds = new ArrayList<>();
         Meld meld1 = new Meld();
+        ArrayList<Meld> melds = new ArrayList<>();
+        
+        // Test setState failure
+        // Create list of melds
+        ArrayList<Tile> set = new ArrayList<>();
+        set.add(new Tile(Colour.RED, 7));
+        set.add(new Tile(Colour.BLUE, 7));
+        set.add(new Tile(Colour.GREEN, 7));
+        set.add(new Tile(Colour.ORANGE, 7));
+        
+        // Make sure meld1 is a valid meld
+        meld1.addTile(set);
+        assertTrue(meld1.isValidMeld());
+        
+        // Split the meld at index 1 to make one invalid (NONE) meld {R7} and one valid meld {B7, G7, O7} and add to melds
+        Meld invalidMeld = meld1.splitMeld(1);
+        melds.add(invalidMeld);
         melds.add(meld1);
         
-        // Should be false because meld1 is an empty meld, therefore of type INVALID/NONE
+        // Should be false because the table has one valid and one invalid meld, therefore the table is invalid
         assertFalse(table.setState(melds));
         
-        melds = new ArrayList<>();
-        
+        // Test setState success
         // Create a run
+        melds = new ArrayList<>();
+        meld1 = new Meld();
+        
+        // Make a new run and add it to melds
         ArrayList<Tile> run = new ArrayList<>();
         run.add(new Tile(Colour.RED, 1));
         run.add(new Tile(Colour.RED, 2));
