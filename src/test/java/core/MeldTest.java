@@ -319,4 +319,17 @@ public class MeldTest extends TestCase {
         meld.addTile(meldTiles);
         assertEquals("{O1,B1,R1}", meld.toString());
     }
+    
+    public void testGetValue() {
+        Meld meld = new Meld();
+        assertEquals(0, meld.getValue());
+        
+        ArrayList<Tile> meldTiles = new ArrayList<>();
+        meldTiles.add(new Tile(Colour.GREEN, 10));
+        meldTiles.add(new Tile(Colour.GREEN, 11));
+        meldTiles.add(new Tile(Colour.GREEN, 12));
+        meld.addTile(meldTiles);
+        assertEquals(33, meld.getValue());
+        
+    }
 }
