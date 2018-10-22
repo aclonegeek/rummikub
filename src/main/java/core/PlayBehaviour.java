@@ -32,10 +32,10 @@ public abstract class PlayBehaviour {
             
             // Once all tiles have been added to melds, find the meld with the greatest value
             Meld greatestMeld = tempMelds.get(0);
-            for (int i = 1; i < tempMelds.size(); i++) {
-                if ((tempMelds.get(i).isValidMeld() && !greatestMeld.isValidMeld()) || 
-                    (tempMelds.get(i).getValue() > greatestMeld.getValue() && tempMelds.get(i).isValidMeld())) {
-                    greatestMeld = tempMelds.get(i);
+            for (Meld tempMeld : tempMelds) {
+                if ((tempMeld.isValidMeld() && !greatestMeld.isValidMeld()) || 
+                    (tempMeld.getValue() > greatestMeld.getValue() && tempMeld.isValidMeld())) {
+                    greatestMeld = tempMeld;
                 }
             }
             
