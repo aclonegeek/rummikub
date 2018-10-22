@@ -77,7 +77,63 @@ public class PlayerTest extends TestCase {
         assertEquals(3, human.getHandSize());
         assertEquals("You:\n# tiles: 3\n[R1, B1, G3]\n\n", human.toString());
     }
-    
+
+    public void testNotifyObserver() {
+        PlayerHuman playerHuman = new PlayerHuman();
+        Player1 player1 = new Player1();
+        Player2 player2 = new Player2();
+        Player3 player3 = new Player3();
+
+        Tile tile1 = new Tile(Colour.GREEN, 1);
+        Tile tile2 = new Tile(Colour.GREEN, 2);
+        Tile tile3 = new Tile(Colour.GREEN, 3);
+        Tile tile4 = new Tile(Colour.GREEN, 4);
+
+        playerHuman.registerObserver(player3);
+        player1.registerObserver(player3);
+        player2.registerObserver(player3);
+
+        playerHuman.add(tile1);
+        playerHuman.add(tile2);
+        player1.add(tile3);
+        player2.add(tile4);
+
+        // The observer has not been notified yet.
+        assertEquals(-1, player3.getLowestHandCount());
+
+        playerHuman.notifyObservers();
+        assertEquals(2, player3.getLowestHandCount());
+        player1.notifyObservers();
+        player2.notifyObservers();
+        assertEquals(1, player3.getLowestHandCount());
+
+        playerHuman.notifyObservers();
+        assertEquals(1, player3.getLowestHandCount());
+    }
+
+    public void testRemoveObserver() {
+        PlayerHuman playerHuman = new PlayerHuman();
+        Player1 player1 = new Player1();
+        Player2 player2 = new Player2();
+        Player3 player3 = new Player3();
+
+        playerHuman.registerObserver(player3);
+        player1.registerObserver(player3);
+        player2.registerObserver(player3);
+
+        assertEquals(1, playerHuman.getObservers().size());
+        assertEquals(1, player1.getObservers().size());
+        assertEquals(1, player2.getObservers().size());
+
+        playerHuman.removeObserver(player3);
+        player1.removeObserver(player3);
+        player2.removeObserver(player3);
+
+        assertEquals(0, playerHuman.getObservers().size());
+        assertEquals(0, player1.getObservers().size());
+        assertEquals(0, player2.getObservers().size());
+    }
+
     // Tests Player1's toString method
     public void testPlayer1toString() {
         Player p1 = new Player1();
@@ -87,7 +143,7 @@ public class PlayerTest extends TestCase {
         p1.add(new Tile(Colour.BLUE, 12));
         assertEquals("Player 1:\n# tiles: 3\n\n", p1.toString());
     }
-    
+
     public void testPlayer2toString() {
         Player p2 = new Player2();
         assertEquals("Player 2:\n# tiles: 0\n\n", p2.toString());
@@ -97,7 +153,7 @@ public class PlayerTest extends TestCase {
         p2.add(new Tile(Colour.ORANGE, 2));
         assertEquals("Player 2:\n# tiles: 4\n\n", p2.toString());
     }
-    
+
     // Tests Player3's toString method
     public void testPlayer3toString() {
         Player p3 = new Player3();
