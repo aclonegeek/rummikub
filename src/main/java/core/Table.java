@@ -3,29 +3,29 @@ package core;
 import java.util.ArrayList;
 
 public class Table implements TableSubject {
-    private ArrayList<TableObserver> players;
+    private ArrayList<TableObserver> observers;
     private ArrayList<Meld> melds;
 
     public Table() {
-        this.players = new ArrayList<>();
+        this.observers = new ArrayList<>();
         this.melds = new ArrayList<>();
     }
 
     public void registerObserver(TableObserver player) {
-        players.add(player);
+        observers.add(player);
     }
 
     public void removeObserver(TableObserver player) {
-        int i = players.indexOf(player);
+        int i = observers.indexOf(player);
         if (i >= 0) {
-            players.remove(i);
+            observers.remove(i);
         }
     }
 
     public void notifyObservers() {
-        for (int i = 0; i < players.size(); i++) {
-            TableObserver player = (TableObserver) players.get(i);
-            player.update(this.melds);
+        for (int i = 0; i < observers.size(); i++) {
+            TableObserver observer = (TableObserver) observers.get(i);
+            observer.update(this.melds);
         }
     }
 
@@ -36,6 +36,7 @@ public class Table implements TableSubject {
     public boolean setState(ArrayList<Meld> melds) {
         if (isValidState(melds)) {
             this.melds = melds;
+            notifyObservers();
             return true;
         }
         return false;
