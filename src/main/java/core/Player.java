@@ -33,9 +33,7 @@ public abstract class Player implements TableObserver {
             this.removeTilesFromHand(newTableState);
             return newTableState;
         }
-        else {
-            return null;
-        }
+        return null;
     }
     
     // Removes tiles from Player's hand that appear in the given ArrayList for which isOnTable is false (ie. they were just added)
