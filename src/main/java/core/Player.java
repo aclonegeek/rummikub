@@ -6,10 +6,12 @@ public abstract class Player implements TableObserver {
     protected ArrayList<Meld> workspace;
     protected Hand hand;
     protected PlayBehaviour playBehaviour;
+    protected boolean initialMove;
     
     public Player() {
         this.workspace = new ArrayList<>();
         this.hand = new Hand();
+        this.initialMove = true;
     }
     
     public void add(Tile tile) {
@@ -25,9 +27,15 @@ public abstract class Player implements TableObserver {
     }
 
     public ArrayList<Meld> play() {
-        ArrayList<Meld> newTableState = this.playBehaviour.determineMove(workspace, hand);
-        this.removeTilesFromHand(newTableState);
-        return newTableState;
+        ArrayList<Meld> newTableState = this.playBehaviour.determineMove(this.workspace, this.hand, this.initialMove);
+        if (newTableState != null) {
+            this.initialMove = false;
+            this.removeTilesFromHand(newTableState);
+            return newTableState;
+        }
+        else {
+            return null;
+        }
     }
     
     // Removes tiles from Player's hand that appear in the given ArrayList for which isOnTable is false (ie. they were just added)
