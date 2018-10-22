@@ -11,7 +11,7 @@ public abstract class PlayBehaviour {
     }
     
     // Plays as many melds as it can using only the tiles in its hand and only if the total of the melds is >= 30
-    public ArrayList<Meld> determineInitialMove(ArrayList<Meld> workspace, Hand hand) {
+    protected ArrayList<Meld> determineInitialMove(ArrayList<Meld> workspace, Hand hand) {
         boolean hasMelds = true;
         int totalTileValue = 0;
         while (hasMelds) {
@@ -58,7 +58,7 @@ public abstract class PlayBehaviour {
         return null; 
     }
     
-    public ArrayList<Meld> determineRegularMove(ArrayList<Meld> workspace, Hand hand) {
+    protected ArrayList<Meld> determineRegularMove(ArrayList<Meld> workspace, Hand hand) {
         System.out.println("This should never print because this method should have been overridden.");
         return null;
     }
