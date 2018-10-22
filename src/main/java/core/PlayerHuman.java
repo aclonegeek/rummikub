@@ -2,8 +2,7 @@ package core;
 
 public class PlayerHuman extends Player {
     public PlayerHuman() {
-        hand = new Hand();
-        playBehaviour = new StrategyHuman();
+        this.playBehaviour = new StrategyHuman();
     }
     
     public String toString() {
