@@ -330,6 +330,5 @@ public class MeldTest extends TestCase {
         meldTiles.add(new Tile(Colour.GREEN, 12));
         meld.addTile(meldTiles);
         assertEquals(33, meld.getValue());
-        
     }
 }
