@@ -119,6 +119,14 @@ public class Meld {
         return this.meldType == MeldType.RUN || this.meldType == MeldType.SET;
     }
     
+    public int getValue() {
+        int total = 0;
+        for (Tile tile : this.meld) {
+            total += tile.getValue();
+        }
+        return total;
+    }
+    
     @Override
     public String toString() {
         return this.meld.stream()
