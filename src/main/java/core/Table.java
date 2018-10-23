@@ -37,11 +37,16 @@ public class Table implements TableSubject {
     }
 
     private boolean isValidState(ArrayList<Meld> melds) {
+        // Discard empty melds before validating them
         for (int i = 0; i < melds.size(); i++) {
-            // Discard empty melds before validating them
             if (melds.get(i).getSize() == 0) {
                 melds.remove(i);
-            } else if (!melds.get(i).isValidMeld()) {
+            }
+        }
+
+        // Check if the melds are valid
+        for (int i = 0; i < melds.size(); i++) {
+            if (!melds.get(i).isValidMeld()) {
                 return false;
             }
         }

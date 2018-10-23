@@ -10,10 +10,18 @@ public class TableTest extends TestCase {
         
         // Create list of melds
         ArrayList<Meld> melds = new ArrayList<>();
+        
         Meld meld1 = new Meld();
-        Meld meld2 = new Meld();
+        Meld emptyMeld = new Meld();
+        
+        ArrayList<Tile> set = new ArrayList<>();
+        set.add(new Tile(Colour.RED, 7));
+        set.add(new Tile(Colour.BLUE, 7));
+        set.add(new Tile(Colour.GREEN, 7));
+        set.add(new Tile(Colour.ORANGE, 7));
+        meld1.addTile(set);
+        melds.add(emptyMeld);
         melds.add(meld1);
-        melds.add(meld2);
         
         table.setState(melds);
         
