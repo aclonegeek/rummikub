@@ -79,43 +79,46 @@ public class PlayerTest extends TestCase {
     }
 
     public void testNotifyObserver() {
-        PlayerHuman playerHuman = new PlayerHuman();
-        Player1 player1 = new Player1();
-        Player2 player2 = new Player2();
-        Player3 player3 = new Player3();
+        Player playerHuman = new PlayerHuman();
+        Player player1 = new Player1();
+        Player player2 = new Player2();
+        Player player3 = new Player3();
 
         Tile tile1 = new Tile(Colour.GREEN, 1);
         Tile tile2 = new Tile(Colour.GREEN, 2);
         Tile tile3 = new Tile(Colour.GREEN, 3);
         Tile tile4 = new Tile(Colour.GREEN, 4);
+        Tile tile5 = new Tile(Colour.GREEN, 5);
+        Tile tile6 = new Tile(Colour.GREEN, 6);
 
         playerHuman.registerObserver(player3);
         player1.registerObserver(player3);
         player2.registerObserver(player3);
 
-        playerHuman.add(tile1);
-        playerHuman.add(tile2);
-        player1.add(tile3);
-        player2.add(tile4);
-
         // The observer has not been notified yet.
         assertEquals(-1, player3.getLowestHandCount());
 
+        playerHuman.add(tile1);
+        playerHuman.add(tile2);
         playerHuman.notifyObservers();
         assertEquals(2, player3.getLowestHandCount());
+
+        player1.add(tile3);
         player1.notifyObservers();
-        player2.notifyObservers();
         assertEquals(1, player3.getLowestHandCount());
 
-        playerHuman.notifyObservers();
+        player2.add(tile4);
+        player2.add(tile5);
+        player2.add(tile6);
+        player2.notifyObservers();
         assertEquals(1, player3.getLowestHandCount());
     }
 
     public void testRemoveObserver() {
-        PlayerHuman playerHuman = new PlayerHuman();
-        Player1 player1 = new Player1();
-        Player2 player2 = new Player2();
-        Player3 player3 = new Player3();
+        Player playerHuman = new PlayerHuman();
+        Player player1 = new Player1();
+        Player player2 = new Player2();
+        Player player3 = new Player3();
 
         playerHuman.registerObserver(player3);
         player1.registerObserver(player3);
