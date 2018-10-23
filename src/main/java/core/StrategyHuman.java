@@ -2,8 +2,14 @@ package core;
 
 import java.util.ArrayList;
 
-public class StrategyHuman extends PlayBehaviour {
-    // Will probably override both methods, not sure how these will be implemented yet
+public class StrategyHuman implements PlayBehaviour {
+    public ArrayList<Meld> determineMove(ArrayList<Meld> workspace, Hand hand, boolean initialMove) {
+        if (initialMove) {
+            return determineInitialMove(workspace, hand);
+        }
+        return determineRegularMove(workspace, hand);
+    }
+    
     public ArrayList<Meld> determineInitialMove(ArrayList<Meld> workspace, Hand hand) {
         return null;
     }
