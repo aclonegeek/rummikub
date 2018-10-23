@@ -43,8 +43,6 @@ public class Table implements TableSubject {
                 melds.remove(i);
             } else if (!melds.get(i).isValidMeld()) {
                 return false;
-            } else {
-                continue;
             }
         }
         return true;
