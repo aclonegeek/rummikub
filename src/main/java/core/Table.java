@@ -12,19 +12,19 @@ public class Table implements TableSubject {
     }
 
     public void registerObserver(TableObserver player) {
-        observers.add(player);
+        this.observers.add(player);
     }
 
     public void removeObserver(TableObserver player) {
         int i = observers.indexOf(player);
         if (i >= 0) {
-            observers.remove(i);
+            this.observers.remove(i);
         }
     }
 
     public void notifyObservers() {
-        for (int i = 0; i < observers.size(); i++) {
-            TableObserver observer = (TableObserver) observers.get(i);
+        for (int i = 0; i < this.observers.size(); i++) {
+            TableObserver observer = (TableObserver) this.observers.get(i);
             observer.update(this.melds);
         }
     }
@@ -36,7 +36,7 @@ public class Table implements TableSubject {
     public boolean setState(ArrayList<Meld> melds) {
         if (isValidState(melds)) {
             this.melds = melds;
-            notifyObservers();
+            this.notifyObservers();
             return true;
         }
         return false;
