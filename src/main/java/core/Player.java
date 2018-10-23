@@ -42,6 +42,6 @@ public abstract class Player implements TableObserver {
     }
     
     public void update(ArrayList<Meld> melds) {
-        this.workspace = melds;
+        this.workspace = new ArrayList<>(melds);
     }
 }
