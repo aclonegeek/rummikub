@@ -11,8 +11,8 @@ public class Table implements TableSubject {
         this.melds = new ArrayList<>();
     }
 
-    public void registerObserver(TableObserver player) {
-        this.observers.add(player);
+    public void registerObserver(TableObserver observer) {
+        this.observers.add(observer);
     }
 
     public void removeObserver(TableObserver observer) {
