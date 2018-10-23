@@ -15,18 +15,12 @@ public class Table implements TableSubject {
         this.observers.add(player);
     }
 
-    public void removeObserver(TableObserver player) {
-        int i = observers.indexOf(player);
-        if (i >= 0) {
-            this.observers.remove(i);
-        }
+    public void removeObserver(TableObserver observer) {
+        this.observers.removeIf(o -> observer.equals(o));
     }
 
     public void notifyObservers() {
-        for (int i = 0; i < this.observers.size(); i++) {
-            TableObserver observer = (TableObserver) this.observers.get(i);
-            observer.update(this.melds);
-        }
+        this.observers.forEach(o -> o.update(this.melds));
     }
 
     public ArrayList<Meld> getState() {
