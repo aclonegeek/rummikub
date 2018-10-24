@@ -3,30 +3,24 @@ package core;
 import java.util.ArrayList;
 
 public class Table implements TableSubject {
-    private ArrayList<TableObserver> players;
+    private ArrayList<TableObserver> observers;
     private ArrayList<Meld> melds;
 
     public Table() {
-        this.players = new ArrayList<>();
+        this.observers = new ArrayList<>();
         this.melds = new ArrayList<>();
     }
 
-    public void registerObserver(TableObserver player) {
-        players.add(player);
+    public void registerObserver(TableObserver observer) {
+        this.observers.add(observer);
     }
 
-    public void removeObserver(TableObserver player) {
-        int i = players.indexOf(player);
-        if (i >= 0) {
-            players.remove(i);
-        }
+    public void removeObserver(TableObserver observer) {
+        this.observers.removeIf(o -> observer.equals(o));
     }
 
     public void notifyObservers() {
-        for (int i = 0; i < players.size(); i++) {
-            TableObserver player = (TableObserver) players.get(i);
-            player.update(this.melds);
-        }
+        this.observers.forEach(o -> o.update(this.melds));
     }
 
     public ArrayList<Meld> getState() {
@@ -36,20 +30,20 @@ public class Table implements TableSubject {
     public boolean setState(ArrayList<Meld> melds) {
         if (isValidState(melds)) {
             this.melds = melds;
+            this.notifyObservers();
             return true;
         }
         return false;
     }
 
     private boolean isValidState(ArrayList<Meld> melds) {
+        // Discard empty melds before validating them
+        melds.removeIf(m -> m.getSize() == 0);
+
+        // Check if the melds are valid
         for (int i = 0; i < melds.size(); i++) {
-            // Discard empty melds before validating them
-            if (melds.get(i).getSize() == 0) {
-                melds.remove(i);
-            } else if (!melds.get(i).isValidMeld()) {
+            if (!melds.get(i).isValidMeld()) {
                 return false;
-            } else {
-                continue;
             }
         }
         return true;
