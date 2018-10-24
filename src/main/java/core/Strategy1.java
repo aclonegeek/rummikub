@@ -40,7 +40,7 @@ public class Strategy1 implements PlayBehaviour {
         if (filteredMelds.size() > 0) {
             Meld largestMeld = filteredMelds.get(0);
             for (Meld tempMeld : filteredMelds) {
-                if (tempMeld.getSize() > largestMeld.getSize()) {
+                if (tempMeld.getValue() > largestMeld.getValue()) {
                     largestMeld = tempMeld;
                 }
             }
