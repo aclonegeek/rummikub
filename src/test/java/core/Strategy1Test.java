@@ -11,22 +11,17 @@ public class Strategy1Test  extends TestCase {
         PlayBehaviour strategy1 = new Strategy1();
         ArrayList<Meld> workspace = new ArrayList<>();
         Hand hand = new Hand();
-        hand.add(new Tile(Colour.GREEN, 1));
-        hand.add(new Tile(Colour.GREEN, 2));
-        hand.add(new Tile(Colour.GREEN, 6));
-        hand.add(new Tile(Colour.GREEN, 7));
         hand.add(new Tile(Colour.GREEN, 10));
         hand.add(new Tile(Colour.ORANGE, 10));
         hand.add(new Tile(Colour.BLUE, 10));
-        hand.add(new Tile(Colour.RED, 9));
+        hand.add(new Tile(Colour.RED, 10));
         hand.add(new Tile(Colour.RED, 8));
-        hand.add(new Tile(Colour.GREEN, 12));
-        hand.add(new Tile(Colour.ORANGE, 2));
-        hand.add(new Tile(Colour.RED, 11));
-        hand.add(new Tile(Colour.RED, 12));
-        hand.add(new Tile(Colour.BLUE, 7));
+        hand.add(new Tile(Colour.RED, 7));
+        hand.add(new Tile(Colour.RED, 6));
+        hand.add(new Tile(Colour.RED, 5));
+        hand.add(new Tile(Colour.RED, 4));
         
-        assertEquals("[{B10,G10,O10}]", strategy1.determineMove(workspace, hand, true).toString());
+        assertEquals("[{R10,B10,G10,O10}]", strategy1.determineMove(workspace, hand, true).toString());
     }
     
     // Test first move such that multiple melds total >= 30, should use as many melds as possible
@@ -68,11 +63,11 @@ public class Strategy1Test  extends TestCase {
         hand.add(new Tile(Colour.RED, 12));
         hand.add(new Tile(Colour.BLUE, 7));
         
-        assertEquals(null, strategy1.determineMove(workspace,  hand,  true));
+        assertEquals(null, strategy1.determineMove(workspace, hand, true));
     }
     
     // Test first move with existing melds in workspace (should not interact with existing melds, should only create new melds)
-    public void testDetermineInitialMove4() {
+    public void testDetermineInitialMove5() {
         PlayBehaviour strategy1 = new Strategy1();
         ArrayList<Meld> workspace = new ArrayList<>();
         Hand hand = new Hand();
