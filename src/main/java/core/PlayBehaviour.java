@@ -12,9 +12,9 @@ public abstract class PlayBehaviour {
     }
     
     public ArrayList<Meld> determineMove(Hand hand) {
-        if (initialMove) {
-            ArrayList<Meld> newTableState = determineInitialMove(hand);
-            if (newTableState != null) initialMove = false;
+        if (this.initialMove) {
+            ArrayList<Meld> newTableState = this.determineInitialMove(hand);
+            if (newTableState != null) { this.initialMove = false; }
             return newTableState;
         }
         return determineRegularMove(hand);
@@ -104,16 +104,16 @@ public abstract class PlayBehaviour {
                 filteredMelds.add(tempMeld);
             }
         }
-        if (filteredMelds.size() > 0) {
-            Meld largestMeld = filteredMelds.get(0);
-            for (Meld tempMeld : filteredMelds) {
-                if (tempMeld.getSize() > largestMeld.getSize()) {
-                    largestMeld = tempMeld;
-                }
+        
+        if (filteredMelds.size() <= 0) return null;
+        
+        Meld largestMeld = filteredMelds.get(0);
+        for (Meld tempMeld : filteredMelds) {
+            if (tempMeld.getSize() > largestMeld.getSize()) {
+                largestMeld = tempMeld;
             }
-            return largestMeld;
-        }  
-        return null;
+        }
+        return largestMeld;
     }
     
     // Returns largest meld (by size)
@@ -121,8 +121,7 @@ public abstract class PlayBehaviour {
         if (melds.size() == 0) return null;
         Meld largestMeld = melds.get(0);
         for (Meld tempMeld : melds) {
-            if ((tempMeld.isValidMeld() && !largestMeld.isValidMeld()) ||
-                (tempMeld.isValidMeld() && tempMeld.getSize() > largestMeld.getSize())) {
+            if (tempMeld.getSize() > largestMeld.getSize()) {
                 largestMeld = tempMeld;
             }
         }
@@ -134,8 +133,7 @@ public abstract class PlayBehaviour {
         if (melds.size() == 0) return null;
         Meld greatestMeld = melds.get(0);
         for (Meld tempMeld : melds) {
-            if ((tempMeld.isValidMeld() && !greatestMeld.isValidMeld()) || 
-                (tempMeld.isValidMeld() && tempMeld.getValue() > greatestMeld.getValue())) {
+            if (tempMeld.getValue() > greatestMeld.getValue()) {
                 greatestMeld = tempMeld;
             }
         }

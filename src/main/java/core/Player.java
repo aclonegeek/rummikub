@@ -27,13 +27,12 @@ public abstract class Player implements TableObserver {
     }
 
     public ArrayList<Meld> play() {
-        ArrayList<Meld> newTableState = this.playBehaviour.determineMove(this.workspace, this.hand, this.initialMove);
+        ArrayList<Meld> newTableState = this.playBehaviour.determineMove(this.hand);
         if (newTableState != null) {
             this.initialMove = false;
             this.removeTilesFromHand(newTableState);
-            return newTableState;
         }
-        return null;
+        return newTableState;
     }
     
     // Removes tiles from Player's hand that appear in the given ArrayList for which isOnTable is false (ie. they were just added)
