@@ -40,6 +40,12 @@ public class Meld {
         return false;
     }
     
+    public boolean addTile(Tile tile) {
+        ArrayList<Tile> tempMeld = new ArrayList<>();
+        tempMeld.add(tile);
+        return this.addTile(tempMeld);
+    }
+    
     public Tile removeTile(int index) {
         Tile removedTile = this.meld.remove(index);
         this.meldType = determineMeldType(this.meld);
@@ -125,6 +131,27 @@ public class Meld {
             total += tile.getValue();
         }
         return total;
+    }
+    
+    public boolean containsTile(Tile tile) {
+        for (Tile tempTile : this.meld) {
+            if (tempTile.toString().equals(tile.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean equals(Meld meld) {
+        if (this.getSize() != meld.getSize()) {
+            return false;
+        }
+        for (int i = 0; i < meld.getSize(); i++) {
+            if (!this.containsTile(meld.getTile(i))) {
+                return false;
+            }
+        }
+        return true;
     }
     
     @Override
