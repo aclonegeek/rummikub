@@ -38,6 +38,10 @@ public class Hand {
         return this.hand.size();
     }
     
+    public Tile getTile(int index) {
+        return this.hand.get(index);
+    }
+    
     public String toString() {
         String returnString = "[";
         for (int i = 0; i < this.hand.size(); i++) {
