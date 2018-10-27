@@ -198,4 +198,71 @@ public class Strategy1Test extends TestCase {
         
         assertEquals(null, strategy1.determineMove(hand));
     }
+    
+    // Test regular move where player plays the last of their tiles by creating new melds from their hand
+    public void testDetermineRegularMove3() {
+        PlayBehaviour strategy1 = new Strategy1();
+        ArrayList<Meld> workspace = new ArrayList<>();
+        Hand hand = new Hand();
+        
+        ArrayList<Tile> tiles1 = new ArrayList<>();
+        ArrayList<Tile> tiles2 = new ArrayList<>();
+        tiles1.add(new Tile(Colour.RED, 1));
+        tiles1.add(new Tile(Colour.RED, 2));
+        tiles1.add(new Tile(Colour.RED, 3));
+        tiles2.add(new Tile(Colour.GREEN, 9));
+        tiles2.add(new Tile(Colour.BLUE, 9));
+        tiles2.add(new Tile(Colour.RED, 9));
+        Meld meld1 = new Meld();
+        Meld meld2 = new Meld();
+        meld1.addTile(tiles1);
+        meld2.addTile(tiles2);
+        workspace.add(meld1);
+        workspace.add(meld2);
+        
+        assertEquals("[{R1,R2,R3}, {G9,B9,R9}]", workspace.toString());
+        
+        hand.add(new Tile(Colour.GREEN, 5));
+        hand.add(new Tile(Colour.GREEN, 6));
+        hand.add(new Tile(Colour.GREEN, 7));
+        hand.add(new Tile(Colour.GREEN, 10));
+        hand.add(new Tile(Colour.RED, 10));
+        hand.add(new Tile(Colour.ORANGE, 10));
+        hand.add(new Tile(Colour.BLUE, 10));
+        strategy1.setWorkspace(workspace);
+        strategy1.setInitialMove(false);
+        
+        assertEquals("[{R1,R2,R3}, {G9,B9,R9}, {R10,B10,G10,O10}, {G5,G6,G7}]", strategy1.determineMove(hand).toString());
+    }
+    
+    // Test regular move where player plays the last of their tiles by adding to melds on the table
+    public void testDetermineRegularMove4() {
+        PlayBehaviour strategy1 = new Strategy1();
+        ArrayList<Meld> workspace = new ArrayList<>();
+        Hand hand = new Hand();
+        
+        ArrayList<Tile> tiles1 = new ArrayList<>();
+        ArrayList<Tile> tiles2 = new ArrayList<>();
+        tiles1.add(new Tile(Colour.RED, 1));
+        tiles1.add(new Tile(Colour.RED, 2));
+        tiles1.add(new Tile(Colour.RED, 3));
+        tiles2.add(new Tile(Colour.GREEN, 9));
+        tiles2.add(new Tile(Colour.BLUE, 9));
+        tiles2.add(new Tile(Colour.RED, 9));
+        Meld meld1 = new Meld();
+        Meld meld2 = new Meld();
+        meld1.addTile(tiles1);
+        meld2.addTile(tiles2);
+        workspace.add(meld1);
+        workspace.add(meld2);
+        
+        assertEquals("[{R1,R2,R3}, {G9,B9,R9}]", workspace.toString());
+        
+        hand.add(new Tile(Colour.RED, 4));
+        hand.add(new Tile(Colour.ORANGE, 9));
+        strategy1.setWorkspace(workspace);
+        strategy1.setInitialMove(false);
+        
+        assertEquals("[{R1,R2,R3,R4}, {G9,B9,R9,O9}]", strategy1.determineMove(hand).toString());
+    }
 }

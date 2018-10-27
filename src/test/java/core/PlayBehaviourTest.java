@@ -122,7 +122,6 @@ public class PlayBehaviourTest extends TestCase {
         Meld meld5 = new Meld();
         Meld meld6 = new Meld();
         Meld meld7 = new Meld();
-        Meld meld8 = new Meld();
         meld5.addTile(new Tile(Colour.RED, 9));
         meld5.addTile(new Tile(Colour.RED, 10));
         meld5.addTile(new Tile(Colour.RED, 11));
@@ -137,11 +136,9 @@ public class PlayBehaviourTest extends TestCase {
         meld7.addTile(new Tile(Colour.GREEN, 5));
         meld7.addTile(new Tile(Colour.GREEN, 4));
         meld7.addTile(new Tile(Colour.GREEN, 3));
-        meld8.addTile(new Tile(Colour.BLUE, 12));
         melds4.add(meld5);
         melds4.add(meld6);
         melds4.add(meld7);
-        melds4.add(meld8);
         assertEquals("{G3,G4,G5,G6,G7,G8}", strategy1.getLargestMeldOver30(melds4).toString());
     }
     
@@ -167,8 +164,9 @@ public class PlayBehaviourTest extends TestCase {
         Meld meld3 = new Meld();
         Meld meld4 = new Meld();
         Meld meld5 = new Meld();
-        Meld meld6 = new Meld();
-        meld6.addTile(new Tile(Colour.BLUE, 10));
+        meld5.addTile(new Tile(Colour.RED, 1));
+        meld5.addTile(new Tile(Colour.RED, 2));
+        meld5.addTile(new Tile(Colour.RED, 3));
         meld2.addTile(new Tile(Colour.RED, 1));
         meld2.addTile(new Tile(Colour.ORANGE, 1));
         meld2.addTile(new Tile(Colour.GREEN, 1));
@@ -180,12 +178,10 @@ public class PlayBehaviourTest extends TestCase {
         meld4.addTile(new Tile(Colour.RED, 12));
         meld4.addTile(new Tile(Colour.RED, 11));
         meld4.addTile(new Tile(Colour.RED, 10));
-        meld5.addTile(new Tile(Colour.BLUE, 10));
         melds3.add(meld2);
         melds3.add(meld3);
         melds3.add(meld4);
         melds3.add(meld5);
-        melds3.add(meld6);
         assertEquals("{R1,O1,G1,B1}", strategy1.getLargestMeld(melds3).toString());
     }
     
@@ -211,23 +207,22 @@ public class PlayBehaviourTest extends TestCase {
         Meld meld3 = new Meld();
         Meld meld4 = new Meld();
         Meld meld5 = new Meld();
-        Meld meld6 = new Meld();
-        meld6.addTile(new Tile(Colour.BLUE, 10));
+        meld4.addTile(new Tile(Colour.RED, 12));
+        meld4.addTile(new Tile(Colour.RED, 11));
+        meld4.addTile(new Tile(Colour.RED, 10));
+        meld5.addTile(new Tile(Colour.RED, 1));
+        meld5.addTile(new Tile(Colour.RED, 2));
+        meld5.addTile(new Tile(Colour.RED, 3));
         meld2.addTile(new Tile(Colour.RED, 12));
         meld2.addTile(new Tile(Colour.ORANGE, 12));
         meld2.addTile(new Tile(Colour.GREEN, 12));
         meld3.addTile(new Tile(Colour.ORANGE, 12));
         meld3.addTile(new Tile(Colour.BLUE, 12));
         meld3.addTile(new Tile(Colour.GREEN, 12));
-        meld4.addTile(new Tile(Colour.RED, 12));
-        meld4.addTile(new Tile(Colour.RED, 11));
-        meld4.addTile(new Tile(Colour.RED, 10));
-        meld5.addTile(new Tile(Colour.BLUE, 10));
         melds3.add(meld2);
         melds3.add(meld3);
         melds3.add(meld4);
         melds3.add(meld5);
-        melds3.add(meld6);
         assertEquals("{R12,O12,G12}", strategy1.getGreatestMeld(melds3).toString());
     }
 }
