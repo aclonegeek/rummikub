@@ -22,6 +22,17 @@ public class Meld {
         this.meldType = MeldType.INVALID;
     }
     
+    public Meld(String meld) {
+        this.meld = new ArrayList<>();
+        this.meldType = MeldType.INVALID;
+        
+        if (meld.length() != 0) {
+            for (String tile : meld.split(",")) {
+                this.addTile(new Tile(tile));
+            }    
+        }
+    }
+    
     public boolean addTile(ArrayList<Tile> tiles) {
         MeldType tempMeldType;
         ArrayList<Tile> tempMeld = new ArrayList<>();
