@@ -8,4 +8,10 @@ public class TileTest extends TestCase {
         Tile t1 = new Tile(Colour.ORANGE, 6);
         assertEquals("O6", t1.toString());
     }
+    
+    public void testStringConstructor() {
+        Tile t1 = new Tile(Colour.ORANGE, 9);
+        Tile t2 = new Tile("O9");
+        assertEquals(t1.toString(), t2.toString());
+    }
 }
