@@ -15,7 +15,7 @@ public class Tile {
     
     public Tile (String tile) {
         this.colour = Colour.getEnum(tile.charAt(0));
-        this.value = Character.getNumericValue(tile.charAt(1));
+        this.value = Integer.parseInt(tile.substring(1));
         this.onTable = false;
     }
     
