@@ -378,4 +378,27 @@ public class MeldTest extends TestCase {
         assertFalse(meld5.equals(meld1));
         assertFalse(meld2.equals(meld6));
     }
+    
+    public void testStringConstructor() {
+        Meld meld1 = new Meld();
+        meld1.addTile(new Tile(Colour.GREEN, 1));
+        meld1.addTile(new Tile(Colour.GREEN, 2));
+        meld1.addTile(new Tile(Colour.GREEN, 3));
+        
+        Meld meld2 = new Meld("G1,G2,G3");
+        assertEquals(meld1.toString(), meld2.toString());
+        assertEquals(meld2.isValidMeld(), true);
+        
+        Meld meld3 = new Meld();
+        meld3.addTile(new Tile(Colour.GREEN, 1));
+        meld3.addTile(new Tile(Colour.GREEN, 2));
+        
+        Meld meld4 = new Meld("G1,G2");
+        assertEquals(meld3.toString(), meld4.toString());
+        assertEquals(meld4.isValidMeld(), false);
+        
+        Meld meld5 = new Meld();
+        Meld meld6 = new Meld("");
+        assertEquals(meld5.toString(), meld6.toString());
+    }
 }
