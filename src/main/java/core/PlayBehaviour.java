@@ -2,13 +2,29 @@ package core;
 
 import java.util.ArrayList;
 
-public abstract class PlayBehaviour {
+public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
     protected boolean initialMove;
     protected ArrayList<Meld> workspace;
+
+    private int lowestHandCount = -1;
 
     public PlayBehaviour() {
         this.workspace = new ArrayList<>();
         this.initialMove = true;
+    }
+
+    public void update(ArrayList<Meld> melds) {
+        this.workspace = new ArrayList<>(melds);
+    }
+
+    public void update(int lowestHandCount) {
+        if (this.lowestHandCount == -1 || lowestHandCount < this.lowestHandCount) {
+            this.lowestHandCount = lowestHandCount;
+        }
+    }
+
+    public int getLowestHandCount() {
+        return this.lowestHandCount;
     }
 
     public ArrayList<Meld> determineMove(Hand hand) {

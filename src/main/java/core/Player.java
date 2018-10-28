@@ -2,9 +2,8 @@ package core;
 
 import java.util.ArrayList;
 
-public abstract class Player implements TableObserver, PlayerObserver, PlayerSubject {
+public abstract class Player implements PlayerSubject {
     private ArrayList<PlayerObserver> observers;
-    private int lowestHandCount = -1;
 
     protected Hand hand;
     protected PlayBehaviour playBehaviour;
@@ -26,6 +25,10 @@ public abstract class Player implements TableObserver, PlayerObserver, PlayerSub
         return this.playBehaviour.getWorkspace();
     }
 
+    public PlayBehaviour getPlayBehaviour() {
+        return this.playBehaviour;
+    }
+
     public ArrayList<Meld> play() {
         ArrayList<Meld> newTableState = this.playBehaviour.determineMove(this.hand);
         if (newTableState != null) {
@@ -45,16 +48,6 @@ public abstract class Player implements TableObserver, PlayerObserver, PlayerSub
         }
     }
 
-    public void update(ArrayList<Meld> melds) {
-        return;
-    }
-
-    public void update(int lowestHandCount) {
-        if (this.lowestHandCount == -1 || lowestHandCount < this.lowestHandCount) {
-            this.lowestHandCount = lowestHandCount;
-        }
-    }
-
     public void registerObserver(PlayerObserver observer) {
 		this.observers.add(observer);
 	}
@@ -66,10 +59,6 @@ public abstract class Player implements TableObserver, PlayerObserver, PlayerSub
 	public void notifyObservers() {
         this.observers.forEach(o -> o.update(this.hand.getSize()));
 	}
-
-    public int getLowestHandCount() {
-        return this.lowestHandCount;
-    }
 
     public ArrayList<PlayerObserver> getObservers() {
         return this.observers;
