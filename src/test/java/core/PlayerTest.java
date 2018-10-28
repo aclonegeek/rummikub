@@ -91,27 +91,27 @@ public class PlayerTest extends TestCase {
         Tile tile5 = new Tile(Colour.GREEN, 5);
         Tile tile6 = new Tile(Colour.GREEN, 6);
 
-        playerHuman.registerObserver(player3);
-        player1.registerObserver(player3);
-        player2.registerObserver(player3);
+        playerHuman.registerObserver(player3.getPlayBehaviour());
+        player1.registerObserver(player3.getPlayBehaviour());
+        player2.registerObserver(player3.getPlayBehaviour());
 
         // The observer has not been notified yet.
-        assertEquals(-1, player3.getLowestHandCount());
+        assertEquals(-1, player3.getPlayBehaviour().getLowestHandCount());
 
         playerHuman.add(tile1);
         playerHuman.add(tile2);
         playerHuman.notifyObservers();
-        assertEquals(2, player3.getLowestHandCount());
+        assertEquals(2, player3.getPlayBehaviour().getLowestHandCount());
 
         player1.add(tile3);
         player1.notifyObservers();
-        assertEquals(1, player3.getLowestHandCount());
+        assertEquals(1, player3.getPlayBehaviour().getLowestHandCount());
 
         player2.add(tile4);
         player2.add(tile5);
         player2.add(tile6);
         player2.notifyObservers();
-        assertEquals(1, player3.getLowestHandCount());
+        assertEquals(1, player3.getPlayBehaviour().getLowestHandCount());
     }
 
     public void testRemoveObserver() {
@@ -120,17 +120,17 @@ public class PlayerTest extends TestCase {
         Player player2 = new Player2();
         Player player3 = new Player3();
 
-        playerHuman.registerObserver(player3);
-        player1.registerObserver(player3);
-        player2.registerObserver(player3);
+        playerHuman.registerObserver(player3.getPlayBehaviour());
+        player1.registerObserver(player3.getPlayBehaviour());
+        player2.registerObserver(player3.getPlayBehaviour());
 
         assertEquals(1, playerHuman.getObservers().size());
         assertEquals(1, player1.getObservers().size());
         assertEquals(1, player2.getObservers().size());
 
-        playerHuman.removeObserver(player3);
-        player1.removeObserver(player3);
-        player2.removeObserver(player3);
+        playerHuman.removeObserver(player3.getPlayBehaviour());
+        player1.removeObserver(player3.getPlayBehaviour());
+        player2.removeObserver(player3.getPlayBehaviour());
 
         assertEquals(0, playerHuman.getObservers().size());
         assertEquals(0, player1.getObservers().size());
