@@ -319,4 +319,86 @@ public class MeldTest extends TestCase {
         meld.addTile(meldTiles);
         assertEquals("{O1,B1,R1}", meld.toString());
     }
+    
+    public void testGetValue() {
+        Meld meld = new Meld();
+        assertEquals(0, meld.getValue());
+        
+        ArrayList<Tile> meldTiles = new ArrayList<>();
+        meldTiles.add(new Tile(Colour.GREEN, 10));
+        meldTiles.add(new Tile(Colour.GREEN, 11));
+        meldTiles.add(new Tile(Colour.GREEN, 12));
+        meld.addTile(meldTiles);
+        assertEquals(33, meld.getValue());
+    }
+    
+    public void testContainsTile() {
+        Meld meld = new Meld();
+        ArrayList<Tile> meldTiles = new ArrayList<>();
+        meldTiles.add(new Tile(Colour.GREEN, 10));
+        meldTiles.add(new Tile(Colour.GREEN, 11));
+        meldTiles.add(new Tile(Colour.GREEN, 12));
+        Tile tile1 = new Tile(Colour.GREEN, 10);
+        Tile tile2 = new Tile(Colour.BLUE, 7);
+        meld.addTile(meldTiles);
+        assertTrue(meld.containsTile(tile1));
+        assertFalse(meld.containsTile(tile2));
+    }
+    
+    public void testEquals() {
+        Meld meld1 = new Meld();
+        Meld meld2 = new Meld();
+        Meld meld3 = new Meld();
+        Meld meld4 = new Meld();
+        Meld meld5 = new Meld();
+        Meld meld6 = new Meld();
+        
+        meld1.addTile(new Tile(Colour.GREEN, 1));
+        meld1.addTile(new Tile(Colour.GREEN, 2));
+        meld1.addTile(new Tile(Colour.GREEN, 3));
+        meld2.addTile(new Tile(Colour.GREEN, 1));
+        meld2.addTile(new Tile(Colour.GREEN, 2));
+        meld2.addTile(new Tile(Colour.GREEN, 3));
+        meld3.addTile(new Tile(Colour.GREEN, 8));
+        meld3.addTile(new Tile(Colour.BLUE, 8));
+        meld3.addTile(new Tile(Colour.RED, 8));
+        meld4.addTile(new Tile(Colour.RED, 8));
+        meld4.addTile(new Tile(Colour.BLUE, 8));
+        meld4.addTile(new Tile(Colour.GREEN, 8));
+        meld5.addTile(new Tile(Colour.RED, 2));
+        meld5.addTile(new Tile(Colour.RED, 3));
+        meld5.addTile(new Tile(Colour.RED, 4));
+        meld6.addTile(new Tile(Colour.RED, 1));
+        
+        assertTrue(meld1.equals(meld2));
+        assertTrue(meld2.equals(meld1));
+        assertTrue(meld3.equals(meld4));
+        assertTrue(meld4.equals(meld3));
+        assertFalse(meld1.equals(meld5));
+        assertFalse(meld5.equals(meld1));
+        assertFalse(meld2.equals(meld6));
+    }
+    
+    public void testStringConstructor() {
+        Meld meld1 = new Meld();
+        meld1.addTile(new Tile(Colour.GREEN, 1));
+        meld1.addTile(new Tile(Colour.GREEN, 2));
+        meld1.addTile(new Tile(Colour.GREEN, 3));
+        
+        Meld meld2 = new Meld("G1,G2,G3");
+        assertEquals(meld1.toString(), meld2.toString());
+        assertEquals(meld2.isValidMeld(), true);
+        
+        Meld meld3 = new Meld();
+        meld3.addTile(new Tile(Colour.GREEN, 1));
+        meld3.addTile(new Tile(Colour.GREEN, 2));
+        
+        Meld meld4 = new Meld("G1,G2");
+        assertEquals(meld3.toString(), meld4.toString());
+        assertEquals(meld4.isValidMeld(), false);
+        
+        Meld meld5 = new Meld();
+        Meld meld6 = new Meld("");
+        assertEquals(meld5.toString(), meld6.toString());
+    }
 }

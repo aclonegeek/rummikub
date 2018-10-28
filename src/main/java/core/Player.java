@@ -9,11 +9,13 @@ public abstract class Player implements TableObserver, PlayerObserver, PlayerSub
     protected ArrayList<Meld> workspace;
     protected Hand hand;
     protected PlayBehaviour playBehaviour;
-
+    protected boolean initialMove;
+    
     public Player() {
         this.observers = new ArrayList<>();
         this.workspace = new ArrayList<>();
         this.hand = new Hand();
+        this.initialMove = true;
     }
 
     public void add(Tile tile) {
@@ -29,8 +31,11 @@ public abstract class Player implements TableObserver, PlayerObserver, PlayerSub
     }
 
     public ArrayList<Meld> play() {
-        ArrayList<Meld> newTableState = this.playBehaviour.determineMove(workspace, hand);
-        this.removeTilesFromHand(newTableState);
+        ArrayList<Meld> newTableState = this.playBehaviour.determineMove(this.hand);
+        if (newTableState != null) {
+            this.initialMove = false;
+            this.removeTilesFromHand(newTableState);
+        }
         return newTableState;
     }
 
@@ -46,7 +51,7 @@ public abstract class Player implements TableObserver, PlayerObserver, PlayerSub
     }
 
     public void update(ArrayList<Meld> melds) {
-        this.workspace = melds;
+        this.workspace = new ArrayList<>(melds);
     }
 
     public void update(int lowestHandCount) {

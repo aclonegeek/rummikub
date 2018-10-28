@@ -20,6 +20,17 @@ public class Meld {
         this.meldType = MeldType.INVALID;
     }
     
+    public Meld(String meld) {
+        this.meld = new ArrayList<>();
+        this.meldType = MeldType.INVALID;
+        
+        if (meld.length() != 0) {
+            for (String tile : meld.split(",")) {
+                this.addTile(new Tile(tile));
+            }    
+        }
+    }
+    
     public boolean addTile(ArrayList<Tile> tiles) {
         MeldType tempMeldType;
         ArrayList<Tile> tempMeld = new ArrayList<>();
@@ -38,6 +49,12 @@ public class Meld {
             return true;
         }
         return false;
+    }
+    
+    public boolean addTile(Tile tile) {
+        ArrayList<Tile> tempMeld = new ArrayList<>();
+        tempMeld.add(tile);
+        return this.addTile(tempMeld);
     }
     
     public Tile removeTile(int index) {
@@ -117,6 +134,35 @@ public class Meld {
     
     public boolean isValidMeld() {
         return this.meldType == MeldType.RUN || this.meldType == MeldType.SET;
+    }
+    
+    public int getValue() {
+        int total = 0;
+        for (Tile tile : this.meld) {
+            total += tile.getValue();
+        }
+        return total;
+    }
+    
+    public boolean containsTile(Tile tile) {
+        for (Tile tempTile : this.meld) {
+            if (tempTile.toString().equals(tile.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean equals(Meld meld) {
+        if (this.getSize() != meld.getSize()) {
+            return false;
+        }
+        for (int i = 0; i < meld.getSize(); i++) {
+            if (!this.containsTile(meld.getTile(i))) {
+                return false;
+            }
+        }
+        return true;
     }
     
     @Override
