@@ -13,6 +13,12 @@ public class Tile {
         this.onTable = false;
     }
     
+    public Tile (String tile) {
+        this.colour = Colour.getEnum(tile.charAt(0));
+        this.value = Integer.parseInt(tile.substring(1));
+        this.onTable = false;
+    }
+    
     public Colour getColour() {
         return this.colour;
     }
