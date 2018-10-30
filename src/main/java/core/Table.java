@@ -48,4 +48,14 @@ public class Table implements TableSubject {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        String table = new String();
+        int counter = 1;
+        for (Meld meld : this.melds) {
+            table += counter++ + ": " + meld.toString() +"\n";
+        }
+        return table;
+    }
 }
