@@ -132,4 +132,34 @@ public class TableTest extends TestCase {
         // Should be true since meld1 is now a run
         assertTrue(table.setState(melds));
     }
+
+    public void testToString() {
+        Table table = new Table();
+        Meld meld1 = new Meld();
+        Meld meld2 = new Meld();
+        ArrayList<Meld> melds = new ArrayList<>();
+
+        assertEquals("", table.toString());
+
+        ArrayList<Tile> set = new ArrayList<>();
+        set.add(new Tile(Colour.RED, 7));
+        set.add(new Tile(Colour.BLUE, 7));
+        set.add(new Tile(Colour.GREEN, 7));
+        set.add(new Tile(Colour.ORANGE, 7));
+        meld1.addTile(set);
+        melds.add(meld1);
+        assertTrue(table.setState(melds));
+
+        assertEquals("1: {R7,B7,G7,O7}\n", table.toString());
+
+        ArrayList<Tile> run = new ArrayList<>();
+        run.add(new Tile(Colour.RED, 1));
+        run.add(new Tile(Colour.RED, 2));
+        run.add(new Tile(Colour.RED, 3));
+        meld2.addTile(run);
+        melds.add(meld2);
+        assertTrue(table.setState(melds));
+
+        assertEquals("1: {R7,B7,G7,O7}\n2: {R1,R2,R3}\n", table.toString());
+    }
 }
