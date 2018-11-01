@@ -10,6 +10,7 @@ public class Player2 extends Player {
     protected ArrayList<Meld> play() {
         ArrayList<Meld> workspace = new ArrayList<>();
         if (this.initialMove && this.getWorkspace().size() > 0) {
+            // If the workspace is empty and it is the player's initial move
             workspace = this.playBehaviour.determineInitialMove(hand);
         } else {
             workspace = this.playBehaviour.determineRegularMove(hand);
