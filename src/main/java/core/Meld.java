@@ -64,6 +64,10 @@ public class Meld {
     }
     
     public Meld splitMeld(int index) {
+        if (index <= 0 || index >= this.meld.size()) {
+           return null;
+        }
+        
         Meld newMeld = new Meld();
         ArrayList<Tile> secondHalf = new ArrayList<>();
         int currMeldSize = this.meld.size();
