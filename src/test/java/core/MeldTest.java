@@ -295,17 +295,17 @@ public class MeldTest extends TestCase {
         assertEquals("{R1,R2,R3}", meld.toString());
         assertEquals("{R4,R5,R6}", returnedMeld1.toString());
         
-        // Split at front
+        // Split at front - invalid
         Meld returnedMeld2;
         returnedMeld2 = meld.splitMeld(0);
-        assertEquals(0, meld.getSize());
-        assertEquals("{R1,R2,R3}", returnedMeld2.toString());
+        assertEquals("{R1,R2,R3}", meld.toString());
+        assertEquals(null, returnedMeld2);
         
-        // Split at back
+        // Split at end - invalid
         Meld returnedMeld3;
-        returnedMeld3 = returnedMeld2.splitMeld(returnedMeld2.getSize());
-        assertEquals("{R1,R2,R3}", returnedMeld2.toString());
-        assertEquals(0, returnedMeld3.getSize()); 
+        returnedMeld3 = meld.splitMeld(meld.getSize());
+        assertEquals("{R1,R2,R3}", meld.toString());
+        assertEquals(null, returnedMeld3);
     }
     
     public void testToString() {
