@@ -3,13 +3,11 @@ package core;
 import java.util.ArrayList;
 
 public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
-    protected boolean initialMove;
     protected int lowestHandCount = -1;
     protected ArrayList<Meld> workspace;
 
     public PlayBehaviour() {
         this.workspace = new ArrayList<>();
-        this.initialMove = true;
     }
     
     abstract ArrayList<Meld> determineInitialMove(Hand hand);
@@ -25,15 +23,6 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
         }
     }
 
-    public ArrayList<Meld> determineMove(Hand hand) {
-        if (this.initialMove) {
-            ArrayList<Meld> newTableState = this.determineInitialMove(hand);
-            if (newTableState != null) { this.initialMove = false; }
-            return newTableState;
-        }
-        return determineRegularMove(hand);
-    }
-
     public ArrayList<Meld> getWorkspace() {
         return this.workspace;
     }
@@ -44,14 +33,6 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
     
     public int getLowestHandCount() {
         return this.lowestHandCount;
-    }
-    
-    public boolean getInitialMove() {
-        return this.initialMove;
-    }
-
-    public void setInitialMove(boolean initialMove) {
-        this.initialMove = initialMove;
     }
 
     // Returns all possible melds in player's hand
