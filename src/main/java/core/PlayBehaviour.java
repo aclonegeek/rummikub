@@ -4,14 +4,16 @@ import java.util.ArrayList;
 
 public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
     protected boolean initialMove;
+    protected int lowestHandCount = -1;
     protected ArrayList<Meld> workspace;
-
-    private int lowestHandCount = -1;
 
     public PlayBehaviour() {
         this.workspace = new ArrayList<>();
         this.initialMove = true;
     }
+    
+    abstract ArrayList<Meld> determineInitialMove(Hand hand);
+    abstract ArrayList<Meld> determineRegularMove(Hand hand);
 
     public void update(ArrayList<Meld> melds) {
         this.workspace = new ArrayList<>(melds);
@@ -23,10 +25,6 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
         }
     }
 
-    public int getLowestHandCount() {
-        return this.lowestHandCount;
-    }
-
     public ArrayList<Meld> determineMove(Hand hand) {
         if (this.initialMove) {
             ArrayList<Meld> newTableState = this.determineInitialMove(hand);
@@ -36,30 +34,24 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
         return determineRegularMove(hand);
     }
 
-    public void setWorkspace(ArrayList<Meld> workspace) {
-        this.workspace = workspace;
-    }
-
     public ArrayList<Meld> getWorkspace() {
         return this.workspace;
     }
-
-    public void setInitialMove(boolean initialMove) {
-        this.initialMove = initialMove;
+    
+    public void setWorkspace(ArrayList<Meld> workspace) {
+        this.workspace = workspace;
     }
-
+    
+    public int getLowestHandCount() {
+        return this.lowestHandCount;
+    }
+    
     public boolean getInitialMove() {
         return this.initialMove;
     }
 
-    protected ArrayList<Meld> determineInitialMove(Hand hand) {
-        System.out.println("determineInitialMove should have been overridden.");
-        return null;
-    }
-
-    protected ArrayList<Meld> determineRegularMove(Hand hand) {
-        System.out.println("determineRegularMove should have been overridden.");
-        return null;
+    public void setInitialMove(boolean initialMove) {
+        this.initialMove = initialMove;
     }
 
     // Returns all possible melds in player's hand
