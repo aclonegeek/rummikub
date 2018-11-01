@@ -1,8 +1,14 @@
 package core;
 
+import java.util.ArrayList;
+
 public class PlayerHuman extends Player {
     public PlayerHuman() {
         this.playBehaviour = new StrategyHuman();
+    }
+    
+    protected ArrayList<Meld> play() {
+        return null;
     }
 
     public String toString() {
