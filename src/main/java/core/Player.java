@@ -35,6 +35,14 @@ public abstract class Player implements PlayerSubject {
     protected PlayBehaviour getPlayBehaviour() {
         return this.playBehaviour;
     }
+    
+    public boolean getInitialMove() {
+        return this.initialMove;
+    }
+
+    public void setInitialMove(boolean initialMove) {
+        this.initialMove = initialMove;
+    }
 
     // Removes tiles from Player's hand that appear in the given ArrayList for which isOnTable is false (ie. they were just added)
     public void removeTilesFromHand(ArrayList<Meld> newTableState) {
