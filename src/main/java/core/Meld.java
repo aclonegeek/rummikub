@@ -58,10 +58,23 @@ public class Meld {
     }
     
     public Tile removeTile(int index) {
+        if (index < 0 || index >= this.meld.size()) {
+            return null;
+         }
+        
         Tile removedTile = this.meld.remove(index);
         this.meldType = determineMeldType(this.meld);
         return removedTile;
     }
+    
+    public Tile removeTileObject(Tile tile) {
+        for (int i = 0; i < this.meld.size(); i++) {
+            if (this.meld.get(i).equals(tile)) {
+                return removeTile(i);
+            }
+        }
+        return null;
+    } 
     
     public Meld splitMeld(int index) {
         if (index <= 0 || index >= this.meld.size()) {
@@ -138,6 +151,10 @@ public class Meld {
     
     public boolean isValidMeld() {
         return this.meldType == MeldType.RUN || this.meldType == MeldType.SET;
+    }
+    
+    public boolean isPotentialMeld() {
+        return this.meldType == MeldType.NONE;
     }
     
     public int getValue() {
