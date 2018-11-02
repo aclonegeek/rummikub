@@ -12,8 +12,10 @@ public class Player2 extends Player {
         if (this.initialMove && this.getWorkspace().size() > 0) {
             // If the workspace is empty and it is the player's initial move
             workspace = this.playBehaviour.determineInitialMove(hand);
-        } else {
+        } else if (!this.initialMove) {
             workspace = this.playBehaviour.determineRegularMove(hand);
+        } else {
+            return null;
         }
         if (workspace != null) {
             this.initialMove = false;

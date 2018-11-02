@@ -225,4 +225,344 @@ public class PlayBehaviourTest extends TestCase {
         melds3.add(meld5);
         assertEquals("{R12,O12,G12}", strategy1.getGreatestMeld(melds3).toString());
     }
+    
+    public void testPlayMeldsUsingExistingTiles() {
+        Strategy2 strategy2 = new Strategy2();
+        ArrayList<Meld> workspace = new ArrayList<>();
+
+        ArrayList<Tile> tiles1 = new ArrayList<>();
+        tiles1.add(new Tile(Colour.RED, 7));
+        tiles1.add(new Tile(Colour.RED, 8));
+        tiles1.add(new Tile(Colour.RED, 9));
+        tiles1.add(new Tile(Colour.RED, 10));
+        Meld meld1 = new Meld();
+        meld1.addTile(tiles1);
+        workspace.add(meld1);
+
+        ArrayList<Tile> tiles2 = new ArrayList<>();
+        Meld meld2 = new Meld();
+        tiles2.add(new Tile(Colour.ORANGE, 8));
+        tiles2.add(new Tile(Colour.ORANGE, 9));
+        tiles2.add(new Tile(Colour.ORANGE, 10));
+        tiles2.add(new Tile(Colour.ORANGE, 11));
+        meld2.addTile(tiles2);
+        workspace.add(meld2);
+
+        ArrayList<Tile> tiles3 = new ArrayList<>();
+        Meld meld3 = new Meld();
+        tiles3.add(new Tile(Colour.ORANGE, 1));
+        tiles3.add(new Tile(Colour.GREEN, 1));
+        tiles3.add(new Tile(Colour.BLUE, 1));
+        tiles3.add(new Tile(Colour.RED, 1));
+        meld3.addTile(tiles3);
+        workspace.add(meld3);
+        
+        Hand hand = new Hand();
+        hand.add(new Tile(Colour.RED, 4));
+        hand.add(new Tile(Colour.RED, 5));
+        hand.add(new Tile(Colour.RED, 6));
+        hand.add(new Tile(Colour.ORANGE, 1));
+        hand.add(new Tile(Colour.GREEN, 1));
+        hand.add(new Tile(Colour.RED, 1));
+        hand.add(new Tile(Colour.ORANGE, 6));
+        hand.add(new Tile(Colour.ORANGE, 7));
+        hand.add(new Tile(Colour.ORANGE, 8));
+        strategy2.setWorkspace(workspace);
+        assertEquals("[{R8,R9,R10}, {O8,O9,O10,O11}, {O1,B1,R1}, {R1,G1,O1,B1}, {R4,R5,R6,R7}]", strategy2.playMeldsUsingExistingTiles(hand).toString());
+    }
+    
+    public void testPlayMeldsUsingExistingTiles2() {
+        Strategy2 strategy2 = new Strategy2();
+        ArrayList<Meld> workspace = new ArrayList<>();
+        
+        ArrayList<Tile> tiles1 = new ArrayList<>();
+        tiles1.add(new Tile(Colour.RED, 7));
+        tiles1.add(new Tile(Colour.RED, 8));
+        tiles1.add(new Tile(Colour.RED, 9));
+        Meld meld1 = new Meld();
+        meld1.addTile(tiles1);
+        workspace.add(meld1);
+        
+        Hand hand = new Hand();
+        hand.add(new Tile(Colour.RED, 4));
+        hand.add(new Tile(Colour.RED, 5));
+        hand.add(new Tile(Colour.RED, 6));
+        strategy2.setWorkspace(workspace);
+        assertEquals(null, strategy2.playMeldsUsingExistingTiles(hand));
+    }
+    
+    public void testPlayPotentialMeldsUsingExistingTiles() {
+        Strategy2 strategy2 = new Strategy2();
+        ArrayList<Meld> workspace = new ArrayList<>();
+
+        ArrayList<Tile> tiles1 = new ArrayList<>();
+        tiles1.add(new Tile(Colour.RED, 7));
+        tiles1.add(new Tile(Colour.RED, 8));
+        tiles1.add(new Tile(Colour.RED, 9));
+        tiles1.add(new Tile(Colour.RED, 10));
+        Meld meld1 = new Meld();
+        meld1.addTile(tiles1);
+        workspace.add(meld1);
+
+        ArrayList<Tile> tiles2 = new ArrayList<>();
+        Meld meld2 = new Meld();
+        tiles2.add(new Tile(Colour.ORANGE, 8));
+        tiles2.add(new Tile(Colour.ORANGE, 9));
+        tiles2.add(new Tile(Colour.ORANGE, 10));
+        tiles2.add(new Tile(Colour.ORANGE, 11));
+        meld2.addTile(tiles2);
+        workspace.add(meld2);
+
+        ArrayList<Tile> tiles3 = new ArrayList<>();
+        Meld meld3 = new Meld();
+        tiles3.add(new Tile(Colour.ORANGE, 1));
+        tiles3.add(new Tile(Colour.GREEN, 1));
+        tiles3.add(new Tile(Colour.BLUE, 1));
+        tiles3.add(new Tile(Colour.RED, 1));
+        meld3.addTile(tiles3);
+        workspace.add(meld3);
+        
+        Hand hand = new Hand();
+        hand.add(new Tile(Colour.RED, 1));
+        hand.add(new Tile(Colour.GREEN, 1));
+        hand.add(new Tile(Colour.RED, 5));
+        hand.add(new Tile(Colour.RED, 5));
+        hand.add(new Tile(Colour.RED, 6));
+        hand.add(new Tile(Colour.ORANGE, 12));
+        hand.add(new Tile(Colour.ORANGE, 13));
+        hand.add(new Tile(Colour.GREEN, 12));
+        strategy2.setWorkspace(workspace);
+        assertEquals("[{R8,R9,R10}, {O8,O9,O10}, {G1,B1,R1}, {R1,G1,O1}, {R5,R6,R7}, {O11,O12,O13}]", strategy2.playPotentialMeldsUsingExistingTiles(hand).toString());
+    }
+    
+    public void testPlayPotentialMeldsUsingExistingTiles2() {
+        Strategy2 strategy2 = new Strategy2();
+        ArrayList<Meld> workspace = new ArrayList<>();
+
+        ArrayList<Tile> tiles1 = new ArrayList<>();
+        tiles1.add(new Tile(Colour.RED, 7));
+        tiles1.add(new Tile(Colour.RED, 8));
+        tiles1.add(new Tile(Colour.RED, 9));
+        Meld meld1 = new Meld();
+        meld1.addTile(tiles1);
+        workspace.add(meld1);
+        
+        Hand hand = new Hand();
+        hand.add(new Tile(Colour.RED, 5));
+        hand.add(new Tile(Colour.RED, 6));
+        strategy2.setWorkspace(workspace);
+
+        assertEquals(null, strategy2.playPotentialMeldsUsingExistingTiles(hand));
+    }
+
+    // Remove tiles from front and add to existing tile to make new meld
+    public void testPlayTileUsingExistingTiles1() {
+        Strategy2 strategy2 = new Strategy2();
+        ArrayList<Meld> workspace = new ArrayList<>();
+
+        ArrayList<Tile> tiles1 = new ArrayList<>();
+        tiles1.add(new Tile(Colour.RED, 5));
+        tiles1.add(new Tile(Colour.RED, 6));
+        tiles1.add(new Tile(Colour.RED, 7));
+        tiles1.add(new Tile(Colour.RED, 8));
+        Meld meld1 = new Meld();
+        meld1.addTile(tiles1);
+        workspace.add(meld1);
+
+        ArrayList<Tile> tiles2 = new ArrayList<>();
+        Meld meld2 = new Meld();
+        tiles2.add(new Tile(Colour.RED, 7));
+        tiles2.add(new Tile(Colour.RED, 8));
+        tiles2.add(new Tile(Colour.RED, 9));
+        tiles2.add(new Tile(Colour.RED, 10));
+        meld2.addTile(tiles2);
+        workspace.add(meld2);
+
+        Hand hand = new Hand();
+        hand.add(new Tile(Colour.RED, 6));
+        strategy2.setWorkspace(workspace);
+        assertEquals("[{R6,R7,R8}, {R8,R9,R10}, {R5,R6,R7}]", strategy2.playTileUsingExistingTiles(hand).toString());
+    }
+
+    // Remove tiles from back and add to existing tile to make a new meld
+    public void testPlayTileUsingExistingTiles2() {
+        Strategy2 strategy2 = new Strategy2();
+        ArrayList<Meld> workspace = new ArrayList<>();
+
+        ArrayList<Tile> tiles1 = new ArrayList<>();
+        tiles1.add(new Tile(Colour.RED, 6));
+        tiles1.add(new Tile(Colour.RED, 7));
+        tiles1.add(new Tile(Colour.RED, 8));
+        tiles1.add(new Tile(Colour.RED, 9));
+        Meld meld1 = new Meld();
+        meld1.addTile(tiles1);
+        workspace.add(meld1);
+
+        ArrayList<Tile> tiles2 = new ArrayList<>();
+        Meld meld2 = new Meld();
+        tiles2.add(new Tile(Colour.RED, 7));
+        tiles2.add(new Tile(Colour.RED, 8));
+        tiles2.add(new Tile(Colour.RED, 9));
+        tiles2.add(new Tile(Colour.RED, 10));
+        tiles2.add(new Tile(Colour.RED, 11));
+        meld2.addTile(tiles2);
+        workspace.add(meld2);
+
+        Hand hand = new Hand();
+        hand.add(new Tile(Colour.RED, 10));
+        strategy2.setWorkspace(workspace);
+    }
+
+    // Remove tiles from back and front add to existing tile to make a new meld
+    public void testPlayTileUsingExistingTiles3() {
+        Strategy2 strategy2 = new Strategy2();
+        ArrayList<Meld> workspace = new ArrayList<>();
+
+        ArrayList<Tile> tiles1 = new ArrayList<>();
+        tiles1.add(new Tile(Colour.RED, 4));
+        tiles1.add(new Tile(Colour.RED, 5));
+        tiles1.add(new Tile(Colour.RED, 6));
+        tiles1.add(new Tile(Colour.RED, 7));
+        tiles1.add(new Tile(Colour.RED, 8));
+        Meld meld1 = new Meld();
+        meld1.addTile(tiles1);
+        workspace.add(meld1);
+
+        ArrayList<Tile> tiles2 = new ArrayList<>();
+        Meld meld2 = new Meld();
+        tiles2.add(new Tile(Colour.RED, 10));
+        tiles2.add(new Tile(Colour.RED, 11));
+        tiles2.add(new Tile(Colour.RED, 12));
+        tiles2.add(new Tile(Colour.RED, 13));
+        meld2.addTile(tiles2);
+        workspace.add(meld2);
+
+        Hand hand = new Hand();
+        hand.add(new Tile(Colour.RED, 9));
+        hand.add(new Tile(Colour.RED, 11));
+        hand.add(new Tile(Colour.ORANGE, 6));
+        strategy2.setWorkspace(workspace);
+        System.out.println(strategy2.playTileUsingExistingTiles(hand).toString());
+//        assertEquals("[{R4,R5,R6,R7}, {R11,R12,R13}, {R8,R9,R10}]",
+//                strategy2.playTileUsingExistingTiles(hand).toString());
+    }
+    
+    // Remove tiles from back and front add to existing tile to make a new meld
+    public void testPlayTileUsingExistingTiles12() {
+        Strategy2 strategy2 = new Strategy2();
+        ArrayList<Meld> workspace = new ArrayList<>();
+
+        ArrayList<Tile> tiles1 = new ArrayList<>();
+        tiles1.add(new Tile(Colour.RED, 4));
+        tiles1.add(new Tile(Colour.RED, 5));
+        tiles1.add(new Tile(Colour.RED, 6));
+        tiles1.add(new Tile(Colour.RED, 7));
+        tiles1.add(new Tile(Colour.RED, 8));
+        Meld meld1 = new Meld();
+        meld1.addTile(tiles1);
+        workspace.add(meld1);
+        
+        ArrayList<Tile> tiles2 = new ArrayList<>();
+        Meld meld2 = new Meld();
+        tiles2.add(new Tile(Colour.RED, 10));
+        tiles2.add(new Tile(Colour.RED, 11));
+        tiles2.add(new Tile(Colour.RED, 12));
+        tiles2.add(new Tile(Colour.RED, 13));
+        meld2.addTile(tiles2);
+        workspace.add(meld2);
+
+        Hand hand = new Hand();
+        hand.add(new Tile(Colour.RED, 7));
+        hand.add(new Tile(Colour.RED, 10));
+        strategy2.setWorkspace(workspace);
+        assertNull(strategy2.playTileUsingExistingTiles(hand));
+    }
+
+    // Removal of any tile from any meld will make it invalid
+    public void testPlayTileUsingExistingTiles4() {
+        Strategy2 strategy2 = new Strategy2();
+        ArrayList<Meld> workspace = new ArrayList<>();
+
+        ArrayList<Tile> tiles1 = new ArrayList<>();
+        tiles1.add(new Tile(Colour.RED, 6));
+        tiles1.add(new Tile(Colour.RED, 7));
+        tiles1.add(new Tile(Colour.RED, 8));
+        Meld meld1 = new Meld();
+        meld1.addTile(tiles1);
+        workspace.add(meld1);
+
+        ArrayList<Tile> tiles2 = new ArrayList<>();
+        Meld meld2 = new Meld();
+        tiles2.add(new Tile(Colour.GREEN, 10));
+        tiles2.add(new Tile(Colour.GREEN, 11));
+        tiles2.add(new Tile(Colour.GREEN, 12));
+        meld2.addTile(tiles2);
+        workspace.add(meld2);
+
+        ArrayList<Tile> tiles3 = new ArrayList<>();
+        Meld meld3 = new Meld();
+        tiles3.add(new Tile(Colour.GREEN, 9));
+        tiles3.add(new Tile(Colour.BLUE, 9));
+        tiles3.add(new Tile(Colour.RED, 9));
+        tiles3.add(new Tile(Colour.ORANGE, 9));
+        meld3.addTile(tiles3);
+        workspace.add(meld3);
+
+        Hand hand = new Hand();
+        hand.add(new Tile(Colour.BLUE, 9));
+        hand.add(new Tile(Colour.BLUE, 10));
+        strategy2.setWorkspace(workspace);
+
+        assertNull(strategy2.playTileUsingExistingTiles(hand));
+    }
+
+    // Remove tiles from the middle of melds such that they can be split in two
+    // melds
+    public void testPlayTileUsingExistingTiles5() {
+        Strategy2 strategy2 = new Strategy2();
+        ArrayList<Meld> workspace = new ArrayList<>();
+
+        ArrayList<Tile> tiles1 = new ArrayList<>();
+        tiles1.add(new Tile(Colour.RED, 6));
+        tiles1.add(new Tile(Colour.RED, 7));
+        tiles1.add(new Tile(Colour.RED, 8));
+        tiles1.add(new Tile(Colour.RED, 9));
+        tiles1.add(new Tile(Colour.RED, 10));
+        tiles1.add(new Tile(Colour.RED, 11));
+        tiles1.add(new Tile(Colour.RED, 12));
+        Meld meld1 = new Meld();
+        meld1.addTile(tiles1);
+        workspace.add(meld1);
+
+        ArrayList<Tile> tiles2 = new ArrayList<>();
+        Meld meld2 = new Meld();
+        tiles2.add(new Tile(Colour.GREEN, 6));
+        tiles2.add(new Tile(Colour.GREEN, 7));
+        tiles2.add(new Tile(Colour.GREEN, 8));
+        tiles2.add(new Tile(Colour.GREEN, 9));
+        tiles2.add(new Tile(Colour.GREEN, 10));
+        tiles2.add(new Tile(Colour.GREEN, 11));
+        tiles2.add(new Tile(Colour.GREEN, 12));
+        meld2.addTile(tiles2);
+        workspace.add(meld2);
+
+        ArrayList<Tile> tiles3 = new ArrayList<>();
+        Meld meld3 = new Meld();
+        tiles3.add(new Tile(Colour.GREEN, 9));
+        tiles3.add(new Tile(Colour.BLUE, 9));
+        tiles3.add(new Tile(Colour.RED, 9));
+        tiles3.add(new Tile(Colour.ORANGE, 9));
+        meld3.addTile(tiles3);
+        workspace.add(meld3);
+
+        Hand hand = new Hand();
+        hand.add(new Tile(Colour.BLUE, 9));
+        hand.add(new Tile(Colour.BLUE, 10));
+        hand.add(new Tile(Colour.BLUE, 9));
+        strategy2.setWorkspace(workspace);
+
+        assertEquals("[{R6,R7,R8}, {R10,R11,R12}, {G6,G7,G8}, {G10,G11,G12}, {G9,B9,R9,O9}, {B9,R9,G9}]",
+                strategy2.playTileUsingExistingTiles(hand).toString());
+    }
+
 }

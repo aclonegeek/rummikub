@@ -35,6 +35,10 @@ public class Tile {
         this.onTable = onTable;
     }
     
+    public boolean equals(Tile tile) {
+        return this.colour == tile.getColour() && this.value == tile.getValue();
+    }
+    
     @Override
     public String toString() {
         return String.valueOf(this.colour.getSymbol()) + String.valueOf(this.value);
