@@ -1,5 +1,7 @@
 package core;
 
+import java.util.ArrayList;
+
 import core.Globals.Colour;
 import junit.framework.TestCase;
 
@@ -65,6 +67,14 @@ public class HandTest extends TestCase {
         assertEquals("R2", hand.remove(0).toString());
         assertEquals(null, hand.remove(0));
         assertEquals(0, hand.getSize());
+    }
+    
+    public void testContainsTile() {
+        Hand hand = new Hand("R1,R2,R3,R4");    
+        assertTrue(hand.containsTile(new Tile("R1")));
+        assertTrue(hand.containsTile(new Tile("R4")));
+        assertFalse(hand.containsTile(new Tile("R5")));
+        assertFalse(hand.containsTile(new Tile("G5")));
     }
     
     // Tests remove() using Tile
