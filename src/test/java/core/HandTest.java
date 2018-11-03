@@ -4,6 +4,16 @@ import core.Globals.Colour;
 import junit.framework.TestCase;
 
 public class HandTest extends TestCase {
+    public void testStringConstructor() {
+        Hand hand1 = new Hand("");
+        assertEquals(0, hand1.getSize());
+        assertEquals("[]", hand1.toString());
+        
+        Hand hand2 = new Hand("R4,G5,O1,R1,B12");
+        assertEquals(5, hand2.getSize());
+        assertEquals("[R1, R4, B12, G5, O1]", hand2.toString());
+    }
+    
     // Tests add()
     // Also tests sort() and toString()
     public void testAdd() {
