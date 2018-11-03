@@ -38,7 +38,7 @@ public class Hand {
     public Tile remove(Tile tile) {
         for (int i = 0; i < this.hand.size(); i++) {
             if (tile.toString().equals(hand.get(i).toString())) {
-                return hand.remove(i);
+                return this.hand.remove(i);
             }
         }
         
@@ -48,8 +48,17 @@ public class Hand {
     // Removes each tile in meld from hand
     public void remove(Meld meld) {
         for (int i = 0; i < meld.getSize(); i++) {
-            hand.remove(meld.getTile(i));
+            this.hand.remove(meld.getTile(i));
         }
+    }
+    
+    public boolean containsTile(Tile tile) {
+        for (Tile tempTile : this.hand) {
+            if (tempTile.toString().equals(tile.toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getSize() {
