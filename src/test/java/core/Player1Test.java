@@ -6,10 +6,9 @@ import core.Globals.Colour;
 import junit.framework.TestCase;
 
 public class Player1Test extends TestCase {
-    public void testPlay() {
+    // Test case where player plays initial move
+    public void testPlay1() {
         Player p1 = new Player1();
-        
-        // Test case where player plays initial move
         ArrayList<Meld> workspace1 = new ArrayList<>();
         workspace1.add(new Meld("G1,G2,G3"));
         Hand hand1 = new Hand("B10,G10,O10,G4");
@@ -17,8 +16,11 @@ public class Player1Test extends TestCase {
         p1.setWorkspace(workspace1);
         p1.setHand(hand1);
         assertEquals("[{G1,G2,G3}, {B10,G10,O10}]", p1.play().toString());
-        
-        // Test case where player plays regular move
+    }
+    
+    // Test case where player plays regular move
+    public void testPlay2() {
+        Player p1 = new Player1();
         ArrayList<Meld> workspace2 = new ArrayList<>();
         workspace2.add(new Meld("G1,G2,G3"));
         Hand hand2 = new Hand("B10,G10,O10,G4");
@@ -26,8 +28,12 @@ public class Player1Test extends TestCase {
         p1.setWorkspace(workspace2);
         p1.setHand(hand2);
         assertEquals("[{G1,G2,G3,G4}, {B10,G10,O10}]", p1.play().toString());
-        
-        // Test case where player plays regular move but cannot play any tiles
+    }
+
+
+    // Test case where player plays regular move but cannot play any tiles
+    public void testPlay3() {
+        Player p1 = new Player1();
         ArrayList<Meld> workspace3 = new ArrayList<>();
         workspace3.add(new Meld("G1,G2,G3"));
         Hand hand3 = new Hand("B1,G1,O10,G9");
