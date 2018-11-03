@@ -14,13 +14,16 @@ public class Player3 extends Player {
         if (this.initialMove) {
             workspace = this.playBehaviour.determineInitialMove(hand);
         } else if (this.hand.getSize() - this.playBehaviour.getLowestHandCount() >= 3) {
-            // If a player is beating player 3 by 3 or more tiles, player 3 will play
-            // anything that it can (Strategy 1)
+            // If a player is beating player 3 by 3 or more tiles, will play all that it can (Strategy 1)
+            ArrayList<Meld> originalWorkspace = this.playBehaviour.getWorkspace();
             this.playBehaviour = new Strategy1();
+            this.playBehaviour.setWorkspace(originalWorkspace);
             workspace = this.playBehaviour.determineRegularMove(hand);
         } else {
-            // Otherwise, player 3 will play only with existing tiles (Strategy 2)
+            // Otherwise, will play only with existing tiles (Strategy 2)
+            ArrayList<Meld> originalWorkspace = this.playBehaviour.getWorkspace();
             this.playBehaviour = new Strategy2();
+            this.playBehaviour.setWorkspace(originalWorkspace);
             workspace = this.playBehaviour.determineRegularMove(hand);
         }  
         if (workspace != null) {
