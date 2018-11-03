@@ -37,42 +37,20 @@ public class Strategy1 extends PlayBehaviour {
     
     // Plays all the tiles it can using its hand and the table
     public ArrayList<Meld> determineRegularMove(Hand hand) {
-        boolean workspaceChanged = false;
-        // First tries to add new melds using tiles in hand
-        while (hand.getSize() > 0) {
-            ArrayList<Meld> melds = this.createMeldsFromHand(hand);
-            Meld largestMeld = this.getLargestMeld(melds);
-            if (largestMeld != null) {
-                this.workspace.add(largestMeld);
-                workspaceChanged = true;
-                for (int j = 0; j < largestMeld.getSize(); j++) {
-                    hand.remove(largestMeld.getTile(j));
-                }
-            } else {
-                break;
+        // Make deep copy of workspace
+        ArrayList<Meld> workspaceCopy = new ArrayList<Meld>();
+        for (Meld meld : this.workspace) {
+            Meld newMeld = new Meld();
+            for (int i = 0; i < meld.getSize(); i++) {
+                newMeld.addTile(new Tile(meld.getTile(i).toString()));
             }
+            workspaceCopy.add(newMeld);
         }
+    
+        this.workspace = this.playUsingHand(hand);
+        this.workspace = this.playUsingHandAndTable(hand);
         
-        // Then tries to add each tiles to every existing melds
-        while (hand.getSize() > 0) {
-            boolean tileAdded = false;
-            for (int i = 0; i < hand.getSize(); i++) {
-                ArrayList<Tile> tiles = new ArrayList<>();
-                tiles.add(hand.getTile(i));
-                for (Meld tempMeld : this.workspace) {
-                    if (tempMeld.addTile(tiles)) {
-                        tileAdded = true;
-                        workspaceChanged = true;
-                        hand.remove(i);
-                        break;
-                    }
-                }
-            }
-            if (!tileAdded) {
-                break;
-            }
-        }
-        if (workspaceChanged) {
+        if (!workspace.toString().equals(workspaceCopy.toString())) {
             return this.workspace;
         }
         return null;
