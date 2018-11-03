@@ -48,6 +48,7 @@ public class Meld {
             this.meldType = tempMeldType;
             return true;
         }
+
         return false;
     }
     
@@ -65,6 +66,19 @@ public class Meld {
         Tile removedTile = this.meld.remove(index);
         this.meldType = determineMeldType(this.meld);
         return removedTile;
+    }
+    
+    public boolean isValidIfRemoveTile(int index) {
+        // Copy meld
+        Meld copyMeld = new Meld();
+        for (Tile tile : this.meld) {
+            copyMeld.addTile(tile);
+        }
+        
+        // Remove from copy and check if valid
+        copyMeld.removeTile(index);
+        if (copyMeld.isValidMeld()) { return true; }
+        return false;
     }
     
     public Tile removeTileObject(Tile tile) {
