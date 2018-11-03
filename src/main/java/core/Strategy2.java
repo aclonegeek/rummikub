@@ -35,7 +35,7 @@ public class Strategy2 extends PlayBehaviour {
         return null;
     }
    
-    // Plays all the tiles it can using its hand and the table
+    // Plays only the tiles in its hand that requires using tiles on the table, unless it can win
     public ArrayList<Meld> determineRegularMove(Hand hand) {
         // Make deep copy of hand
         Hand handCopy = new Hand();
