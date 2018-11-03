@@ -188,6 +188,15 @@ public class Meld {
         return false;
     }
     
+    public boolean containsTileValue(Tile tile) {
+        for (Tile tempTile : this.meld) {
+            if (tempTile.getValue() == tile.getValue()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public boolean equals(Meld meld) {
         if (this.getSize() != meld.getSize()) {
             return false;
