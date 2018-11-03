@@ -12,8 +12,7 @@ public class Strategy2 extends PlayBehaviour {
             return this.workspace;
         }
 
-        // Otherwise, adds as few melds as possible to workspace such that total points
-        // >= 30 pts
+        // Otherwise, adds as few melds as possible to workspace such that total points >= 30 pts
         int totalTileValue = 0;
         while (hand.getSize() != 0) {
             ArrayList<Meld> currentMelds = this.createMeldsFromHand(hand);
@@ -35,50 +34,40 @@ public class Strategy2 extends PlayBehaviour {
         }
         return null;
     }
-
-    // Try to play all its tiles to the table and win
-    private ArrayList<Meld> hasWinningHand(Hand hand) {
-        ArrayList<Meld> originalWorkspace = new ArrayList<>(this.workspace);
-        ArrayList<Meld> success =  new ArrayList<>();
-        
-        success = this.playMeldsWithoutExistingTiles(hand);
-        if (success != null) { this.workspace = success; }
-        if (hand.getSize() == 0) { return this.workspace; }
-        
-        success = this.playPotentialMeldsUsingExistingTiles(hand);
-        if (success != null) { this.workspace = success; }
-        if (hand.getSize() == 0) { return this.workspace; }
-        
-        success = this.playTileUsingExistingTiles(hand);
-        if (success != null) { this.workspace = success; }
-        if (hand.getSize() == 0) { return this.workspace; }
-        
-        success = this.playTilesToExistingMelds(hand);
-        if (success != null) { this.workspace = success; }
-        if (hand.getSize() == 0) { return this.workspace; }
-        
-        this.workspace = originalWorkspace;
-        return null;
-    }
    
     // Plays all the tiles it can using its hand and the table
     public ArrayList<Meld> determineRegularMove(Hand hand) {
-        ArrayList<Meld> success = null;
+        // Make deep copy of hand
+        Hand handCopy = new Hand();
+        for (int i = 0; i < hand.getSize(); i++) {
+            handCopy.add(hand.getTile(i));
+        }
         
-        success = this.hasWinningHand(hand);
-        if (success != null) { return this.workspace = success; } 
+        // Make deep copy of workspace 
+        ArrayList<Meld> workspaceCopy = new ArrayList<Meld>();
+        for (Meld meld : this.workspace) {
+            Meld newMeld = new Meld();
+            for (int i = 0; i < meld.getSize(); i++) {
+                newMeld.addTile(new Tile(meld.getTile(i).toString()));
+            }
+            workspaceCopy.add(newMeld);
+        }
         
+        // Check if player can win this turn, if so return the winning workspace and remove tiles from hand
+        ArrayList<Meld> winningWorkspace = hasWinningHand(handCopy);
+        if (winningWorkspace != null) {
+            while (hand.getSize() > 0) {
+                hand.remove(0);
+            }
+            return winningWorkspace;
+        }
         
-        success = this.playPotentialMeldsUsingExistingTiles(hand);
-        if (success != null) { this.workspace = success; }
+        // Otherwise add as many tiles as possible using tiles already on the board
+        this.workspace = this.playUsingHandAndTable(hand);
+        if (!workspace.toString().equals(workspaceCopy.toString())) {
+            return this.workspace;
+        }
         
-        
-        success = this.playTileUsingExistingTiles(hand);
-        if (success != null) {this.workspace = success; }
-        
-        success = this.playTilesToExistingMelds(hand);
-        if (success != null) { this.workspace = success; }
-
-        return success;
+        return null;
     }
 }
