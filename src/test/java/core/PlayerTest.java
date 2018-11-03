@@ -6,13 +6,9 @@ import core.Globals.Colour;
 import junit.framework.TestCase;
 
 public class PlayerTest extends TestCase {
-    // Tests Player's add, getSize, and removeTilesFromHand methods
-    // Tests Human's toString method
-    // TODO: test Player's play method (can't until playBehaviour is implemented)
     public void testPlayerHuman() { 
         // Create ArrayList of melds representing the table
-        ArrayList<Meld> melds = new ArrayList<>();
-        
+        ArrayList<Meld> melds = new ArrayList<>();  
         ArrayList<Tile> tiles1 = new ArrayList<Tile>();
         Meld meld1 = new Meld();
         Tile tile1 = new Tile(Colour.GREEN, 1);
@@ -135,37 +131,5 @@ public class PlayerTest extends TestCase {
         assertEquals(0, playerHuman.getObservers().size());
         assertEquals(0, player1.getObservers().size());
         assertEquals(0, player2.getObservers().size());
-    }
-
-    // Tests Player1's toString method
-    public void testPlayer1toString() {
-        Player p1 = new Player1();
-        assertEquals("Player 1:\n# tiles: 0\n\n", p1.toString());
-        p1.add(new Tile(Colour.GREEN, 1));
-        p1.add(new Tile(Colour.ORANGE, 5));
-        p1.add(new Tile(Colour.BLUE, 12));
-        assertEquals("Player 1:\n# tiles: 3\n\n", p1.toString());
-    }
-
-    public void testPlayer2toString() {
-        Player p2 = new Player2();
-        assertEquals("Player 2:\n# tiles: 0\n\n", p2.toString());
-        p2.add(new Tile(Colour.RED, 10));
-        p2.add(new Tile(Colour.BLUE, 2));
-        p2.add(new Tile(Colour.BLUE, 12));
-        p2.add(new Tile(Colour.ORANGE, 2));
-        assertEquals("Player 2:\n# tiles: 4\n\n", p2.toString());
-    }
-
-    // Tests Player3's toString method
-    public void testPlayer3toString() {
-        Player p3 = new Player3();
-        assertEquals("Player 3:\n# tiles: 0\n\n", p3.toString());
-        p3.add(new Tile(Colour.RED, 1));
-        p3.add(new Tile(Colour.ORANGE, 12));
-        p3.add(new Tile(Colour.BLUE, 6));
-        p3.add(new Tile(Colour.ORANGE, 2));
-        p3.add(new Tile(Colour.ORANGE, 2));
-        assertEquals("Player 3:\n# tiles: 5\n\n", p3.toString());
     }
 }
