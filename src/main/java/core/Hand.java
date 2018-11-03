@@ -9,6 +9,17 @@ public class Hand {
         this.hand = new ArrayList<>();
     }
     
+    public Hand(String hand) {
+        this.hand = new ArrayList<>();
+        
+        if (hand.length() != 0) {
+            for (String tile : hand.split(",")) {
+                this.hand.add(new Tile(tile));
+                this.sort();
+            }    
+        }
+    }
+    
     public void add(Tile tile) {
         this.hand.add(tile);
         this.sort();
@@ -32,6 +43,13 @@ public class Hand {
         }
         
         return null;
+    }
+    
+    // Removes each tile in meld from hand
+    public void remove(Meld meld) {
+        for (int i = 0; i < meld.getSize(); i++) {
+            hand.remove(meld.getTile(i));
+        }
     }
 
     public int getSize() {
