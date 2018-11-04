@@ -9,6 +9,9 @@ public class Strategy4 extends PlayBehaviour {
         Meld largestMeldOver30 = this.getLargestMeldOver30(melds);
         if (largestMeldOver30 != null) {
             this.workspace.add(largestMeldOver30);
+            for (int i = 0; i < largestMeldOver30.getSize(); i++) {
+                hand.remove(largestMeldOver30.getTile(i));
+            }
             return this.workspace;
         }
 
@@ -20,8 +23,8 @@ public class Strategy4 extends PlayBehaviour {
             if (largestMeld != null) {
                 this.workspace.add(largestMeld);
                 totalTileValue += largestMeld.getValue();
-                for (int j = 0; j < largestMeld.getSize(); j++) {
-                    hand.remove(largestMeld.getTile(j));
+                for (int i = 0; i < largestMeld.getSize(); i++) {
+                    hand.remove(largestMeld.getTile(i));
                 }
 
                 // Break out of the loop as soon as the player reaches 30 points (or more)
