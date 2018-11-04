@@ -46,7 +46,7 @@ public class Strategy2 extends PlayBehaviour {
         for (Tile tile : tilesRemoved) {
             hand.add(tile);
         }
-        
+
         return null;
     }
    
