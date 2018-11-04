@@ -82,48 +82,15 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
     
     // Returns all possible potential melds in player's hand
     protected ArrayList<Meld> createPotentialMeldsFromHand(Hand hand) {
-        // For each tile, add it to a new meld and add each meld to a new ArrayList
-        ArrayList<ArrayList<Meld>> allMelds = new ArrayList<>();
-        for (int i = 0; i < hand.getSize(); i++) {
-            ArrayList<Meld> melds = new ArrayList<>();
-            Meld meld = new Meld();
-            meld.addTile(hand.getTile(i));
-            melds.add(meld);
-            allMelds.add(melds);
-        }
-
-        // For each tile, clone every meld and attempt to add the tile to it
-        // If tile is added to the cloned meld, add this amended cloned meld to the ArrayList
-        for (int i = 0; i < hand.getSize(); i++) {
-            for (ArrayList<Meld> arrayList : allMelds) {
-                for (int j = 0; j < arrayList.size(); j++) {
-                    // Clone meld
-                    Meld newMeld = new Meld();
-                    for (int k = 0; k < arrayList.get(j).getSize(); k++) {
-                        newMeld.addTile(arrayList.get(j).getTile(k));
-                    }
-
-                    // If tile is added to cloned meld, add this meld to ArrayList
-                    if (newMeld.addTile(hand.getTile(i))) {
-                        arrayList.add(newMeld);
-                    }
-                }
-            }
-        }
-        
-        // Filter out valid melds to a new ArrayList, ignoring duplicates
         ArrayList<Meld> potentialMelds = new ArrayList<>();
-        for (ArrayList<Meld> tempArrayList : allMelds) {
-            for (Meld meld : tempArrayList) {
-                boolean duplicate = false;
-                for (Meld potentialMeld : potentialMelds) {
-                    if (meld.equals(potentialMeld)) {
-                        duplicate = true;
-                    }
-                }
-                if (meld.getSize() == 2 && !duplicate) {
-                    potentialMelds.add(meld);
-                }
+        // Check each pair
+        for (int i = 0; i < hand.getSize() - 1; i++) {
+            for (int j = i + 1; j < hand.getSize(); j++) {
+               // Add the pair to a new meld and check if it's a valid potential meld (of size 2)
+                Meld pair = new Meld();
+                pair.addTile(hand.getTile(i));
+                pair.addTile(hand.getTile(j));
+                if (pair.isPotentialMeld() && pair.getSize() == 2) { potentialMelds.add(pair); }
             }
         }
         return potentialMelds;
