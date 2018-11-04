@@ -2,7 +2,6 @@ package core;
 
 import java.util.ArrayList;
 
-import core.Globals.Colour;
 import junit.framework.TestCase;
 
 public class Strategy2Test extends TestCase {
@@ -39,7 +38,7 @@ public class Strategy2Test extends TestCase {
         Hand hand = new Hand("R3,R4,R5,G5,G6,G7,O2,O3,O4,B1");
         assertEquals("[{R1,R2,R3}, {R10,O10,G10,B10}, {B5,B6,B7,B8}, {R3,R4,R5}, {G5,G6,G7}]", strategy2.determineInitialMove(hand).toString());
     }
-    
+
     // Test case where melds are being constructed but hand size reaches 0 (needed for full coverage)
     public void testDetermineInitialMove4() {
         Strategy2 strategy2 = new Strategy2();
@@ -73,7 +72,7 @@ public class Strategy2Test extends TestCase {
         Hand hand = new Hand("G1,G2,G3,G4,G8,O10,B2,R9,R4,G5,O2,R11,R12,B7");
         assertEquals(null, strategy2.determineInitialMove(hand));
     }
-    
+
     // Plays all its tiles and wins
     public void testDetermineRegularMove1() {
         Strategy2 strategy2 = new Strategy2();
@@ -82,12 +81,12 @@ public class Strategy2Test extends TestCase {
         workspace.add(meld1);
         strategy2.setWorkspace(workspace);
         assertEquals("[{R1,R2,R3}]", strategy2.getWorkspace().toString());
-        
+
         Hand hand = new Hand("G1,G2,G3,G4");
         assertEquals("[{R1,R2,R3}, {G1,G2,G3,G4}]", strategy2.determineRegularMove(hand).toString());
         assertEquals(0, hand.getSize());
     }
-    
+
     // Doesn't play because it can't win on this turn (can't create new meld G1,G2,G3,G4)
     public void testDetermineRegularMove2() {
         Strategy2 strategy2 = new Strategy2();
@@ -96,12 +95,12 @@ public class Strategy2Test extends TestCase {
         workspace.add(meld1);
         strategy2.setWorkspace(workspace);
         assertEquals("[{R1,R2,R3}]", strategy2.getWorkspace().toString());
-        
+
         Hand hand = new Hand("G1,G2,G3,G4,G8");
         assertEquals(null, strategy2.determineRegularMove(hand));
         assertEquals(5, hand.getSize());
     }
-    
+
     // Plays melds using tiles on table with no tiles left over
     public void testDetermineRegularMove4() {
         Strategy2 strategy2 = new Strategy2();
@@ -112,12 +111,12 @@ public class Strategy2Test extends TestCase {
         workspace.add(new Meld("G3,R3,B3,O3"));
         strategy2.setWorkspace(workspace);
         assertEquals("[{R1,R2,R3,R4,R5,R6,R7}, {G2,G3,G4,G5}, {G3,R3,B3,O3}]", strategy2.getWorkspace().toString());
-        
+
         Hand hand = new Hand("R2,R3,R8,G1");
         assertEquals("[{R2,R3,R4,R5,R6,R7,R8}, {G3,G4,G5}, {R3,B3,O3}, {R1,R2,R3}, {G1,G2,G3}]", strategy2.determineRegularMove(hand).toString());
         assertEquals(0, hand.getSize());
     }
-    
+
     // Plays melds using tiles on table with tiles left over
     public void testDetermineRegularMove5() {
         Strategy2 strategy2 = new Strategy2();
@@ -128,7 +127,7 @@ public class Strategy2Test extends TestCase {
         workspace.add(new Meld("G3,R3,B3,O3"));
         strategy2.setWorkspace(workspace);
         assertEquals("[{R1,R2,R3,R4,R5,R6,R7}, {G2,G3,G4,G5}, {G3,R3,B3,O3}]", strategy2.getWorkspace().toString());
-        
+
         Hand hand = new Hand("R2,R3,R8,G1,O7");
         assertEquals("[{R2,R3,R4,R5,R6,R7,R8}, {G3,G4,G5}, {R3,B3,O3}, {R1,R2,R3}, {G1,G2,G3}]", strategy2.determineRegularMove(hand).toString());
         assertEquals(1, hand.getSize());
