@@ -17,24 +17,36 @@ public class Strategy1 extends PlayBehaviour {
         }
 
         // Otherwise, adds as many melds as possible to workspace such that total points >= 30
-        int totalTileValue = 0;
+        int totalTileValue           = 0;
+        ArrayList<Tile> tilesRemoved = new ArrayList<>();
+        ArrayList<Meld> meldsToAdd   = new ArrayList<>();
         while (hand.getSize() != 0) {
             ArrayList<Meld> currentMelds = this.createMeldsFromHand(hand);
             Meld greatestMeld = this.getGreatestMeld(currentMelds);
-            if (greatestMeld != null) {
-                this.workspace.add(greatestMeld);
-                totalTileValue += greatestMeld.getValue();
-                for (int i = 0; i < greatestMeld.getSize(); i++) {
-                    hand.remove(greatestMeld.getTile(i));
-                }
-            } else {
+
+            if (greatestMeld == null) {
                 break;
+            }
+
+            meldsToAdd.add(greatestMeld);
+            totalTileValue += greatestMeld.getValue();
+            for (int i = 0; i < greatestMeld.getSize(); i++) {
+                hand.remove(greatestMeld.getTile(i));
+                tilesRemoved.add(greatestMeld.getTile(i));
             }
         }
 
         if (totalTileValue >= 30) {
+            for (Meld meld : meldsToAdd) {
+                this.workspace.add(meld);
+            }
             return this.workspace;
+        } else {
+            for (Tile tile : tilesRemoved) {
+                hand.add(tile);
+            }
         }
+
         return null;
     }
 
