@@ -27,15 +27,11 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
         return this.workspace;
     }
     
-    public void setWorkspace(ArrayList<Meld> workspace) {
-        this.workspace = workspace;
-    }
-    
     public int getLowestHandCount() {
         return this.lowestHandCount;
     }
 
-    // Returns all possible melds in player's hand
+    // Returns all possible valid melds in player's hand
     protected ArrayList<Meld> createMeldsFromHand(Hand hand) {
         // For each tile, add it to a new meld and add each meld to a new ArrayList
         ArrayList<ArrayList<Meld>> allMelds = new ArrayList<>();
@@ -83,6 +79,22 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
         }
         return validMelds;
     }
+    
+    // Returns all possible potential melds in player's hand
+    protected ArrayList<Meld> createPotentialMeldsFromHand(Hand hand) {
+        ArrayList<Meld> potentialMelds = new ArrayList<>();
+        // Check each pair
+        for (int i = 0; i < hand.getSize() - 1; i++) {
+            for (int j = i + 1; j < hand.getSize(); j++) {
+               // Add the pair to a new meld and check if it's a valid potential meld (of size 2)
+                Meld pair = new Meld();
+                pair.addTile(hand.getTile(i));
+                pair.addTile(hand.getTile(j));
+                if (pair.isPotentialMeld() && pair.getSize() == 2) { potentialMelds.add(pair); }
+            }
+        }
+        return potentialMelds;
+    }
 
     // Filters melds >= 30 points and returns the largest sized one
     protected Meld getLargestMeldOver30(ArrayList<Meld> melds) {
@@ -129,43 +141,127 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
         return greatestMeld;
     }
     
-    protected ArrayList<Meld> playMeldsWithoutExistingTiles(Hand hand) {
-        ArrayList<Meld> workspace = new ArrayList<>(this.workspace);
-        boolean workspaceChanged = false;
-        // Plays all its melds to the table
+    // Determines if player can win; returns updated workspace if won, otherwise returns null
+    protected ArrayList<Meld> hasWinningHand(Hand hand) {
+        // Make deep copy of workspace
+        ArrayList<Meld> workspaceCopy = new ArrayList<Meld>();
+        for (Meld meld : this.workspace) {
+            Meld newMeld = new Meld();
+            for (int i = 0; i < meld.getSize(); i++) {
+                newMeld.addTile(new Tile(meld.getTile(i).toString()));
+            }
+            workspaceCopy.add(newMeld);
+        }
+
+        this.workspace = playUsingHand(hand);
+        this.workspace = playUsingHandAndTable(hand);
+        if (hand.getSize() == 0) {
+            return this.workspace;
+        }
+        else {
+            this.workspace = workspaceCopy;
+            return null;
+        }
+    }
+    
+    // Plays using only tiles in hand
+    protected ArrayList<Meld> playUsingHand(Hand hand) {
         while (hand.getSize() > 0) {
             ArrayList<Meld> currentMelds = this.createMeldsFromHand(hand);
             Meld largestMeld = this.getLargestMeld(currentMelds);
             if (largestMeld != null) {
-                workspace.add(largestMeld);
-                for (int j = 0; j < largestMeld.getSize(); j++) {
-                    hand.remove(largestMeld.getTile(j));
-                }
-                workspaceChanged = true;
+                this.workspace.add(largestMeld);
+                hand.remove(largestMeld);
             } else {
                 break;
             }
         }
-        if (workspaceChanged) {
-            return workspace;
-        }
-        return null;
+        
+        return this.workspace;
     }
-    
-    protected ArrayList<Meld> playTilesToExistingMelds(Hand hand) {
-        ArrayList<Meld> workspace = new ArrayList<>(this.workspace);
 
-        boolean workspaceChanged = false;
-        // Then tries to add each tiles to every existing melds
+    // Plays using both tiles in hand and on table (but not only from hand)
+    protected ArrayList<Meld> playUsingHandAndTable(Hand hand) {
+        // Add tiles on table to valid melds in hand, removing from the first and last index of the meld
+        ArrayList<Meld> validMelds = this.createMeldsFromHand(hand);
+        for (Meld validMeld : validMelds) {
+            for (int i = 0; i < this.workspace.size(); i++) {
+                Meld tempMeld = this.workspace.get(i);
+                if (tempMeld.isValidIfRemoveTile(0) && validMeld.addTile(tempMeld.getTile(0))) {
+                    tempMeld.removeTile(0);
+                    hand.remove(validMeld);
+                    this.workspace.add(validMeld);
+                }
+                int n = tempMeld.getSize() - 1;
+                if (tempMeld.isValidIfRemoveTile(n) && validMeld.addTile(tempMeld.getTile(n))) {
+                    hand.remove(tempMeld.removeTile(n));
+                    hand.remove(validMeld);
+                    this.workspace.add(validMeld);
+                }
+            }
+        }
+        
+        // Add tiles on table to potential melds in hand, removing from the first and last index of the meld
+        ArrayList<Meld> potentialMelds = this.createPotentialMeldsFromHand(hand);
+        for (Meld potentialMeld : potentialMelds) {
+            for (int i = 0; i < this.workspace.size(); i++) {
+                Meld tempMeld = this.workspace.get(i);
+                if (tempMeld.isValidIfRemoveTile(0) && potentialMeld.addTile(tempMeld.getTile(0))) {
+                    tempMeld.removeTile(0);
+                    hand.remove(potentialMeld);
+                    this.workspace.add(potentialMeld);
+                }
+                int n = tempMeld.getSize() - 1;
+                if (tempMeld.isValidIfRemoveTile(n) && potentialMeld.addTile(tempMeld.getTile(n))) {
+                    tempMeld.removeTile(n);
+                    hand.remove(potentialMeld);
+                    this.workspace.add(potentialMeld);
+                }
+            }
+        }
+        
+        // Add tiles on table to tiles in hand, removing from the first and last index of the meld
+        for (int i = 0; i < hand.getSize(); i++) {
+            Meld newMeld = new Meld();
+            newMeld.addTile(hand.getTile(i));
+            
+            Meld meldRemovedFrom = new Meld();
+            Tile tileRemoved = new Tile("R1");
+            
+            for (int j = 0; j < this.workspace.size(); j++) {
+                Meld tempMeld = this.workspace.get(j);
+                if (tempMeld.isValidIfRemoveTile(0) && newMeld.addTile(tempMeld.getTile(0))) {
+                    tileRemoved = tempMeld.getTile(0);
+                    meldRemovedFrom = tempMeld;
+                    tempMeld.removeTile(0);
+                    hand.remove(tileRemoved);
+                    //if (newMeld.isValidMeld()) { break; }
+                }
+                int n = tempMeld.getSize() - 1;
+                if (tempMeld.isValidIfRemoveTile(n) && newMeld.addTile(tempMeld.getTile(n))) {
+                    tileRemoved = tempMeld.getTile(n);
+                    meldRemovedFrom = tempMeld;
+                    tempMeld.removeTile(n);
+                    hand.remove(tileRemoved);
+                    //if (newMeld.isValidMeld()) { break; }
+                }
+            }
+            
+            if (newMeld.isValidMeld()) {
+                workspace.add(newMeld);
+                hand.remove(i);
+            } else if (meldRemovedFrom != null) {
+                meldRemovedFrom.addTile(tileRemoved);
+            }
+        }
+        
+        // Add remaining tiles in hand to each meld on table
         while (hand.getSize() > 0) {
             boolean tileAdded = false;
             for (int i = 0; i < hand.getSize(); i++) {
-                ArrayList<Tile> tiles = new ArrayList<>();
-                tiles.add(hand.getTile(i));
                 for (Meld tempMeld : workspace) {
-                    if (tempMeld.addTile(tiles)) {
+                    if (tempMeld.addTile(hand.getTile(i))) {
                         tileAdded = true;
-                        workspaceChanged = true;
                         hand.remove(i);
                         break;
                     }
@@ -175,234 +271,16 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
                 break;
             }
         }
-        if (workspaceChanged) {
-            return workspace;
-        }
-        return null;
-    }
-    
-    // Tries to play all melds in player's hand using only tiles on the table
-    protected ArrayList<Meld> playMeldsUsingExistingTiles(Hand hand) {
-        ArrayList<Meld> workspace = new ArrayList<>(this.workspace); 
-        boolean workspaceChanged = false;
         
-        ArrayList<Meld> melds = this.createMeldsFromHand(hand);
-        Meld handMeld = this.getLargestMeld(melds);
-
-        while (true) {
-            for (Meld meld : workspace) {
-                // Clone meld
-                Meld clone = new Meld();
-                for (int k = 0; k < meld.getSize(); k++) {
-                    clone.addTile(meld.getTile(k));
-                }
-
-                // Check if the clone can shrink will still remaining valid
-                for (int l = 0; l < clone.getSize(); l++) {
-                    Tile removedTile = clone.removeTile(l);
-                    Boolean addedTile = handMeld.addTile(removedTile);    
-                    
-                    if (addedTile && clone.isValidMeld()) {
-                        meld.removeTile(l);
-                        workspaceChanged = true;
-                        workspace.add(handMeld);
-
-                        for (int m = 0; m < handMeld.getSize(); m++) {
-                            hand.remove(handMeld.getTile(m));
-                        }
-                        break;
-                    } else {
-                        workspaceChanged = false;
-                        if (addedTile) {
-                            for (int t = 0; t < handMeld.getSize(); t++) {
-                                if (handMeld.getTile(t).equals(removedTile)) {
-                                    handMeld.removeTile(t);
-                                }
-                            }
-                        }
-                        clone.addTile(removedTile);
-                    }
-                }
-                // Next meld
-                if (workspaceChanged) {
-                    melds = this.createMeldsFromHand(hand);
-                    handMeld = this.getLargestMeld(melds);
-                    break;
-                }
-            }
-            if (melds.size() <= 1) {
-                break;
-            }
-        }
-        if (workspaceChanged) {
-            return workspace;
-        }
-        return null;
+        return this.workspace;
     }
     
-    // Tries to play all potential melds in player's hand using tiles on the table
-    protected ArrayList<Meld> playPotentialMeldsUsingExistingTiles(Hand hand) {
-        ArrayList<Meld> workspace = new ArrayList<>(this.workspace); 
-        boolean workspaceChanged = false;
-
-        // Create all possible pairs and check if they are potential runs/sets
-        for (int i = 0; i < hand.getSize() - 1; i++) {
-            for (int j = i + 1; j < hand.getSize(); j++) {
-                
-                ArrayList<Tile> pair = new ArrayList<>();
-                Meld tempMeld = new Meld();
-                pair.add(hand.getTile(i));
-                pair.add(hand.getTile(j));
-                tempMeld.addTile(pair);
-
-                if (tempMeld.isPotentialMeld()) {
-                    for (Meld meld : workspace) {
-                        // Clone meld
-                        Meld clone = new Meld();
-                        for (int k = 0; k < meld.getSize(); k++) {
-                            clone.addTile(meld.getTile(k));
-                        }
-
-                        // Check if the clone can shrink will still remaining valid
-                        for (int l = 0; l < clone.getSize(); l++) {
-                            Tile removedTile = clone.removeTile(l);
-                            Boolean addedTile = tempMeld.addTile(removedTile);
-                            if (tempMeld.isValidMeld() && clone.isValidMeld()) {
-                                meld.removeTile(l);
-                                workspaceChanged = true;
-                                workspace.add(tempMeld);
-                                for (Tile tile : pair) {
-                                    hand.remove(tile);
-                                }
-                                break;
-                            } else {
-                                workspaceChanged = false;
-                                if (addedTile) {
-                                    // Remove the tile
-                                    for (int t = 0; t < tempMeld.getSize(); t++) {
-                                        if (tempMeld.getTile(t).equals(removedTile)) {
-                                            tempMeld.removeTile(t);
-                                        }
-                                    }
-                                }
-                                // The removal of this tile does not create two valid melds
-                                // Add it back to its parent meld
-                                clone.addTile(removedTile);
-                            }
-                        }
-                        if (workspaceChanged) {
-                            break;
-                        }
-                    }
-                }
-                // Try next pair
-            }
-        }
-        if (workspaceChanged) {
-            return workspace;
-        }
-        return null;
+    // Required for testing purposes
+    public void setLowestHandCount(int count) {
+        this.lowestHandCount = count;
     }
     
-    // Tries to extract a tile from each meld on the table and add it to
-    // the current tile in the player's hand until a meld is formed
-    protected ArrayList<Meld> playTileUsingExistingTiles(Hand hand) {
-        ArrayList<Meld> workspace = new ArrayList<>(this.workspace);
-        
-        boolean workspaceChanged = false;
-        boolean removedFront = false;
-        boolean removedBack = false;
-        int offset = 0;
-        ArrayList<Meld> addedMelds = new ArrayList<>();
-        ArrayList<Meld> workspace2 = new ArrayList<>(workspace);
-        ArrayList<Tile> removedTiles = new ArrayList<>(); 
-
-        for (int i = 0; i < hand.getSize(); i++) {
-            Tile currentHandTile = hand.getTile(i);
-
-            Meld tempMeld = new Meld();
-            tempMeld.addTile(currentHandTile);
-            
-            for (int j = 0; j < workspace.size(); j++) {
-                Meld meld = workspace.get(j);
-
-                // Clone meld
-                Meld clone = new Meld();
-                for (int k = 0; k < meld.getSize(); k++) {
-                    clone.addTile(meld.getTile(k));
-                }
-
-                // Check if the clone can shrink will still remaining valid
-                // for each tile in the clone
-                for (int l = 0; l < clone.getSize(); l++) {
-                    Tile currTile = clone.getTile(l);
-                    Meld secondHalf = new Meld();
-                    
-                    if (tempMeld.addTile(currTile)) {
-                        if (l == 0) {
-                            removedFront = true;
-                            secondHalf = clone.splitMeld(l + 1);
-                        } else if (l == clone.getSize() - 1) {
-                            removedBack = true;
-                            //secondHalf = clone.splitMeld(l);
-                        } else {
-                            secondHalf = clone.splitMeld(l + 1);
-                        }
-                        
-                        removedTiles.add(clone.removeTileObject(currTile));
-                        
-                        if (removedFront && secondHalf.isValidMeld() || removedBack && clone.isValidMeld()
-                                || clone.isValidMeld() && secondHalf.isValidMeld()) {
-
-                            workspace2.remove(j + offset);
-
-                            if (!clone.isValidMeld()) {
-                                workspace2.add(j + offset, secondHalf);
-                            } else if (!secondHalf.isValidMeld()) {
-                                workspace2.add(j + offset, clone);
-                            } else {
-                                workspace2.add(j + offset, clone);
-                                workspace2.add(j + offset + 1, secondHalf);
-                                offset += 1;
-                            }
-
-                            if (tempMeld.isValidMeld()) {
-                                // add to table
-                                addedMelds.add(tempMeld);
-                                // move to next tile in hand
-                                workspaceChanged = true;
-
-                                workspace2.addAll(addedMelds);
-                                workspace = workspace2;
-                                
-                                // remove tile from hand
-                                hand.remove(currentHandTile);
-                            } else {
-                                // potential meld
-                                // move to next meld
-                                workspaceChanged = false;
-                            }
-                            break;
-                        } else {
-                            clone = new Meld();
-
-                            for (int k = 0; k < meld.getSize(); k++) {
-                                clone.addTile(meld.getTile(k));
-                            }
-                            workspace2.get(j + offset).addTile(removedTiles);
-                            tempMeld.removeTileObject(currTile);
-                        }
-                    }
-                }
-                // try next tile in hand
-                if (workspaceChanged) {
-                    break;
-                }
-            }
-        }
-        if (workspaceChanged) {
-            return workspace2;
-        }
-        return null;
+    public void setWorkspace(ArrayList<Meld> workspace) {
+        this.workspace = workspace;
     }
 }

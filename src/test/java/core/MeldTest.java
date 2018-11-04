@@ -345,6 +345,14 @@ public class MeldTest extends TestCase {
         assertFalse(meld.containsTile(tile2));
     }
     
+    public void testContainsTileValue() {
+        Meld meld = new Meld("G1,G2,G3,G4");
+        assertTrue(meld.containsTileValue(new Tile("G1")));
+        assertTrue(meld.containsTileValue(new Tile("R1")));
+        assertTrue(meld.containsTileValue(new Tile("B4")));
+        assertFalse(meld.containsTileValue(new Tile("G5")));
+    }
+    
     public void testEquals() {
         Meld meld1 = new Meld();
         Meld meld2 = new Meld();
@@ -400,5 +408,13 @@ public class MeldTest extends TestCase {
         Meld meld5 = new Meld();
         Meld meld6 = new Meld("");
         assertEquals(meld5.toString(), meld6.toString());
+    }
+    
+    public void testIsValidIfRemoveTile() {
+        Meld meld1 = new Meld("R1,R2,R3,R4");
+        assertTrue(meld1.isValidIfRemoveTile(0));
+        
+        Meld meld2 = new Meld("R1,R2,R3");
+        assertFalse(meld2.isValidIfRemoveTile(0));
     }
 }

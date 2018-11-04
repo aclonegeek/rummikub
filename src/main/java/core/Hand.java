@@ -9,6 +9,17 @@ public class Hand {
         this.hand = new ArrayList<>();
     }
     
+    public Hand(String hand) {
+        this.hand = new ArrayList<>();
+        
+        if (hand.length() != 0) {
+            for (String tile : hand.split(",")) {
+                this.hand.add(new Tile(tile));
+                this.sort();
+            }    
+        }
+    }
+    
     public void add(Tile tile) {
         this.hand.add(tile);
         this.sort();
@@ -27,11 +38,27 @@ public class Hand {
     public Tile remove(Tile tile) {
         for (int i = 0; i < this.hand.size(); i++) {
             if (tile.toString().equals(hand.get(i).toString())) {
-                return hand.remove(i);
+                return this.hand.remove(i);
             }
         }
         
         return null;
+    }
+    
+    // Removes each tile in meld from hand
+    public void remove(Meld meld) {
+        for (int i = 0; i < meld.getSize(); i++) {
+            this.hand.remove(meld.getTile(i));
+        }
+    }
+    
+    public boolean containsTile(Tile tile) {
+        for (Tile tempTile : this.hand) {
+            if (tempTile.toString().equals(tile.toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getSize() {

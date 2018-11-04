@@ -2,11 +2,9 @@ package core;
 
 import java.util.ArrayList;
 
-public class Player3 extends Player {
-    public Player3() {
-        // Player 3's strategy is the same as Strategy 2 in the initial move
-        // the only difference is the circumstance in which it is used (see play())
-        this.playBehaviour = new Strategy2();
+public class Player4 extends Player {
+    public Player4() {
+        this.playBehaviour = new Strategy4();
     }
 
     protected ArrayList<Meld> play() {
@@ -20,9 +18,10 @@ public class Player3 extends Player {
             this.playBehaviour.setWorkspace(originalWorkspace);
             workspace = this.playBehaviour.determineRegularMove(hand);
         } else {
-            // Otherwise, will play only with existing tiles (Strategy 2)
+            // Otherwise, they will play only using tiles with values alredy on the table (Strategy 4)
+            // Because if the value is not already on the table, there is a higher chance they can create a set using this tile
             ArrayList<Meld> originalWorkspace = this.playBehaviour.getWorkspace();
-            this.playBehaviour = new Strategy2();
+            this.playBehaviour = new Strategy4();
             this.playBehaviour.setWorkspace(originalWorkspace);
             workspace = this.playBehaviour.determineRegularMove(hand);
         }  
@@ -32,8 +31,8 @@ public class Player3 extends Player {
         }
         return workspace;
     }
-
+    
     public String toString() {
-        return "Player 3:\n# tiles: " + this.hand.getSize() + "\n\n";
+        return "Player 4:\n# tiles: " + this.hand.getSize() + "\n\n";
     }
 }

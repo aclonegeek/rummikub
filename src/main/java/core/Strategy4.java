@@ -2,7 +2,7 @@ package core;
 
 import java.util.ArrayList;
 
-public class Strategy2 extends PlayBehaviour {
+public class Strategy4 extends PlayBehaviour {
     public ArrayList<Meld> determineInitialMove(Hand hand) {
         // Add the largest meld >= 30 pts, if it exists, to the workspace
         ArrayList<Meld> melds = this.createMeldsFromHand(hand);
@@ -34,16 +34,27 @@ public class Strategy2 extends PlayBehaviour {
         }
         return null;
     }
-   
-    // Plays only the tiles in its hand that requires using tiles on the table, unless it can win
+    
+    // Plays all the tiles it can but only if their values already appear on the table
     public ArrayList<Meld> determineRegularMove(Hand hand) {
-        // Make deep copy of hand
-        Hand handCopy = new Hand();
+        // Make copy of hand that only includes tiles with values already on table
+        Hand filteredHand = new Hand();
         for (int i = 0; i < hand.getSize(); i++) {
-            handCopy.add(hand.getTile(i));
+            Tile tile = hand.getTile(i);
+            for (Meld meld : this.workspace) {
+                if (meld.containsTileValue(tile)) {
+                    filteredHand.add(tile);
+                    break;
+                }
+            }
         }
         
-        // Make deep copy of workspace 
+        Hand filteredHandCopy = new Hand();
+        for (int i = 0; i < filteredHand.getSize(); i++) {
+            filteredHandCopy.add(filteredHand.getTile(i));
+        }
+        
+        // Make deep copy of workspace
         ArrayList<Meld> workspaceCopy = new ArrayList<Meld>();
         for (Meld meld : this.workspace) {
             Meld newMeld = new Meld();
@@ -53,21 +64,19 @@ public class Strategy2 extends PlayBehaviour {
             workspaceCopy.add(newMeld);
         }
         
-        // Check if player can win this turn, if so return the winning workspace and remove tiles from hand
-        ArrayList<Meld> winningWorkspace = hasWinningHand(handCopy);
-        if (winningWorkspace != null) {
-            while (hand.getSize() > 0) {
-                hand.remove(0);
+        this.workspace = this.playUsingHand(filteredHand);
+        this.workspace = this.playUsingHandAndTable(filteredHand);
+        
+        // Remove tiles from hand that were removed from filteredHand
+        for (int i = 0; i < filteredHandCopy.getSize(); i++) {
+            if (!filteredHand.containsTile(filteredHandCopy.getTile(i))) {
+                hand.remove(filteredHandCopy.getTile(i));
             }
-            return winningWorkspace;
         }
         
-        // Otherwise add as many tiles as possible using tiles already on the board
-        this.workspace = this.playUsingHandAndTable(hand);
         if (!workspace.toString().equals(workspaceCopy.toString())) {
             return this.workspace;
         }
-        
         return null;
     }
 }

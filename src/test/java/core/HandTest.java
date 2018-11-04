@@ -1,9 +1,21 @@
 package core;
 
+import java.util.ArrayList;
+
 import core.Globals.Colour;
 import junit.framework.TestCase;
 
 public class HandTest extends TestCase {
+    public void testStringConstructor() {
+        Hand hand1 = new Hand("");
+        assertEquals(0, hand1.getSize());
+        assertEquals("[]", hand1.toString());
+        
+        Hand hand2 = new Hand("R4,G5,O1,R1,B12");
+        assertEquals(5, hand2.getSize());
+        assertEquals("[R1, R4, B12, G5, O1]", hand2.toString());
+    }
+    
     // Tests add()
     // Also tests sort() and toString()
     public void testAdd() {
@@ -55,6 +67,14 @@ public class HandTest extends TestCase {
         assertEquals("R2", hand.remove(0).toString());
         assertEquals(null, hand.remove(0));
         assertEquals(0, hand.getSize());
+    }
+    
+    public void testContainsTile() {
+        Hand hand = new Hand("R1,R2,R3,R4");    
+        assertTrue(hand.containsTile(new Tile("R1")));
+        assertTrue(hand.containsTile(new Tile("R4")));
+        assertFalse(hand.containsTile(new Tile("R5")));
+        assertFalse(hand.containsTile(new Tile("G5")));
     }
     
     // Tests remove() using Tile

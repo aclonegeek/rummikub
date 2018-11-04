@@ -40,10 +40,6 @@ public abstract class Player implements PlayerSubject {
         return this.initialMove;
     }
 
-    public void setInitialMove(boolean initialMove) {
-        this.initialMove = initialMove;
-    }
-
     // Removes tiles from Player's hand that appear in the given ArrayList for which isOnTable is false (ie. they were just added)
     public void removeTilesFromHand(ArrayList<Meld> newTableState) {
         for (Meld meld : newTableState) {
@@ -69,5 +65,22 @@ public abstract class Player implements PlayerSubject {
 
     public ArrayList<PlayerObserver> getObservers() {
         return this.observers;
+    }
+    
+    // Required for testing purposes
+    public void setInitialMove(boolean initialMove) {
+        this.initialMove = initialMove;
+    }
+    
+    public void setHand(Hand hand) {
+        this.hand = hand;
+    }
+    
+    public void setLowestHandCount(int count) {
+        this.playBehaviour.setLowestHandCount(count);
+    }
+    
+    public void setWorkspace(ArrayList<Meld> workspace) {
+        this.playBehaviour.workspace = workspace;
     }
 }
