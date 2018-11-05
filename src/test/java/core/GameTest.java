@@ -17,76 +17,6 @@ public class GameTest extends TestCase {
         human.notifyObservers();
         return human.playBehaviour.workspace;
     }
-
-    public void testGame2() {
-        Hand humanHand = new Hand("B1,R6,R13,B2,B8,B10,B11,B12,B13,G5,G8,G9,O3,O13");
-        Hand p1Hand = new Hand("R1,R2,R3,R4,R6,R7,R8,G9,O9,B9,O2,O3,O4,O5");
-        Hand p2Hand = new Hand("R1,R5,B3,G1,G2,G3,G8,G12,O2,O5,G10,O11,O11,O12");
-        Hand p3Hand = new Hand("B9,G7,R10,R11,B1,B5,B6,G6,G10,O1,O7,O10,O12,O13");
-        ArrayList<Hand> hands = new ArrayList<>(Arrays.asList(humanHand, p1Hand, p2Hand, p3Hand));
-        Stock stock = new Stock();
-        stock.remaining(hands);
-
-        Game game = new Game(true);
-        game.rig(hands, stock);
-        game.setup();
-
-        ArrayList<Meld> workspace;
-        workspace = this.playHuman(game.players.get(0), "B10 B11 B12 B13 > NM");
-        game.table.setState(workspace);
-        assertEquals("1: {B10 B11 B12 B13}\n", game.table.toString());
-
-        workspace = game.players.get(1).play();
-        game.table.setState(workspace);
-        assertEquals("1: {B10 B11 B12 B13}\n2: {B9 G9 O9}\n3: {R6 R7 R8}\n4: {O2 O3 O4 O5}\n5: {R1 R2 R3 R4}\n", game.table.toString());  // req. 4c, req. 10b
-        assertEquals(0, game.players.get(1).getHandSize());
-    }
-
-    public void testGame9() {
-        Hand humanHand = new Hand("B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13,B13,O1,G2");
-        Hand p1Hand = new Hand("G1,G3,G6,G7,G9,G12,G13,B2,B3,B4,O1,O2,O3,O11");
-        Hand p2Hand = new Hand("R2,R3,R4,R5,R6,R7,R8,R9,R10,R11,R12,B1,B2,B3");
-        Hand p3Hand = new Hand("G4,G10,G11,G13,B5,B6,B7,B12,O5,O7,O8,O10,O12,O13");
-        ArrayList<Hand> hands = new ArrayList<>(Arrays.asList(humanHand, p1Hand, p2Hand, p3Hand));
-        ArrayList<Tile> tiles = new ArrayList<>();
-        tiles.add(new Tile("G2"));
-        tiles.add(new Tile("G3"));
-        tiles.add(new Tile("G1"));
-        tiles.add(new Tile("B9"));
-        Stock stock = new Stock(tiles);
-
-        Game game = new Game(true);
-        game.rig(hands, stock);
-        game.setup();
-
-        ArrayList<Meld> workspace;
-        workspace = this.playHuman(game.players.get(0),"B3 B4 B5 B6 B7 B8 B9 B10 B11 B12 B13 > NM");
-        game.table.setState(workspace);
-        assertEquals("1: {B3 B4 B5 B6 B7 B8 B9 B10 B11 B12 B13}\n", game.table.toString());
-
-        workspace = game.players.get(1).play();
-        assertEquals(null, workspace);
-        game.players.get(1).add(stock.draw());
-
-        workspace = game.players.get(2).play();
-        game.table.setState(workspace);
-        assertEquals("1: {B3 B4 B5 B6 B7 B8 B9 B10 B11 B12 B13}\n2: {R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12}\n", game.table.toString());
-
-        workspace = game.players.get(3).play();
-        assertEquals(null, workspace);
-        game.players.get(3).add(stock.draw());
-
-        game.players.get(0).add(stock.draw());
-
-        workspace = game.players.get(1).play();
-        assertEquals(null, workspace);
-        game.players.get(1).add(stock.draw());
-
-        workspace = game.players.get(2).play();
-        game.table.setState(workspace);
-        assertEquals("1: {B3 B4 B5 B6 B7 B8 B9 B10 B11 B12 B13}\n2: {R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12}\n3: {B1 B2 B3}\n", game.table.toString());  // req. 16, req. 16a
-        assertEquals(0, game.players.get(2).getHandSize());
-    }
     
     public void testGame1() {
         Hand humanHand = new Hand("R1,R11,R13,B2,B3,B9,G1,G8,G9,G11,G12,G13,O1,O7");
@@ -141,6 +71,30 @@ public class GameTest extends TestCase {
         workspace = game.players.get(1).play();
         game.table.setState(workspace);
         assertEquals("1: {R6 B6 O6}\n2: {R5 B5 O5}\n", game.table.toString());  // req. 4b2, 8d
+    }
+    
+    public void testGame2() {
+        Hand humanHand = new Hand("B1,R6,R13,B2,B8,B10,B11,B12,B13,G5,G8,G9,O3,O13");
+        Hand p1Hand = new Hand("R1,R2,R3,R4,R6,R7,R8,G9,O9,B9,O2,O3,O4,O5");
+        Hand p2Hand = new Hand("R1,R5,B3,G1,G2,G3,G8,G12,O2,O5,G10,O11,O11,O12");
+        Hand p3Hand = new Hand("B9,G7,R10,R11,B1,B5,B6,G6,G10,O1,O7,O10,O12,O13");
+        ArrayList<Hand> hands = new ArrayList<>(Arrays.asList(humanHand, p1Hand, p2Hand, p3Hand));
+        Stock stock = new Stock();
+        stock.remaining(hands);
+
+        Game game = new Game(true);
+        game.rig(hands, stock);
+        game.setup();
+
+        ArrayList<Meld> workspace;
+        workspace = this.playHuman(game.players.get(0), "B10 B11 B12 B13 > NM");
+        game.table.setState(workspace);
+        assertEquals("1: {B10 B11 B12 B13}\n", game.table.toString());
+
+        workspace = game.players.get(1).play();
+        game.table.setState(workspace);
+        assertEquals("1: {B10 B11 B12 B13}\n2: {B9 G9 O9}\n3: {R6 R7 R8}\n4: {O2 O3 O4 O5}\n5: {R1 R2 R3 R4}\n", game.table.toString());  // req. 4c, req. 10b
+        assertEquals(0, game.players.get(1).getHandSize());
     }
     
     public void testGame3() {
@@ -377,6 +331,76 @@ public class GameTest extends TestCase {
         assertEquals("1: {O7 O8 O9}\n2: {R11 R12 R13}\n3: {G9 G10 G11}\n4: {O1 O2 O3}\n5: {R1 R2 R3}\n6: {G1 G2 G3}\n7: {B10 O10 R10}\n", game.table.toString());   // req. 9g
     }
     
+    public void testGame7() {
+        // Deal cards
+        Hand humanHand = new Hand("B1,B2,B3,O1,O2,O3,O7,O8,O9,O12");
+        Hand p1Hand = new Hand("R1,R2,R3,R5,R8,R10,R12,G2,G3,G13");
+        Hand p2Hand = new Hand("B5,G9,O1,O2,O4,O5,O7,O8,O11,O13");
+        Hand p3Hand = new Hand("B2,B3,B4,G7,G8,G9,O5,O6,O10,O11");
+        ArrayList<Hand> hands = new ArrayList<>(Arrays.asList(humanHand, p1Hand, p2Hand, p3Hand));
+        
+        // Determine first several tiles to be drawn by the players
+        ArrayList<Tile> tiles = new ArrayList<>();
+        tiles.add(new Tile("O6"));
+        tiles.add(new Tile("B6"));
+        tiles.add(new Tile("B7"));
+        tiles.add(new Tile("R12"));
+        tiles.add(new Tile("B12"));
+        Stock stock = new Stock(tiles);
+
+        Game game = new Game(true);
+        game.rig(hands, stock);
+        game.setup();
+
+        ArrayList<Meld> workspace;
+        // Human plays initial melds
+        workspace = this.playHuman(game.players.get(0), "B1 B2 B3 > NM");
+        workspace = this.playHuman(game.players.get(0), "O1 O2 O3 > NM");
+        workspace = this.playHuman(game.players.get(0), "O7 O8 O9 > NM");
+        game.table.setState(workspace);
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n", game.table.toString());
+        
+        // P1 draws O6
+        workspace = game.players.get(1).play();
+        assertNull(workspace);
+        game.players.get(1).add(game.stock.draw());
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n", game.table.toString());
+        
+        // P2 draws B6
+        workspace = game.players.get(2).play();
+        assertNull(workspace);
+        game.players.get(2).add(game.stock.draw());
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n", game.table.toString());
+        
+        // P3 plays initial melds
+        workspace = game.players.get(3).play();
+        game.table.setState(workspace);
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n4: {B2 B3 B4}\n5: {G7 G8 G9}\n", game.table.toString());
+        
+        // Human draws B7
+        game.players.get(0).add(game.stock.draw());
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n4: {B2 B3 B4}\n5: {G7 G8 G9}\n", game.table.toString());
+        
+        // P1 draws R12
+        workspace = game.players.get(1).play();
+        assertNull(workspace);
+        game.players.get(1).add(game.stock.draw());
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n4: {B2 B3 B4}\n5: {G7 G8 G9}\n", game.table.toString());
+        
+        // P2 draws B12
+        workspace = game.players.get(2).play();
+        assertNull(workspace);
+        game.players.get(2).add(game.stock.draw());
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n4: {B2 B3 B4}\n5: {G7 G8 G9}\n", game.table.toString());
+        
+        // P3 wins using some tiles of the table on its last turn, AND using all the tiles it can since another player has 3 fewer tiles (Player Human) 
+        workspace = game.players.get(3).play();
+        game.table.setState(workspace);
+        // req. 12b & req. 13b
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O5 O6 O7 O8 O9 O10 O11}\n4: {B2 B3 B4}\n5: {G7 G8 G9}\n", game.table.toString());
+        assertEquals(0, game.players.get(3).getHandSize());
+    }
+    
     public void testGame8() {
         Hand humanHand = new Hand("R1,R2,R4,R5,R7,R8,R10");
         Hand p1Hand = new Hand("O1,O2,O4,O5,O7,O8,O10");
@@ -439,6 +463,112 @@ public class GameTest extends TestCase {
         assertEquals("1: {R10 R11 R12}\n2: {G1 G2 G3 G4 G5}\n", game.table.toString());
         assertEquals(0, game.players.get(3).getHandSize());
         if(game.players.get(3).getHandSize() == 0) { System.out.println("p3 wins"); }
+    }
+    
+    public void testGame9() {
+        Hand humanHand = new Hand("B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13,B13,O1,G2");
+        Hand p1Hand = new Hand("G1,G3,G6,G7,G9,G12,G13,B2,B3,B4,O1,O2,O3,O11");
+        Hand p2Hand = new Hand("R2,R3,R4,R5,R6,R7,R8,R9,R10,R11,R12,B1,B2,B3");
+        Hand p3Hand = new Hand("G4,G10,G11,G13,B5,B6,B7,B12,O5,O7,O8,O10,O12,O13");
+        ArrayList<Hand> hands = new ArrayList<>(Arrays.asList(humanHand, p1Hand, p2Hand, p3Hand));
+        ArrayList<Tile> tiles = new ArrayList<>();
+        tiles.add(new Tile("G2"));
+        tiles.add(new Tile("G3"));
+        tiles.add(new Tile("G1"));
+        tiles.add(new Tile("B9"));
+        Stock stock = new Stock(tiles);
+
+        Game game = new Game(true);
+        game.rig(hands, stock);
+        game.setup();
+
+        ArrayList<Meld> workspace;
+        workspace = this.playHuman(game.players.get(0),"B3 B4 B5 B6 B7 B8 B9 B10 B11 B12 B13 > NM");
+        game.table.setState(workspace);
+        assertEquals("1: {B3 B4 B5 B6 B7 B8 B9 B10 B11 B12 B13}\n", game.table.toString());
+
+        workspace = game.players.get(1).play();
+        assertEquals(null, workspace);
+        game.players.get(1).add(stock.draw());
+
+        workspace = game.players.get(2).play();
+        game.table.setState(workspace);
+        assertEquals("1: {B3 B4 B5 B6 B7 B8 B9 B10 B11 B12 B13}\n2: {R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12}\n", game.table.toString());
+
+        workspace = game.players.get(3).play();
+        assertEquals(null, workspace);
+        game.players.get(3).add(stock.draw());
+
+        game.players.get(0).add(stock.draw());
+
+        workspace = game.players.get(1).play();
+        assertEquals(null, workspace);
+        game.players.get(1).add(stock.draw());
+
+        workspace = game.players.get(2).play();
+        game.table.setState(workspace);
+        assertEquals("1: {B3 B4 B5 B6 B7 B8 B9 B10 B11 B12 B13}\n2: {R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12}\n3: {B1 B2 B3}\n", game.table.toString());  // req. 16, req. 16a
+        assertEquals(0, game.players.get(2).getHandSize());
+    }
+    
+    public void testGame10() {
+        Hand humanHand = new Hand("B1,B2,B3,O1,O2,O3,O7,O8,O9,O12");
+        Hand p1Hand = new Hand("R1,R2,R3,R5,R8,R10,R12,G2,G3,G13");
+        Hand p2Hand = new Hand("B2,B3,B4,G7,G8,G9,O5,O6,O10,O11");
+        Hand p3Hand = new Hand("B5,G9,O1,O2,O4,O5,O7,O8,O11,O13");
+        ArrayList<Hand> hands = new ArrayList<>(Arrays.asList(humanHand, p1Hand, p2Hand, p3Hand));
+
+        ArrayList<Tile> tiles = new ArrayList<>();
+        tiles.add(new Tile("O6"));
+        tiles.add(new Tile("B6"));
+        tiles.add(new Tile("B7"));
+        tiles.add(new Tile("R12"));
+        tiles.add(new Tile("B12"));
+        Stock stock = new Stock(tiles);
+
+        Game game = new Game(true);
+        game.rig(hands, stock);
+        game.setup();
+
+        ArrayList<Meld> workspace;
+        workspace = this.playHuman(game.players.get(0), "B1 B2 B3 > NM");
+        workspace = this.playHuman(game.players.get(0), "O1 O2 O3 > NM");
+        workspace = this.playHuman(game.players.get(0), "O7 O8 O9 > NM");
+        game.table.setState(workspace);
+
+        // P1 draws O6
+        workspace = game.players.get(1).play();
+        assertNull(workspace);
+        game.players.get(1).add(game.stock.draw());
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n", game.table.toString());
+
+        // P2 plays initial melds
+        workspace = game.players.get(2).play();
+        game.table.setState(workspace);
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n4: {B2 B3 B4}\n5: {G7 G8 G9}\n", game.table.toString());
+
+        // P3 draws B6
+        workspace = game.players.get(3).play();
+        assertNull(workspace);
+        game.players.get(3).add(game.stock.draw());
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n4: {B2 B3 B4}\n5: {G7 G8 G9}\n", game.table.toString());
+
+        // Human draws B7
+        game.players.get(0).add(game.stock.draw());
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n4: {B2 B3 B4}\n5: {G7 G8 G9}\n", game.table.toString());
+
+        // P1 draws R12
+        workspace = game.players.get(1).play();
+        assertNull(workspace);
+        game.players.get(1).add(game.stock.draw());
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n4: {B2 B3 B4}\n5: {G7 G8 G9}\n", game.table.toString());
+
+        // P2 wins using some tiles of the table on its last turn
+        workspace = game.players.get(2).play();
+        game.table.setState(workspace);
+        // req. 16b
+        assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O5 O6 O7 O8 O9 O10 O11}\n4: {B2 B3 B4}\n5: {G7 G8 G9}\n", game.table.toString());
+        assertEquals(0, game.players.get(2).getHandSize());
     }
     
     public void testGame11() {
