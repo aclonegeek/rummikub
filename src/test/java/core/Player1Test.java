@@ -44,11 +44,11 @@ public class Player1Test extends TestCase {
     }
 
     public void testToString() {
-        Player p1 = new Player1();
-        assertEquals("Player 1:\n# tiles: 0\n\n", p1.toString());
+        Player p1 = new Player1("Player 1");
+        assertEquals("Player 1: 0 tiles\n[]\n", p1.toString());
         p1.add(new Tile(Colour.GREEN, 1));
         p1.add(new Tile(Colour.ORANGE, 5));
         p1.add(new Tile(Colour.BLUE, 12));
-        assertEquals("Player 1:\n# tiles: 3\n\n", p1.toString());
+        assertEquals("Player 1: 3 tiles\n[B12 G1 O5]\n", p1.toString());
     }
 }

@@ -58,13 +58,13 @@ public class Player4Test extends TestCase {
     }
 
     public void testToString() {
-        Player p4 = new Player4();
-        assertEquals("Player 4:\n# tiles: 0\n\n", p4.toString());
+        Player p4 = new Player4("Player 4");
+        assertEquals("Player 4: 0 tiles\n[]\n", p4.toString());
         p4.add(new Tile(Colour.RED, 1));
         p4.add(new Tile(Colour.ORANGE, 12));
         p4.add(new Tile(Colour.BLUE, 6));
         p4.add(new Tile(Colour.ORANGE, 2));
         p4.add(new Tile(Colour.ORANGE, 2));
-        assertEquals("Player 4:\n# tiles: 5\n\n", p4.toString());
+        assertEquals("Player 4: 5 tiles\n[R1 B6 O2 O2 O12]\n", p4.toString());
     }
 }

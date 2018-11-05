@@ -66,12 +66,12 @@ public class Player2Test extends TestCase {
     }
 
     public void testToString() {
-        Player p2 = new Player2();
-        assertEquals("Player 2:\n# tiles: 0\n\n", p2.toString());
+        Player p2 = new Player2("Player 2");
+        assertEquals("Player 2: 0 tiles\n[]\n", p2.toString());
         p2.add(new Tile(Colour.RED, 10));
         p2.add(new Tile(Colour.BLUE, 2));
         p2.add(new Tile(Colour.BLUE, 12));
         p2.add(new Tile(Colour.ORANGE, 2));
-        assertEquals("Player 2:\n# tiles: 4\n\n", p2.toString());
+        assertEquals("Player 2: 4 tiles\n[R10 B2 B12 O2]\n", p2.toString());
     }
 }
