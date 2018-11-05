@@ -43,7 +43,7 @@ public abstract class PlayBehaviour implements TableObserver {
                         newMeld.addTile(arrayList.get(j).getTile(k));
                     }
 
-                    // If tile is added to cloned meld, add this meld to ArrayList   
+                    // If tile is added to cloned meld, add this meld to ArrayList
                     if (newMeld.addTile(hand.getTile(i))) {
                         arrayList.add(newMeld);
                     }
@@ -265,8 +265,6 @@ public abstract class PlayBehaviour implements TableObserver {
 
         return this.workspace;
     }
-
-    protected void parseInput(Hand hand, String input) {}
 
     public void setWorkspace(ArrayList<Meld> workspace) {
         this.workspace = workspace;
