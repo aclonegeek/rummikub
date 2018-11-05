@@ -11,7 +11,7 @@ public class Player4 extends Player {
         ArrayList<Meld> workspace = new ArrayList<>();
         if (this.initialMove) {
             workspace = this.playBehaviour.determineInitialMove(hand);
-        } else if (this.hand.getSize() - this.playBehaviour.getLowestHandCount() >= 3) {
+        } else if (this.hand.getSize() - this.lowestHandCount >= 3) {
             // If a player is beating player 3 by 3 or more tiles, will play all that it can (Strategy 1)
             ArrayList<Meld> originalWorkspace = this.playBehaviour.getWorkspace();
             this.playBehaviour = new Strategy1();
@@ -24,14 +24,14 @@ public class Player4 extends Player {
             this.playBehaviour = new Strategy4();
             this.playBehaviour.setWorkspace(originalWorkspace);
             workspace = this.playBehaviour.determineRegularMove(hand);
-        }  
+        }
         if (workspace != null) {
             this.initialMove = false;
             this.notifyObservers();
         }
         return workspace;
     }
-    
+
     public String toString() {
         return "Player 4:\n# tiles: " + this.hand.getSize() + "\n\n";
     }
