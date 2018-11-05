@@ -43,7 +43,7 @@ public abstract class PlayBehaviour implements TableObserver {
                         newMeld.addTile(arrayList.get(j).getTile(k));
                     }
 
-                    // If tile is added to cloned meld, add this meld to ArrayList
+                    // If tile is added to cloned meld, add this meld to ArrayList   
                     if (newMeld.addTile(hand.getTile(i))) {
                         arrayList.add(newMeld);
                     }
@@ -180,12 +180,14 @@ public abstract class PlayBehaviour implements TableObserver {
                     tempMeld.removeTile(0);
                     hand.remove(validMeld);
                     this.workspace.add(validMeld);
+                    break;
                 }
                 int n = tempMeld.getSize() - 1;
                 if (tempMeld.isValidIfRemoveTile(n) && validMeld.addTile(tempMeld.getTile(n))) {
                     hand.remove(tempMeld.removeTile(n));
                     hand.remove(validMeld);
                     this.workspace.add(validMeld);
+                    break;
                 }
             }
         }
@@ -199,12 +201,14 @@ public abstract class PlayBehaviour implements TableObserver {
                     tempMeld.removeTile(0);
                     hand.remove(potentialMeld);
                     this.workspace.add(potentialMeld);
+                    break;
                 }
                 int n = tempMeld.getSize() - 1;
                 if (tempMeld.isValidIfRemoveTile(n) && potentialMeld.addTile(tempMeld.getTile(n))) {
                     tempMeld.removeTile(n);
                     hand.remove(potentialMeld);
                     this.workspace.add(potentialMeld);
+                    break;
                 }
             }
         }
@@ -261,6 +265,8 @@ public abstract class PlayBehaviour implements TableObserver {
 
         return this.workspace;
     }
+
+    protected void parseInput(Hand hand, String input) {}
 
     public void setWorkspace(ArrayList<Meld> workspace) {
         this.workspace = workspace;
