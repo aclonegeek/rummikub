@@ -180,12 +180,14 @@ public abstract class PlayBehaviour implements TableObserver {
                     tempMeld.removeTile(0);
                     hand.remove(validMeld);
                     this.workspace.add(validMeld);
+                    break;
                 }
                 int n = tempMeld.getSize() - 1;
                 if (tempMeld.isValidIfRemoveTile(n) && validMeld.addTile(tempMeld.getTile(n))) {
                     hand.remove(tempMeld.removeTile(n));
                     hand.remove(validMeld);
                     this.workspace.add(validMeld);
+                    break;
                 }
             }
         }
@@ -199,12 +201,14 @@ public abstract class PlayBehaviour implements TableObserver {
                     tempMeld.removeTile(0);
                     hand.remove(potentialMeld);
                     this.workspace.add(potentialMeld);
+                    break;
                 }
                 int n = tempMeld.getSize() - 1;
                 if (tempMeld.isValidIfRemoveTile(n) && potentialMeld.addTile(tempMeld.getTile(n))) {
                     tempMeld.removeTile(n);
                     hand.remove(potentialMeld);
                     this.workspace.add(potentialMeld);
+                    break;
                 }
             }
         }
