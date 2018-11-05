@@ -15,9 +15,9 @@ public class Player1Test extends TestCase {
         p1.setInitialMove(true);
         p1.setWorkspace(workspace1);
         p1.setHand(hand1);
-        assertEquals("[{G1,G2,G3}, {B10,G10,O10}]", p1.play().toString());
+        assertEquals("[{G1 G2 G3}, {B10 G10 O10}]", p1.play().toString());
     }
-    
+
     // Test case where player plays regular move
     public void testPlay2() {
         Player p1 = new Player1();
@@ -27,7 +27,7 @@ public class Player1Test extends TestCase {
         p1.setInitialMove(false);
         p1.setWorkspace(workspace2);
         p1.setHand(hand2);
-        assertEquals("[{G1,G2,G3,G4}, {B10,G10,O10}]", p1.play().toString());
+        assertEquals("[{G1 G2 G3 G4}, {B10 G10 O10}]", p1.play().toString());
     }
 
 
@@ -42,7 +42,7 @@ public class Player1Test extends TestCase {
         p1.setHand(hand3);
         assertEquals(null, p1.play());
     }
-    
+
     public void testToString() {
         Player p1 = new Player1();
         assertEquals("Player 1:\n# tiles: 0\n\n", p1.toString());

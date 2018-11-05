@@ -13,6 +13,6 @@ public class PlayerHumanTest extends TestCase {
         human.add(new Tile(Colour.GREEN, 3));
         human.add(new Tile(Colour.GREEN, 5));
         assertEquals(5, human.getHandSize());
-        assertEquals("You:\n# tiles: 5\n[R1, R2, B1, G3, G5]\n\n", human.toString());
+        assertEquals("You:\n# tiles: 5\n[R1 R2 B1 G3 G5]\n\n", human.toString());
     }
 }

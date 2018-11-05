@@ -11,7 +11,7 @@ public class HandTest extends TestCase {
 
         Hand hand2 = new Hand("R4,G5,O1,R1,B12");
         assertEquals(5, hand2.getSize());
-        assertEquals("[R1, R4, B12, G5, O1]", hand2.toString());
+        assertEquals("[R1 R4 B12 G5 O1]", hand2.toString());
     }
 
     // Tests add()
@@ -41,7 +41,7 @@ public class HandTest extends TestCase {
         hand.add(tile4);
         hand.add(tile5);
         assertEquals(9, hand.getSize());
-        assertEquals("[R1, R2, B1, B10, G3, G5, O7, O12, O13]", hand.toString());
+        assertEquals("[R1 R2 B1 B10 G3 G5 O7 O12 O13]", hand.toString());
     }
 
     // Tests remove() using index
@@ -89,7 +89,7 @@ public class HandTest extends TestCase {
         hand.add(tile4);
 
         assertEquals("R1", hand.remove(tile1).toString());
-        assertEquals("[R1, R2, G3]", hand.toString());
+        assertEquals("[R1 R2 G3]", hand.toString());
         assertEquals("R1", hand.remove(tile1).toString());
         assertEquals(null, hand.remove(tile1));
         assertEquals("R2", hand.remove(tile2).toString());

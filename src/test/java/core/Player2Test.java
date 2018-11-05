@@ -15,9 +15,9 @@ public class Player2Test extends TestCase {
         p2.setInitialMove(true);
         p2.setWorkspace(workspace1);
         p2.setHand(hand1);
-        assertEquals("[{G1,G2,G3}, {B10,G10,O10}]", p2.play().toString());
+        assertEquals("[{G1 G2 G3}, {B10 G10 O10}]", p2.play().toString());
     }
-    
+
     // Test case where table is empty so player does not play initial move
     public void testPlay2() {
         Player p2 = new Player2();
@@ -28,7 +28,7 @@ public class Player2Test extends TestCase {
         p2.setHand(hand2);
         assertEquals(null, p2.play());
     }
-    
+
     // Test case where player plays regular move and plays tiles to existing melds
     public void testPlay3() {
         Player p2 = new Player2();
@@ -38,9 +38,9 @@ public class Player2Test extends TestCase {
         p2.setInitialMove(false);
         p2.setWorkspace(workspace3);
         p2.setHand(hand3);
-        assertEquals("[{G1,G2,G3,G4}]", p2.play().toString());
+        assertEquals("[{G1 G2 G3 G4}]", p2.play().toString());
     }
-    
+
     // Test case where player plays regular move and wins (can play new melds from hand)
     public void testPlay4() {
         Player p2 = new Player2();
@@ -50,9 +50,9 @@ public class Player2Test extends TestCase {
         p2.setInitialMove(false);
         p2.setWorkspace(workspace4);
         p2.setHand(hand4);
-        assertEquals("[{G1,G2,G3,G4}, {B10,G10,O10}]", p2.play().toString());
+        assertEquals("[{G1 G2 G3 G4}, {B10 G10 O10}]", p2.play().toString());
     }
-    
+
     // Test case where player does not play any tiles
     public void testPlay5() {
         Player p2 = new Player2();
@@ -64,7 +64,7 @@ public class Player2Test extends TestCase {
         p2.setHand(hand5);
         assertEquals(null, p2.play());
     }
-    
+
     public void testToString() {
         Player p2 = new Player2();
         assertEquals("Player 2:\n# tiles: 0\n\n", p2.toString());
