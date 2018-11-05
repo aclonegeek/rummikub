@@ -16,12 +16,17 @@ public class Player2 extends Player {
         } else if (!this.initialMove) {
             workspace = this.playBehaviour.determineRegularMove(hand);
         } else {
+            this.drawing = true;
+            this.notifyObservers();
             return null;
         }
         if (workspace != null) {
             this.initialMove = false;
-            this.notifyObservers();
+            this.drawing = false;
+        } else {
+            this.drawing = true;
         }
+        this.notifyObservers();
         return workspace;
     }
 

@@ -2,18 +2,20 @@ package core;
 
 import java.util.ArrayList;
 
-public abstract class Player implements PlayerSubject {
+public abstract class Player implements PlayerSubject, PlayerObserver {
     protected Hand hand;
     protected PlayBehaviour playBehaviour;
     protected boolean initialMove = true;
-    
+    protected boolean drawing = false;
+    protected int lowestHandCount = 100;
+
     private ArrayList<PlayerObserver> observers;
 
     public Player() {
         this.observers = new ArrayList<>();
         this.hand = new Hand();
     }
-    
+
     abstract ArrayList<Meld> play();
 
     public void add(Tile tile) {
@@ -27,15 +29,20 @@ public abstract class Player implements PlayerSubject {
     public ArrayList<Meld> getWorkspace() {
         return this.playBehaviour.getWorkspace();
     }
-    
+
     public int getLowestHandCount() {
-        return this.playBehaviour.getLowestHandCount();
+        return this.lowestHandCount;
+    }
+
+    // Required for testing purposes
+    public void setLowestHandCount(int count) {
+        this.lowestHandCount = count;
     }
 
     protected PlayBehaviour getPlayBehaviour() {
         return this.playBehaviour;
     }
-    
+
     public boolean getInitialMove() {
         return this.initialMove;
     }
@@ -52,34 +59,36 @@ public abstract class Player implements PlayerSubject {
     }
 
     public void registerObserver(PlayerObserver observer) {
-		this.observers.add(observer);
-	}
+        this.observers.add(observer);
+    }
 
-	public void removeObserver(PlayerObserver observer) {
+    public void removeObserver(PlayerObserver observer) {
         this.observers.removeIf(o -> observer.equals(o));
-	}
+    }
 
-	public void notifyObservers() {
-        this.observers.forEach(o -> o.update(this.hand.getSize()));
-	}
+    public void notifyObservers() {
+        this.observers.forEach(o -> o.update(drawing ? this.hand.getSize() + 1 : this.hand.getSize()));
+    }
 
     public ArrayList<PlayerObserver> getObservers() {
         return this.observers;
     }
-    
+
+    public void update(int lowestHandCount) {
+        if (lowestHandCount < this.lowestHandCount) {
+            this.lowestHandCount = lowestHandCount;
+        }
+    }
+
     // Required for testing purposes
     public void setInitialMove(boolean initialMove) {
         this.initialMove = initialMove;
     }
-    
+
     public void setHand(Hand hand) {
         this.hand = hand;
     }
-    
-    public void setLowestHandCount(int count) {
-        this.playBehaviour.setLowestHandCount(count);
-    }
-    
+
     public void setWorkspace(ArrayList<Meld> workspace) {
         this.playBehaviour.workspace = workspace;
     }

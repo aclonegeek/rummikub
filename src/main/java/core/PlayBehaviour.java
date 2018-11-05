@@ -2,14 +2,13 @@ package core;
 
 import java.util.ArrayList;
 
-public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
-    protected int lowestHandCount = -1;
+public abstract class PlayBehaviour implements TableObserver {
     protected ArrayList<Meld> workspace;
 
     public PlayBehaviour() {
         this.workspace = new ArrayList<>();
     }
-    
+
     abstract ArrayList<Meld> determineInitialMove(Hand hand);
     abstract ArrayList<Meld> determineRegularMove(Hand hand);
 
@@ -17,18 +16,8 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
         this.workspace = new ArrayList<>(melds);
     }
 
-    public void update(int lowestHandCount) {
-        if (this.lowestHandCount == -1 || lowestHandCount < this.lowestHandCount) {
-            this.lowestHandCount = lowestHandCount;
-        }
-    }
-
     public ArrayList<Meld> getWorkspace() {
         return this.workspace;
-    }
-    
-    public int getLowestHandCount() {
-        return this.lowestHandCount;
     }
 
     // Returns all possible valid melds in player's hand
@@ -79,7 +68,7 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
         }
         return validMelds;
     }
-    
+
     // Returns all possible potential melds in player's hand
     protected ArrayList<Meld> createPotentialMeldsFromHand(Hand hand) {
         ArrayList<Meld> potentialMelds = new ArrayList<>();
@@ -140,7 +129,7 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
         }
         return greatestMeld;
     }
-    
+
     // Determines if player can win; returns updated workspace if won, otherwise returns null
     protected ArrayList<Meld> hasWinningHand(Hand hand) {
         // Make deep copy of workspace
@@ -163,7 +152,7 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
             return null;
         }
     }
-    
+
     // Plays using only tiles in hand
     protected ArrayList<Meld> playUsingHand(Hand hand) {
         while (hand.getSize() > 0) {
@@ -176,7 +165,7 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
                 break;
             }
         }
-        
+
         return this.workspace;
     }
 
@@ -200,7 +189,7 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
                 }
             }
         }
-        
+
         // Add tiles on table to potential melds in hand, removing from the first and last index of the meld
         ArrayList<Meld> potentialMelds = this.createPotentialMeldsFromHand(hand);
         for (Meld potentialMeld : potentialMelds) {
@@ -219,15 +208,15 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
                 }
             }
         }
-        
+
         // Add tiles on table to tiles in hand, removing from the first and last index of the meld
         for (int i = 0; i < hand.getSize(); i++) {
             Meld newMeld = new Meld();
             newMeld.addTile(hand.getTile(i));
-            
+
             Meld meldRemovedFrom = new Meld();
             Tile tileRemoved = new Tile("R1");
-            
+
             for (int j = 0; j < this.workspace.size(); j++) {
                 Meld tempMeld = this.workspace.get(j);
                 if (tempMeld.isValidIfRemoveTile(0) && newMeld.addTile(tempMeld.getTile(0))) {
@@ -235,7 +224,6 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
                     meldRemovedFrom = tempMeld;
                     tempMeld.removeTile(0);
                     hand.remove(tileRemoved);
-                    //if (newMeld.isValidMeld()) { break; }
                 }
                 int n = tempMeld.getSize() - 1;
                 if (tempMeld.isValidIfRemoveTile(n) && newMeld.addTile(tempMeld.getTile(n))) {
@@ -243,10 +231,9 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
                     meldRemovedFrom = tempMeld;
                     tempMeld.removeTile(n);
                     hand.remove(tileRemoved);
-                    //if (newMeld.isValidMeld()) { break; }
                 }
             }
-            
+
             if (newMeld.isValidMeld()) {
                 workspace.add(newMeld);
                 hand.remove(i);
@@ -254,7 +241,7 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
                 meldRemovedFrom.addTile(tileRemoved);
             }
         }
-        
+
         // Add remaining tiles in hand to each meld on table
         while (hand.getSize() > 0) {
             boolean tileAdded = false;
@@ -271,15 +258,10 @@ public abstract class PlayBehaviour implements TableObserver, PlayerObserver {
                 break;
             }
         }
-        
+
         return this.workspace;
     }
-    
-    // Required for testing purposes
-    public void setLowestHandCount(int count) {
-        this.lowestHandCount = count;
-    }
-    
+
     public void setWorkspace(ArrayList<Meld> workspace) {
         this.workspace = workspace;
     }
