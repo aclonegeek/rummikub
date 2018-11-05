@@ -16,8 +16,11 @@ public class Player1 extends Player {
         }
         if (workspace != null) {
             this.initialMove = false;
-            this.notifyObservers();
+            this.drawing = false;
+        } else {
+            this.drawing = true;
         }
+        this.notifyObservers();
         return workspace;
     }
 
