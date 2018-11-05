@@ -6,8 +6,9 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
     protected Hand hand;
     protected PlayBehaviour playBehaviour;
     protected boolean initialMove = true;
-    protected boolean drawing = false;
+    protected String name;
     protected int lowestHandCount = 100;
+    protected boolean drawing = false;
 
     private ArrayList<PlayerObserver> observers;
 
@@ -19,7 +20,16 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
     abstract ArrayList<Meld> play();
 
     public void add(Tile tile) {
+        System.out.println(this.name + " drew " + tile.toString());
         this.hand.add(tile);
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Hand getHand() {
+        return this.hand;
     }
 
     public int getHandSize() {
@@ -91,5 +101,10 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
 
     public void setWorkspace(ArrayList<Meld> workspace) {
         this.playBehaviour.workspace = workspace;
+    }
+
+    @Override
+    public String toString() {
+        return this.name + ": " + this.hand.getSize() + " tiles" + "\n" + this.hand.toString() + "\n";
     }
 }

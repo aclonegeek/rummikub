@@ -39,9 +39,9 @@ public class PlayerTest extends TestCase {
         meld2.addTile(tiles2);
 
         // Create player and player's hand
-        Player human = new PlayerHuman();
+        Player human = new PlayerHuman("PlayerHuman");
         assertEquals(0, human.getHandSize());
-        assertEquals("You:\n# tiles: 0\n[]\n\n", human.toString());
+        assertEquals("PlayerHuman: 0 tiles\n[]\n", human.toString());
 
         Tile tile8 = new Tile(Colour.RED, 1);
         Tile tile9 = new Tile(Colour.RED, 2);
@@ -54,7 +54,7 @@ public class PlayerTest extends TestCase {
         human.add(tile11);
         human.add(tile12);
         assertEquals(5, human.getHandSize());
-        assertEquals("You:\n# tiles: 5\n[R1 R2 B1 G3 G5]\n\n", human.toString());
+        assertEquals("PlayerHuman: 5 tiles\n[R1 R2 B1 G3 G5]\n", human.toString());
 
         // Add player's tiles to ArrayList of melds representing the temporary table state
         ArrayList<Tile> tiles3 = new ArrayList<Tile>();
@@ -71,7 +71,7 @@ public class PlayerTest extends TestCase {
         // Remove tiles from player's hand for which isOnTable is false
         human.removeTilesFromHand(melds);
         assertEquals(3, human.getHandSize());
-        assertEquals("You:\n# tiles: 3\n[R1 B1 G3]\n\n", human.toString());
+        assertEquals("PlayerHuman: 3 tiles\n[R1 B1 G3]\n", human.toString());
     }
 
     public void testNotifyObserver() {
