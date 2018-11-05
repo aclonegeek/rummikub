@@ -213,6 +213,6 @@ public class Meld {
     public String toString() {
         return this.meld.stream()
             .map(Object::toString)
-            .collect(Collectors.joining(",","{","}"));
+            .collect(Collectors.joining(" ","{","}"));
     }
 }

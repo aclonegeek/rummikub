@@ -150,7 +150,7 @@ public class TableTest extends TestCase {
         melds.add(meld1);
         assertTrue(table.setState(melds));
 
-        assertEquals("1: {R7,B7,G7,O7}\n", table.toString());
+        assertEquals("1: {R7 B7 G7 O7}\n", table.toString());
 
         ArrayList<Tile> run = new ArrayList<>();
         run.add(new Tile(Colour.RED, 1));
@@ -160,6 +160,6 @@ public class TableTest extends TestCase {
         melds.add(meld2);
         assertTrue(table.setState(melds));
 
-        assertEquals("1: {R7,B7,G7,O7}\n2: {R1,R2,R3}\n", table.toString());
+        assertEquals("1: {R7 B7 G7 O7}\n2: {R1 R2 R3}\n", table.toString());
     }
 }

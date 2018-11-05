@@ -17,7 +17,7 @@ public class Strategy1 extends PlayBehaviour {
         }
 
         // Otherwise, adds as many melds as possible to workspace such that total points >= 30
-        int totalTileValue           = 0;
+        int totalTileValue = 0;
         ArrayList<Tile> tilesRemoved = new ArrayList<>();
         ArrayList<Meld> meldsToAdd   = new ArrayList<>();
         while (hand.getSize() != 0) {
