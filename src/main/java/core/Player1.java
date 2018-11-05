@@ -7,6 +7,11 @@ public class Player1 extends Player {
         this.playBehaviour = new Strategy1();
     }
 
+    public Player1(String name) {
+        this();
+        this.name = name;
+    }
+
     protected ArrayList<Meld> play() {
         ArrayList<Meld> workspace = new ArrayList<>();
         if (this.initialMove) {
@@ -17,14 +22,12 @@ public class Player1 extends Player {
         if (workspace != null) {
             this.initialMove = false;
             this.drawing = false;
+            System.out.println(this.name + " played tiles");
         } else {
             this.drawing = true;
         }
         this.notifyObservers();
+        System.out.println(this.toString());
         return workspace;
-    }
-
-    public String toString() {
-        return "Player 1:\n# tiles: " + this.hand.getSize() + "\n\n";
     }
 }

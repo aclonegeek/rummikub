@@ -12,6 +12,23 @@ public class Stock {
         this.stock = new ArrayList<>();
     }
 
+    public Stock(ArrayList<Tile> stock) {
+        this.stock = stock;
+    }
+
+    public void remaining(ArrayList<Hand> hands) {
+        this.populate();
+
+        ArrayList<Tile> existing = new ArrayList<>();
+        for (Hand hand : hands) {
+            for (int i = 0; i < hand.getSize(); i++) {
+                existing.add(hand.getTile(i));
+            }
+        }
+
+        this.stock.removeIf(t -> existing.contains(t));
+    }
+
     public ArrayList<Tile> getStock() {
         return this.stock;
     }

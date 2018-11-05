@@ -146,8 +146,7 @@ public abstract class PlayBehaviour implements TableObserver {
         this.workspace = playUsingHandAndTable(hand);
         if (hand.getSize() == 0) {
             return this.workspace;
-        }
-        else {
+        } else {
             this.workspace = workspaceCopy;
             return null;
         }
@@ -265,6 +264,8 @@ public abstract class PlayBehaviour implements TableObserver {
 
         return this.workspace;
     }
+
+    protected void parseInput(Hand hand, String input) {}
 
     public void setWorkspace(ArrayList<Meld> workspace) {
         this.workspace = workspace;

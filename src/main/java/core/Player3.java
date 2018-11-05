@@ -9,6 +9,11 @@ public class Player3 extends Player {
         this.playBehaviour = new Strategy2();
     }
 
+    public Player3(String name) {
+        this();
+        this.name = name;
+    }
+
     protected ArrayList<Meld> play() {
         ArrayList<Meld> workspace = new ArrayList<>();
         if (this.initialMove) {
@@ -19,6 +24,9 @@ public class Player3 extends Player {
             this.playBehaviour = new Strategy1();
             this.playBehaviour.setWorkspace(originalWorkspace);
             workspace = this.playBehaviour.determineRegularMove(hand);
+            if (workspace == null) {
+                System.out.println("p3 could play but has not tile to play");
+            }
         } else {
             // Otherwise, will play only with existing tiles (Strategy 2)
             ArrayList<Meld> originalWorkspace = this.playBehaviour.getWorkspace();
@@ -28,13 +36,10 @@ public class Player3 extends Player {
         }
         if (workspace != null) {
             this.initialMove = false;
+            System.out.println(this.name + " played tiles");
         }
-        // Reset lowestHandCount for the next turn
         this.lowestHandCount = 100;
+        System.out.println(this.toString());
         return workspace;
-    }
-
-    public String toString() {
-        return "Player 3:\n# tiles: " + this.hand.getSize() + "\n\n";
     }
 }
