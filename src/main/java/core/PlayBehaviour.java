@@ -170,27 +170,6 @@ public abstract class PlayBehaviour implements TableObserver {
 
     // Plays using both tiles in hand and on table (but not only from hand)
     protected ArrayList<Meld> playUsingHandAndTable(Hand hand) {
-        // Add tiles on table to valid melds in hand, removing from the first and last index of the meld
-        ArrayList<Meld> validMelds = this.createMeldsFromHand(hand);
-        for (Meld validMeld : validMelds) {
-            for (int i = 0; i < this.workspace.size(); i++) {
-                Meld tempMeld = this.workspace.get(i);
-                if (tempMeld.isValidIfRemoveTile(0) && validMeld.addTile(tempMeld.getTile(0))) {
-                    tempMeld.removeTile(0);
-                    hand.remove(validMeld);
-                    this.workspace.add(validMeld);
-                    break;
-                }
-                int n = tempMeld.getSize() - 1;
-                if (tempMeld.isValidIfRemoveTile(n) && validMeld.addTile(tempMeld.getTile(n))) {
-                    hand.remove(tempMeld.removeTile(n));
-                    hand.remove(validMeld);
-                    this.workspace.add(validMeld);
-                    break;
-                }
-            }
-        }
-
         // Add tiles on table to potential melds in hand, removing from the first and last index of the meld
         ArrayList<Meld> potentialMelds = this.createPotentialMeldsFromHand(hand);
         for (Meld potentialMeld : potentialMelds) {
@@ -263,6 +242,22 @@ public abstract class PlayBehaviour implements TableObserver {
         }
 
         return this.workspace;
+    }
+    
+    // Returns true if number of tiles in newWorkspace > number of tiles in oldWorkspace, otherwise returns false
+    protected boolean tilesAddedToWorkspace(ArrayList<Meld> newWorkspace, ArrayList<Meld> oldWorkspace) {
+        int newWorkspaceTileCount = 0;
+        int oldWorkspaceTileCount = 0;
+        for (Meld meld : newWorkspace) {
+            newWorkspaceTileCount += meld.getSize();
+        }
+        
+        for (Meld meld : oldWorkspace) {
+            oldWorkspaceTileCount += meld.getSize();
+        }
+        
+        if (newWorkspaceTileCount > oldWorkspaceTileCount) { return true; }
+        return false;
     }
 
     protected void parseInput(Hand hand, String input) {}
