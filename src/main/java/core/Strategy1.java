@@ -65,7 +65,7 @@ public class Strategy1 extends PlayBehaviour {
         this.workspace = this.playUsingHand(hand);
         this.workspace = this.playUsingHandAndTable(hand);
 
-        if(tilesAddedToWorkspace(this.workspace, workspaceCopy)) {
+        if (tilesAddedToWorkspace(this.workspace, workspaceCopy)) {
             return this.workspace;
         }
         return null;
