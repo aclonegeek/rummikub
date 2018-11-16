@@ -3,16 +3,16 @@ package core;
 import java.util.ArrayList;
 
 public class Strategy4 extends PlayBehaviour {
-    public ArrayList<Meld> determineInitialMove(Hand hand) {
+    public ArrayList<Meld> determineInitialMove(Hand hand, ArrayList<Meld> workspace) {
         // Add the largest meld >= 30 pts, if it exists, to the workspace
         ArrayList<Meld> melds = this.createMeldsFromHand(hand);
         Meld largestMeldOver30 = this.getLargestMeldOver30(melds);
         if (largestMeldOver30 != null) {
-            this.workspace.add(largestMeldOver30);
+            workspace.add(largestMeldOver30);
             for (int i = 0; i < largestMeldOver30.getSize(); i++) {
                 hand.remove(largestMeldOver30.getTile(i));
             }
-            return this.workspace;
+            return workspace;
         }
 
         // Otherwise, adds as few melds as possible to workspace such that total points >= 30 pts
@@ -37,9 +37,9 @@ public class Strategy4 extends PlayBehaviour {
             // Break out of the loop as soon as the player reaches 30 points (or more)
             if (totalTileValue >= 30) {
                 for (Meld meld : meldsToAdd) {
-                    this.workspace.add(meld);
+                    workspace.add(meld);
                 }
-                return this.workspace;
+                return workspace;
             }
         }
 
@@ -51,12 +51,12 @@ public class Strategy4 extends PlayBehaviour {
     }
     
     // Plays all the tiles it can but only if their values already appear on the table
-    public ArrayList<Meld> determineRegularMove(Hand hand) {
+    public ArrayList<Meld> determineRegularMove(Hand hand, ArrayList<Meld> workspace) {
         // Make copy of hand that only includes tiles with values already on table
         Hand filteredHand = new Hand();
         for (int i = 0; i < hand.getSize(); i++) {
             Tile tile = hand.getTile(i);
-            for (Meld meld : this.workspace) {
+            for (Meld meld : workspace) {
                 if (meld.containsTileValue(tile)) {
                     filteredHand.add(tile);
                     break;
@@ -71,7 +71,7 @@ public class Strategy4 extends PlayBehaviour {
         
         // Make deep copy of workspace
         ArrayList<Meld> workspaceCopy = new ArrayList<Meld>();
-        for (Meld meld : this.workspace) {
+        for (Meld meld : workspace) {
             Meld newMeld = new Meld();
             for (int i = 0; i < meld.getSize(); i++) {
                 newMeld.addTile(new Tile(meld.getTile(i).toString()));
@@ -79,8 +79,8 @@ public class Strategy4 extends PlayBehaviour {
             workspaceCopy.add(newMeld);
         }
         
-        this.workspace = this.playUsingHand(filteredHand);
-        this.workspace = this.playUsingHandAndTable(filteredHand);
+        workspace = this.playUsingHand(filteredHand, workspace);
+        workspace = this.playUsingHandAndTable(filteredHand, workspace);
         
         // Remove tiles from hand that were removed from filteredHand
         for (int i = 0; i < filteredHandCopy.getSize(); i++) {
@@ -90,7 +90,7 @@ public class Strategy4 extends PlayBehaviour {
         }
         
         if (!workspace.toString().equals(workspaceCopy.toString())) {
-            return this.workspace;
+            return workspace;
         }
         return null;
     }

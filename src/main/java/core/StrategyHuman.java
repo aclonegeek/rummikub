@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class StrategyHuman extends PlayBehaviour {
-    ArrayList<Meld> determineInitialMove(Hand hand) {
-        if (this.handleInput(hand)) {
-            return this.workspace;
+    ArrayList<Meld> determineInitialMove(Hand hand, ArrayList<Meld> workspace) {
+        if (this.handleInput(hand, workspace)) {
+            return workspace;
         }
         return null;
     }
 
-    ArrayList<Meld> determineRegularMove(Hand hand) {
-        if (this.handleInput(hand)) {
-            return this.workspace;
+    ArrayList<Meld> determineRegularMove(Hand hand, ArrayList<Meld> workspace) {
+        if (this.handleInput(hand, workspace)) {
+            return workspace;
         }
         return null;
     }
 
-    private boolean handleInput(Hand hand) {
+    private boolean handleInput(Hand hand, ArrayList<Meld> workspace) {
         Scanner scanner = new Scanner(System.in);
         String choice   = new String();
 
@@ -34,7 +34,7 @@ public class StrategyHuman extends PlayBehaviour {
                     if (choice.equals("f")) {
                         break;
                     }
-                    this.parseInput(hand, choice);
+                    this.parseInput(hand, choice, workspace);
                 }
                 break;
             } else if (choice.equals("d")) {
@@ -47,7 +47,7 @@ public class StrategyHuman extends PlayBehaviour {
         return true;
     }
 
-    protected void parseInput(Hand hand, String input) {
+    protected ArrayList<Meld> parseInput(Hand hand, String input, ArrayList<Meld> workspace) {
         String[] commands   = input.split(">");
         String tilesToMove  = commands[0].trim();
         String meldToUpdate = commands[1].trim();
@@ -58,7 +58,7 @@ public class StrategyHuman extends PlayBehaviour {
             meld = new Meld();
         } else {
             // Subtract 1 because melds are indexed from 1 on the table
-            meld = this.workspace.get(Integer.parseInt(meldToUpdate.substring(1)) - 1);
+            meld = workspace.get(Integer.parseInt(meldToUpdate.substring(1)) - 1);
         }
 
         for (String tileString : tilesToMove.split(" ")) {
@@ -86,7 +86,7 @@ public class StrategyHuman extends PlayBehaviour {
                 meldIndex = Integer.parseInt(tileString.substring(1, tileIndex));
                 Tile tile = new Tile(tileString.substring(tileIndex));
                 // Melds are indexed by 1 in the workspace
-                Meld meldToRemoveFrom = this.workspace.get(meldIndex - 1);
+                Meld meldToRemoveFrom = workspace.get(meldIndex - 1);
                 tile                  = meldToRemoveFrom.removeTileObject(tile);
                 meld.addTile(tile);
             // Split a meld on the table
@@ -94,7 +94,7 @@ public class StrategyHuman extends PlayBehaviour {
                 int meldIndex = Integer.parseInt(tileString.substring(1, tileString.indexOf(" ")));
                 // M1 | R3 (+ 2 after the pipe is our number)
                 Tile tileToSplitAt = new Tile(tileString.substring(tileString.indexOf("|") + 2));
-                Meld meldToSplit   = this.workspace.get(meldIndex);
+                Meld meldToSplit   = workspace.get(meldIndex);
 
                 // Find where in the meld to split
                 int tileIndex = 0;
@@ -109,7 +109,7 @@ public class StrategyHuman extends PlayBehaviour {
                 }
 
                 Meld otherMeld = meld.splitMeld(tileIndex);
-                this.workspace.add(otherMeld);
+                workspace.add(otherMeld);
             // Move a tile from the player's hand
             } else {
                 Tile tile = new Tile(tileString);
@@ -119,7 +119,9 @@ public class StrategyHuman extends PlayBehaviour {
 
         // If a new meld was created, add it to the workspace
         if (meldToUpdate.equals("NM")) {
-            this.workspace.add(meld);
+            workspace.add(meld);
         }
+        
+        return workspace;
     }
 }

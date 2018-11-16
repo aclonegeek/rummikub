@@ -2,23 +2,12 @@ package core;
 
 import java.util.ArrayList;
 
-public abstract class PlayBehaviour implements TableObserver {
-    protected ArrayList<Meld> workspace;
+public abstract class PlayBehaviour {
 
-    public PlayBehaviour() {
-        this.workspace = new ArrayList<>();
-    }
+    public PlayBehaviour() {}
 
-    abstract ArrayList<Meld> determineInitialMove(Hand hand);
-    abstract ArrayList<Meld> determineRegularMove(Hand hand);
-
-    public void update(ArrayList<Meld> melds) {
-        this.workspace = new ArrayList<>(melds);
-    }
-
-    public ArrayList<Meld> getWorkspace() {
-        return this.workspace;
-    }
+    abstract ArrayList<Meld> determineInitialMove(Hand hand, ArrayList<Meld> workspace);
+    abstract ArrayList<Meld> determineRegularMove(Hand hand, ArrayList<Meld> workspace);
 
     // Returns all possible valid melds in player's hand
     protected ArrayList<Meld> createMeldsFromHand(Hand hand) {
@@ -131,10 +120,10 @@ public abstract class PlayBehaviour implements TableObserver {
     }
 
     // Determines if player can win; returns updated workspace if won, otherwise returns null
-    protected ArrayList<Meld> hasWinningHand(Hand hand) {
+    protected ArrayList<Meld> hasWinningHand(Hand hand, ArrayList<Meld> workspace) {
         // Make deep copy of workspace
         ArrayList<Meld> workspaceCopy = new ArrayList<Meld>();
-        for (Meld meld : this.workspace) {
+        for (Meld meld : workspace) {
             Meld newMeld = new Meld();
             for (int i = 0; i < meld.getSize(); i++) {
                 newMeld.addTile(new Tile(meld.getTile(i).toString()));
@@ -142,71 +131,49 @@ public abstract class PlayBehaviour implements TableObserver {
             workspaceCopy.add(newMeld);
         }
 
-        this.workspace = playUsingHand(hand);
-        this.workspace = playUsingHandAndTable(hand);
+        workspaceCopy = this.playUsingHand(hand, workspaceCopy);
+        workspaceCopy = this.playUsingHandAndTable(hand, workspaceCopy);
         if (hand.getSize() == 0) {
-            return this.workspace;
+            return workspaceCopy;
         } else {
-            this.workspace = workspaceCopy;
             return null;
         }
     }
 
     // Plays using only tiles in hand
-    protected ArrayList<Meld> playUsingHand(Hand hand) {
+    protected ArrayList<Meld> playUsingHand(Hand hand, ArrayList<Meld> workspace) {
         while (hand.getSize() > 0) {
             ArrayList<Meld> currentMelds = this.createMeldsFromHand(hand);
             Meld largestMeld = this.getLargestMeld(currentMelds);
             if (largestMeld != null) {
-                this.workspace.add(largestMeld);
+                workspace.add(largestMeld);
                 hand.remove(largestMeld);
             } else {
                 break;
             }
         }
 
-        return this.workspace;
+        return workspace;
     }
 
     // Plays using both tiles in hand and on table (but not only from hand)
-    protected ArrayList<Meld> playUsingHandAndTable(Hand hand) {
-        // Add tiles on table to valid melds in hand, removing from the first and last index of the meld
-        ArrayList<Meld> validMelds = this.createMeldsFromHand(hand);
-        for (Meld validMeld : validMelds) {
-            for (int i = 0; i < this.workspace.size(); i++) {
-                Meld tempMeld = this.workspace.get(i);
-                if (tempMeld.isValidIfRemoveTile(0) && validMeld.addTile(tempMeld.getTile(0))) {
-                    tempMeld.removeTile(0);
-                    hand.remove(validMeld);
-                    this.workspace.add(validMeld);
-                    break;
-                }
-                int n = tempMeld.getSize() - 1;
-                if (tempMeld.isValidIfRemoveTile(n) && validMeld.addTile(tempMeld.getTile(n))) {
-                    hand.remove(tempMeld.removeTile(n));
-                    hand.remove(validMeld);
-                    this.workspace.add(validMeld);
-                    break;
-                }
-            }
-        }
-
+    protected ArrayList<Meld> playUsingHandAndTable(Hand hand, ArrayList<Meld> workspace) {
         // Add tiles on table to potential melds in hand, removing from the first and last index of the meld
         ArrayList<Meld> potentialMelds = this.createPotentialMeldsFromHand(hand);
         for (Meld potentialMeld : potentialMelds) {
-            for (int i = 0; i < this.workspace.size(); i++) {
-                Meld tempMeld = this.workspace.get(i);
+            for (int i = 0; i < workspace.size(); i++) {
+                Meld tempMeld = workspace.get(i);
                 if (tempMeld.isValidIfRemoveTile(0) && potentialMeld.addTile(tempMeld.getTile(0))) {
                     tempMeld.removeTile(0);
                     hand.remove(potentialMeld);
-                    this.workspace.add(potentialMeld);
+                    workspace.add(potentialMeld);
                     break;
                 }
                 int n = tempMeld.getSize() - 1;
                 if (tempMeld.isValidIfRemoveTile(n) && potentialMeld.addTile(tempMeld.getTile(n))) {
                     tempMeld.removeTile(n);
                     hand.remove(potentialMeld);
-                    this.workspace.add(potentialMeld);
+                    workspace.add(potentialMeld);
                     break;
                 }
             }
@@ -220,8 +187,8 @@ public abstract class PlayBehaviour implements TableObserver {
             Meld meldRemovedFrom = new Meld();
             Tile tileRemoved = new Tile("R1");
 
-            for (int j = 0; j < this.workspace.size(); j++) {
-                Meld tempMeld = this.workspace.get(j);
+            for (int j = 0; j < workspace.size(); j++) {
+                Meld tempMeld = workspace.get(j);
                 if (tempMeld.isValidIfRemoveTile(0) && newMeld.addTile(tempMeld.getTile(0))) {
                     tileRemoved = tempMeld.getTile(0);
                     meldRemovedFrom = tempMeld;
@@ -262,12 +229,8 @@ public abstract class PlayBehaviour implements TableObserver {
             }
         }
 
-        return this.workspace;
+        return workspace;
     }
 
-    protected void parseInput(Hand hand, String input) {}
-
-    public void setWorkspace(ArrayList<Meld> workspace) {
-        this.workspace = workspace;
-    }
+    protected ArrayList<Meld> parseInput(Hand hand, String input, ArrayList<Meld> workspace) { return null; }
 }
