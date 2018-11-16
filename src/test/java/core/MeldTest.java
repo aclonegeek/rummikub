@@ -254,7 +254,7 @@ public class MeldTest extends TestCase {
         meld.removeTile(2);
         // Expected NONE because melds less than size 3 are yet to be determined
         // and may be part of an intermediate move
-        assertEquals(MeldType.NONE, meld.getMeldType());
+        assertEquals(MeldType.POTENTIAL, meld.getMeldType());
     }
 
     // Remove tiles from a SET that will make it invalid
@@ -273,7 +273,7 @@ public class MeldTest extends TestCase {
         meld.removeTile(0);
         // Expected NONE because melds less than size 3 are yet to be determined
         // and may be part of an intermediate move
-        assertEquals(MeldType.NONE, meld.getMeldType());
+        assertEquals(MeldType.POTENTIAL, meld.getMeldType());
     }
 
     public void testSplitMeld() {
