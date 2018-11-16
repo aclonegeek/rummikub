@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 public class Meld {
     public enum MeldType {
-        INVALID, NONE, RUN, SET;
+        INVALID, POTENTIAL, RUN, SET;
     }
 
     private ArrayList<Tile> meld;
@@ -114,7 +114,7 @@ public class Meld {
 
     private MeldType determineMeldType(ArrayList<Tile> tiles) {
         // Redundant melds
-        if (tiles.size() <= 1) { return MeldType.NONE; }
+        if (tiles.size() <= 1) { return MeldType.POTENTIAL; }
 
         // Map each tile to its corresponding integer value and use this array to determine if it satisfies any Meld properties
         List<Integer> tilesByValue = tiles.stream()
@@ -145,7 +145,7 @@ public class Meld {
         boolean sameColours = tiles.stream()
                 .allMatch(tile -> tile.getColour() == tiles.get(0).getColour());
 
-        if ((sameValues && differentColours || consecutiveValues && sameColours) && tiles.size() < 3) { return MeldType.NONE;    }
+        if ((sameValues && differentColours || consecutiveValues && sameColours) && tiles.size() < 3) { return MeldType.POTENTIAL;    }
         else if (consecutiveValues && sameColours)                                                    { return MeldType.RUN;     }
         else if (sameValues && differentColours)                                                      { return MeldType.SET;     }
         else                                                                                          { return MeldType.INVALID; }
@@ -167,7 +167,7 @@ public class Meld {
         return this.meldType == MeldType.RUN || this.meldType == MeldType.SET;
     }
     public boolean isPotentialMeld() {
-        return this.meldType == MeldType.NONE;
+        return this.meldType == MeldType.POTENTIAL;
     }
 
     public int getValue() {

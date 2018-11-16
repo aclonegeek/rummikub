@@ -79,10 +79,9 @@ public class Strategy2 extends PlayBehaviour {
         
         // Otherwise add as many tiles as possible using tiles already on the board
         workspace = this.playUsingHandAndTable(hand, workspace);
-        if (!workspace.toString().equals(workspaceCopy.toString())) {
+        if (tilesAddedToWorkspace(this.workspace, workspaceCopy)) {
             return workspace;
         }
-        
         return null;
     }
 }

@@ -268,4 +268,34 @@ public class PlayBehaviourTest extends TestCase {
         Hand losingHand = new Hand("R5,R8,G8,O8,B1");
         assertEquals(null, strategy2.hasWinningHand(losingHand, workspace1));
     }
+    
+    public void testTilesAddedToWorkspace() {
+        Strategy1 strategy1 = new Strategy1();
+        
+        // Case where newWorkspace > oldWorkspace (returns true)
+        ArrayList<Meld> newWorkspace1 = new ArrayList<Meld>();
+        ArrayList<Meld> oldWorkspace1 = new ArrayList<Meld>();
+        newWorkspace1.add(new Meld("R1,R2,R3,R4"));
+        newWorkspace1.add(new Meld("G1,O1,B1"));
+        oldWorkspace1.add(new Meld("R1,R2,R3"));
+        oldWorkspace1.add(new Meld("G1,O1,B1"));
+        assertTrue(strategy1.tilesAddedToWorkspace(newWorkspace1, oldWorkspace1));
+        
+        // Case where newWorkspace == oldWorkspace (returns false)
+        ArrayList<Meld> newWorkspace2 = new ArrayList<Meld>();
+        ArrayList<Meld> oldWorkspace2 = new ArrayList<Meld>();
+        newWorkspace2.add(new Meld("R1,R2,R3"));
+        newWorkspace2.add(new Meld("G1,O1,B1"));
+        oldWorkspace2.add(new Meld("R1,R2,R3"));
+        oldWorkspace2.add(new Meld("G1,O1,B1"));
+        assertFalse(strategy1.tilesAddedToWorkspace(newWorkspace2, oldWorkspace2));
+        
+        // Case where newWorkspace < oldWorkspace (returns false)
+        ArrayList<Meld> newWorkspace3 = new ArrayList<Meld>();
+        ArrayList<Meld> oldWorkspace3 = new ArrayList<Meld>();
+        newWorkspace3.add(new Meld("R1,R2,R3"));
+        oldWorkspace3.add(new Meld("R1,R2,R3"));
+        oldWorkspace3.add(new Meld("G1,O1,B1"));
+        assertFalse(strategy1.tilesAddedToWorkspace(newWorkspace3, oldWorkspace3));
+    }
 }

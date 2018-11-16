@@ -6,72 +6,41 @@ import core.Globals.Colour;
 import junit.framework.TestCase;
 
 public class PlayerTest extends TestCase {
-    public void testPlayerHuman() {
+    public void testPlayer() {
         // Create ArrayList of melds representing the table
-        ArrayList<Meld> melds = new ArrayList<>();
-        ArrayList<Tile> tiles1 = new ArrayList<Tile>();
-        Meld meld1 = new Meld();
-        Tile tile1 = new Tile(Colour.GREEN, 1);
-        Tile tile2 = new Tile(Colour.GREEN, 2);
-        Tile tile3 = new Tile(Colour.GREEN, 3);
-        Tile tile4 = new Tile(Colour.GREEN, 4);
-        tile1.setOnTable(true);
-        tile2.setOnTable(true);
-        tile3.setOnTable(true);
-        tile4.setOnTable(true);
-        tiles1.add(tile1);
-        tiles1.add(tile2);
-        tiles1.add(tile3);
-        tiles1.add(tile4);
-        meld1.addTile(tiles1);
+        ArrayList<Meld> workspace = new ArrayList<>();
+        
+        Meld meld1 = new Meld("G1,G2,G3,G4");
+        for (int i = 0; i < meld1.getSize(); i++) {
+            meld1.getTile(i).setOnTable(true);
+        }
+        
+        Meld meld2 = new Meld("G2,B2,O2");
+        for (int i = 0; i < meld2.getSize(); i++) {
+            meld2.getTile(i).setOnTable(true);
+        }
+        
+        workspace.add(meld1);
+        workspace.add(meld2);
 
-        ArrayList<Tile> tiles2 = new ArrayList<Tile>();
-        Meld meld2 = new Meld();
-        Tile tile5 = new Tile(Colour.GREEN, 2);
-        Tile tile6 = new Tile(Colour.BLUE, 2);
-        Tile tile7 = new Tile(Colour.ORANGE, 2);
-        tile5.setOnTable(true);
-        tile6.setOnTable(true);
-        tile7.setOnTable(true);
-        tiles2.add(tile5);
-        tiles2.add(tile6);
-        tiles2.add(tile7);
-        meld2.addTile(tiles2);
+        // Create player and add card's to hand
+        Player p1 = new Player1("p1");
+        p1.setWorkspace(workspace);
+        assertEquals(0, p1.getHandSize());
+        assertEquals("p1: 0 tiles\n[]\n", p1.toString());
+        p1.add(new Tile("R1"));
+        p1.add(new Tile("R2"));
+        p1.add(new Tile("R3"));
+        p1.add(new Tile("O5"));
+        p1.add(new Tile("O6"));
+        assertEquals(5, p1.getHandSize());
+        assertEquals("p1: 5 tiles\n[R1 R2 R3 O5 O6]\n", p1.toString());
 
-        // Create player and player's hand
-        Player human = new PlayerHuman("PlayerHuman");
-        assertEquals(0, human.getHandSize());
-        assertEquals("PlayerHuman: 0 tiles\n[]\n", human.toString());
-
-        Tile tile8 = new Tile(Colour.RED, 1);
-        Tile tile9 = new Tile(Colour.RED, 2);
-        Tile tile10 = new Tile(Colour.BLUE, 1);
-        Tile tile11 = new Tile(Colour.GREEN, 3);
-        Tile tile12 = new Tile(Colour.GREEN, 5);
-        human.add(tile8);
-        human.add(tile9);
-        human.add(tile10);
-        human.add(tile11);
-        human.add(tile12);
-        assertEquals(5, human.getHandSize());
-        assertEquals("PlayerHuman: 5 tiles\n[R1 R2 B1 G3 G5]\n", human.toString());
-
-        // Add player's tiles to ArrayList of melds representing the temporary table state
-        ArrayList<Tile> tiles3 = new ArrayList<Tile>();
-        tiles3.add(tile12);
-        meld1.addTile(tiles3);
-
-        ArrayList<Tile> tiles4 = new ArrayList<Tile>();
-        tiles4.add(tile9);
-        meld2.addTile(tiles4);
-
-        melds.add(meld1);
-        melds.add(meld2);
-
-        // Remove tiles from player's hand for which isOnTable is false
-        human.removeTilesFromHand(melds);
-        assertEquals(3, human.getHandSize());
-        assertEquals("PlayerHuman: 3 tiles\n[R1 B1 G3]\n", human.toString());
+        // Have player play their turn and verify tiles were removed from their hand
+        p1.setInitialMove(false);
+        p1.play();
+        assertEquals(2, p1.getHandSize());
+        assertEquals("p1: 2 tiles\n[O5 O6]\n", p1.toString());
     }
 
     public void testNotifyObserver() {
