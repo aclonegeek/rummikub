@@ -57,17 +57,6 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
         return this.initialMove;
     }
 
-    // Removes tiles from Player's hand that appear in the given ArrayList for which isOnTable is false (ie. they were just added)
-    public void removeTilesFromHand(ArrayList<Meld> newTableState) {
-        for (Meld meld : newTableState) {
-            for (int j = 0; j < meld.getSize(); j++) {
-                if (!meld.getTile(j).isOnTable()) {
-                    this.hand.remove(meld.getTile(j));
-                }
-            }
-        }
-    }
-
     public void registerObserver(PlayerObserver observer) {
         this.observers.add(observer);
     }
