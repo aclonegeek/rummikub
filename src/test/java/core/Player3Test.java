@@ -13,9 +13,8 @@ public class Player3Test extends TestCase {
         workspace1.add(new Meld("G1,G2,G3"));
         Hand hand1 = new Hand("B10,G10,O10,G4");
         p3.setInitialMove(true);
-        p3.setWorkspace(workspace1);
         p3.setHand(hand1);
-        assertEquals("[{G1 G2 G3}, {B10 G10 O10}]", p3.play().toString());
+        assertEquals("[{G1 G2 G3}, {B10 G10 O10}]", p3.play(workspace1).toString());
     }
 
     // Test case where player uses Strategy2 (only plays to existing melds), ie. no other player has 3 fewer tiles
@@ -26,9 +25,8 @@ public class Player3Test extends TestCase {
         Hand hand2 = new Hand("B10,G10,O10,G4,B5");
         p3.setInitialMove(false);
         p3.setLowestHandCount(4);
-        p3.setWorkspace(workspace2);
         p3.setHand(hand2);
-        assertEquals("[{G1 G2 G3 G4}]", p3.play().toString());
+        assertEquals("[{G1 G2 G3 G4}]", p3.play(workspace2).toString());
     }
 
     // Test case where player uses Strategy1 (plays all possible melds), ie. some player has 3 or more fewer tiles
@@ -39,9 +37,8 @@ public class Player3Test extends TestCase {
         Hand hand3 = new Hand("B10,G10,O10,G4,B10");
         p3.setInitialMove(false);
         p3.setLowestHandCount(1);
-        p3.setWorkspace(workspace3);
         p3.setHand(hand3);
-        assertEquals("[{G1 G2 G3 G4}, {B10 G10 O10}]", p3.play().toString());
+        assertEquals("[{G1 G2 G3 G4}, {B10 G10 O10}]", p3.play(workspace3).toString());
     }
 
     // Test case where player does not play any tiles
@@ -51,10 +48,9 @@ public class Player3Test extends TestCase {
         workspace5.add(new Meld("G1,G2,G3"));
         Hand hand5 = new Hand("B10,G10,O10,G5");
         p3.setInitialMove(false);
-        p3.setWorkspace(workspace5);
         p3.setLowestHandCount(4);
         p3.setHand(hand5);
-        assertEquals(null, p3.play());
+        assertEquals(null, p3.play(workspace5));
     }
 
     public void testToString() {

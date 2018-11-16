@@ -13,9 +13,8 @@ public class Player2Test extends TestCase {
         workspace1.add(new Meld("G1,G2,G3"));
         Hand hand1 = new Hand("B10,G10,O10,G4");
         p2.setInitialMove(true);
-        p2.setWorkspace(workspace1);
         p2.setHand(hand1);
-        assertEquals("[{G1 G2 G3}, {B10 G10 O10}]", p2.play().toString());
+        assertEquals("[{G1 G2 G3}, {B10 G10 O10}]", p2.play(workspace1).toString());
     }
 
     // Test case where table is empty so player does not play initial move
@@ -24,9 +23,8 @@ public class Player2Test extends TestCase {
         ArrayList<Meld> workspace2 = new ArrayList<>();
         Hand hand2 = new Hand("B10,G10,O10,G4");
         p2.setInitialMove(true);
-        p2.setWorkspace(workspace2);
         p2.setHand(hand2);
-        assertEquals(null, p2.play());
+        assertEquals(null, p2.play(workspace2));
     }
 
     // Test case where player plays regular move and plays tiles to existing melds
@@ -36,9 +34,8 @@ public class Player2Test extends TestCase {
         workspace3.add(new Meld("G1,G2,G3"));
         Hand hand3 = new Hand("B10,G10,O9,G4");
         p2.setInitialMove(false);
-        p2.setWorkspace(workspace3);
         p2.setHand(hand3);
-        assertEquals("[{G1 G2 G3 G4}]", p2.play().toString());
+        assertEquals("[{G1 G2 G3 G4}]", p2.play(workspace3).toString());
     }
 
     // Test case where player plays regular move and wins (can play new melds from hand)
@@ -48,9 +45,8 @@ public class Player2Test extends TestCase {
         workspace4.add(new Meld("G1,G2,G3"));
         Hand hand4 = new Hand("B10,G10,O10,G4");
         p2.setInitialMove(false);
-        p2.setWorkspace(workspace4);
         p2.setHand(hand4);
-        assertEquals("[{G1 G2 G3 G4}, {B10 G10 O10}]", p2.play().toString());
+        assertEquals("[{G1 G2 G3 G4}, {B10 G10 O10}]", p2.play(workspace4).toString());
     }
 
     // Test case where player does not play any tiles
@@ -60,9 +56,8 @@ public class Player2Test extends TestCase {
         workspace5.add(new Meld("G1,G2,G3"));
         Hand hand5 = new Hand("B10,G10,O10,G5");
         p2.setInitialMove(false);
-        p2.setWorkspace(workspace5);
         p2.setHand(hand5);
-        assertEquals(null, p2.play());
+        assertEquals(null, p2.play(workspace5));
     }
 
     public void testToString() {
