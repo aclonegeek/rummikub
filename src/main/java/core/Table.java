@@ -2,25 +2,11 @@ package core;
 
 import java.util.ArrayList;
 
-public class Table implements TableSubject {
-    private ArrayList<TableObserver> observers;
+public class Table {
     private ArrayList<Meld> melds;
 
     public Table() {
-        this.observers = new ArrayList<>();
         this.melds = new ArrayList<>();
-    }
-
-    public void registerObserver(TableObserver observer) {
-        this.observers.add(observer);
-    }
-
-    public void removeObserver(TableObserver observer) {
-        this.observers.removeIf(o -> observer.equals(o));
-    }
-
-    public void notifyObservers() {
-        this.observers.forEach(o -> o.update(this.melds));
     }
 
     public ArrayList<Meld> getState() {
@@ -30,7 +16,6 @@ public class Table implements TableSubject {
     public boolean setState(ArrayList<Meld> melds) {
         if (isValidState(melds)) {
             this.melds = melds;
-            this.notifyObservers();
             return true;
         }
         return false;
