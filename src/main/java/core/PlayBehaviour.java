@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public abstract class PlayBehaviour {
 
-    public PlayBehaviour() {}
-
     abstract ArrayList<Meld> determineInitialMove(Hand hand, ArrayList<Meld> workspace);
     abstract ArrayList<Meld> determineRegularMove(Hand hand, ArrayList<Meld> workspace);
 

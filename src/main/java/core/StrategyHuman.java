@@ -34,6 +34,7 @@ public class StrategyHuman extends PlayBehaviour {
                     if (choice.equals("f")) {
                         break;
                     }
+                    // TODO: return workspace to be consistent with other strategies
                     this.parseInput(hand, choice, workspace);
                 }
                 break;
