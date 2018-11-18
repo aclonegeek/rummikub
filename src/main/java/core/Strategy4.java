@@ -89,7 +89,7 @@ public class Strategy4 extends PlayBehaviour {
             }
         }
         
-        if (tilesAddedToWorkspace(this.workspace, workspaceCopy)) {
+        if (tilesAddedToWorkspace(workspace, workspaceCopy)) {
             return workspace;
         }
         return null;
