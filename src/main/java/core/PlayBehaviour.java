@@ -229,6 +229,22 @@ public abstract class PlayBehaviour {
 
         return workspace;
     }
+    
+    // Returns true if number of tiles in newWorkspace > number of tiles in oldWorkspace, otherwise returns false
+    protected boolean tilesAddedToWorkspace(ArrayList<Meld> newWorkspace, ArrayList<Meld> oldWorkspace) {
+        int newWorkspaceTileCount = 0;
+        int oldWorkspaceTileCount = 0;
+        for (Meld meld : newWorkspace) {
+            newWorkspaceTileCount += meld.getSize();
+        }
+        
+        for (Meld meld : oldWorkspace) {
+            oldWorkspaceTileCount += meld.getSize();
+        }
+        
+        if (newWorkspaceTileCount > oldWorkspaceTileCount) { return true; }
+        return false;
+    }
 
     protected ArrayList<Meld> parseInput(Hand hand, String input, ArrayList<Meld> workspace) { return null; }
 }
