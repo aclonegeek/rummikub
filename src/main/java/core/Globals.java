@@ -25,4 +25,26 @@ public class Globals {
             return null;
         }
     }
+    
+    public static enum PlayerType {
+        PLAYERHUMAN("StrategyHuman"),
+        PLAYER1("Strategy1"),
+        PLAYER2("Strategy2"),
+        PLAYER3("Strategy3"),
+        PLAYER4("Strategy4");
+        
+        private final String playerType;
+        
+        private PlayerType(String playerType) {
+            this.playerType = playerType;
+        }
+        
+        public boolean equals(String otherPlayerType) {
+            return this.playerType.equals(otherPlayerType);
+        }
+        
+        public String toString() {
+            return this.playerType;
+        }
+    }
 }

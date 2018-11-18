@@ -3,16 +3,16 @@ package core;
 import java.util.ArrayList;
 
 public class Strategy2 extends PlayBehaviour {
-    public ArrayList<Meld> determineInitialMove(Hand hand) {
+    public ArrayList<Meld> determineInitialMove(Hand hand, ArrayList<Meld> workspace) {
         // Add the largest meld >= 30 pts, if it exists, to the workspace
         ArrayList<Meld> melds = this.createMeldsFromHand(hand);
         Meld largestMeldOver30 = this.getLargestMeldOver30(melds);
         if (largestMeldOver30 != null) {
-            this.workspace.add(largestMeldOver30);
+            workspace.add(largestMeldOver30);
             for (int i = 0; i < largestMeldOver30.getSize(); i++) {
                 hand.remove(largestMeldOver30.getTile(i));
             }
-            return this.workspace;
+            return workspace;
         }
 
         // Otherwise, adds as few melds as possible to workspace such that total points >= 30 pts
@@ -37,9 +37,9 @@ public class Strategy2 extends PlayBehaviour {
             // Break out of the loop as soon as the player reaches 30 points (or more)
             if (totalTileValue >= 30) {
                 for (Meld meld : meldsToAdd) {
-                    this.workspace.add(meld);
+                    workspace.add(meld);
                 }
-                return this.workspace;
+                return workspace;
             }
         }
 
@@ -51,7 +51,7 @@ public class Strategy2 extends PlayBehaviour {
     }
    
     // Plays only the tiles in its hand that requires using tiles on the table, unless it can win
-    public ArrayList<Meld> determineRegularMove(Hand hand) {
+    public ArrayList<Meld> determineRegularMove(Hand hand, ArrayList<Meld> workspace) {
         // Make deep copy of hand
         Hand handCopy = new Hand();
         for (int i = 0; i < hand.getSize(); i++) {
@@ -60,7 +60,7 @@ public class Strategy2 extends PlayBehaviour {
         
         // Make deep copy of workspace 
         ArrayList<Meld> workspaceCopy = new ArrayList<Meld>();
-        for (Meld meld : this.workspace) {
+        for (Meld meld : workspace) {
             Meld newMeld = new Meld();
             for (int i = 0; i < meld.getSize(); i++) {
                 newMeld.addTile(new Tile(meld.getTile(i).toString()));
@@ -69,7 +69,7 @@ public class Strategy2 extends PlayBehaviour {
         }
         
         // Check if player can win this turn, if so return the winning workspace and remove tiles from hand
-        ArrayList<Meld> winningWorkspace = hasWinningHand(handCopy);
+        ArrayList<Meld> winningWorkspace = this.hasWinningHand(handCopy, workspace);
         if (winningWorkspace != null) {
             while (hand.getSize() > 0) {
                 hand.remove(0);
@@ -78,9 +78,9 @@ public class Strategy2 extends PlayBehaviour {
         }
         
         // Otherwise add as many tiles as possible using tiles already on the board
-        this.workspace = this.playUsingHandAndTable(hand);
-        if (tilesAddedToWorkspace(this.workspace, workspaceCopy)) {
-            return this.workspace;
+        workspace = this.playUsingHandAndTable(hand, workspace);
+        if (tilesAddedToWorkspace(workspace, workspaceCopy)) {
+            return workspace;
         }
         return null;
     }

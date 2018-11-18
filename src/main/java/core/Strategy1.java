@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class Strategy1 extends PlayBehaviour {
     // Plays as many melds as it can using only the tiles in its hand and only if the total of the melds is >= 30
-    public ArrayList<Meld> determineInitialMove(Hand hand) {
+    public ArrayList<Meld> determineInitialMove(Hand hand, ArrayList<Meld> workspace) {
         // Return largest meld >= 30, if it exists
         ArrayList<Meld> melds = this.createMeldsFromHand(hand);
         Meld largestMeldOver30 = this.getLargestMeldOver30(melds);
         if (largestMeldOver30 != null) {
-            this.workspace.add(largestMeldOver30);
+            workspace.add(largestMeldOver30);
             for (int i = 0; i < largestMeldOver30.getSize(); i++) {
                 hand.remove(largestMeldOver30.getTile(i));
             }
-            return this.workspace;
+            return workspace;
         }
 
         // Otherwise, adds as many melds as possible to workspace such that total points >= 30
@@ -38,9 +38,9 @@ public class Strategy1 extends PlayBehaviour {
 
         if (totalTileValue >= 30) {
             for (Meld meld : meldsToAdd) {
-                this.workspace.add(meld);
+                workspace.add(meld);
             }
-            return this.workspace;
+            return workspace;
         } else {
             for (Tile tile : tilesRemoved) {
                 hand.add(tile);
@@ -51,10 +51,10 @@ public class Strategy1 extends PlayBehaviour {
     }
 
     // Plays all the tiles it can using its hand and the table
-    public ArrayList<Meld> determineRegularMove(Hand hand) {
+    public ArrayList<Meld> determineRegularMove(Hand hand, ArrayList<Meld> workspace) {
         // Make deep copy of workspace
         ArrayList<Meld> workspaceCopy = new ArrayList<Meld>();
-        for (Meld meld : this.workspace) {
+        for (Meld meld : workspace) {
             Meld newMeld = new Meld();
             for (int i = 0; i < meld.getSize(); i++) {
                 newMeld.addTile(new Tile(meld.getTile(i).toString()));
@@ -62,11 +62,11 @@ public class Strategy1 extends PlayBehaviour {
             workspaceCopy.add(newMeld);
         }
 
-        this.workspace = this.playUsingHand(hand);
-        this.workspace = this.playUsingHandAndTable(hand);
+        workspace = this.playUsingHand(hand, workspace);
+        workspace = this.playUsingHandAndTable(hand, workspace);
 
-        if (tilesAddedToWorkspace(this.workspace, workspaceCopy)) {
-            return this.workspace;
+        if (tilesAddedToWorkspace(workspace, workspaceCopy)) {
+            return workspace;
         }
         return null;
     }

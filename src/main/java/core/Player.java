@@ -2,9 +2,12 @@ package core;
 
 import java.util.ArrayList;
 
+import core.Globals.PlayerType;
+
 public abstract class Player implements PlayerSubject, PlayerObserver {
     protected Hand hand;
     protected PlayBehaviour playBehaviour;
+    protected PlayerType playerType;
     protected boolean initialMove = true;
     protected String name;
     protected int lowestHandCount = 100;
@@ -17,7 +20,7 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
         this.hand = new Hand();
     }
 
-    abstract ArrayList<Meld> play();
+    abstract ArrayList<Meld> play(ArrayList<Meld> tableState);
 
     public void add(Tile tile) {
         System.out.println(this.name + " drew " + tile.toString());
@@ -36,10 +39,6 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
         return this.hand.getSize();
     }
 
-    public ArrayList<Meld> getWorkspace() {
-        return this.playBehaviour.getWorkspace();
-    }
-
     public int getLowestHandCount() {
         return this.lowestHandCount;
     }
@@ -55,6 +54,10 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
 
     public boolean getInitialMove() {
         return this.initialMove;
+    }
+    
+    public PlayerType getPlayerType() {
+        return this.playerType;
     }
 
     public void registerObserver(PlayerObserver observer) {
@@ -86,10 +89,6 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
 
     public void setHand(Hand hand) {
         this.hand = hand;
-    }
-
-    public void setWorkspace(ArrayList<Meld> workspace) {
-        this.playBehaviour.workspace = workspace;
     }
 
     @Override
