@@ -534,4 +534,28 @@ public class MeldTest extends TestCase {
         assertNull(releasedJoker);
         assertEquals(MeldType.SET, meld.getMeldType());
     }
+    
+    // Add a joker to a single tile to make it a potential meld
+    public void testAddJokerValidPotentialMeld() {
+        Meld meld;
+        ArrayList<Tile> meldTiles;
+        Tile releasedJoker;
+        Tile joker = new Joker();
+        
+        // Default joker to back (potential set)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R1");
+        meldTiles.add(joker);
+        releasedJoker = meld.addTile(meldTiles);
+        assertNull(releasedJoker.colour);
+        assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+        
+        // Default joker to back (potential set)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R13");
+        meldTiles.add(joker);
+        releasedJoker = meld.addTile(meldTiles);
+        assertNull(releasedJoker.colour);
+        assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+    }
 }
