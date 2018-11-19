@@ -34,6 +34,10 @@ public class Tile {
         this.onTable = onTable;
     }
     
+    public boolean isJoker() {
+        return this.isJoker;
+    }
+    
     public boolean equals(Tile tile) {
         return this.colour == tile.getColour() && this.value == tile.getValue();
     }
