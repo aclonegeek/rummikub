@@ -13,7 +13,7 @@ public class MeldTest extends TestCase {
         for (Colour colour : Colour.values()) {
             Meld meld = new Meld();
             ArrayList<Tile> meldTiles = new ArrayList<>();
-            boolean tilesAdded;
+            Tile tilesAdded;
 
             // Initial case: a RUN with 3 tiles to the empty meld
             meldTiles.add(new Tile(colour, 3));
@@ -24,7 +24,7 @@ public class MeldTest extends TestCase {
             tilesAdded = meld.addTile(meldTiles);
 
             // Check if tile was successfully added and is of type RUN
-            assertTrue(tilesAdded);
+            assertNull(tilesAdded.colour);
             assertEquals(MeldType.RUN, meld.getMeldType());
             meldTiles = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public class MeldTest extends TestCase {
             meldTiles.add(new Tile(colour, 8));
 
             tilesAdded = meld.addTile(meldTiles);
-            assertTrue(tilesAdded);
+            assertNull(tilesAdded.colour);
             assertEquals(MeldType.RUN, meld.getMeldType());
             meldTiles = new ArrayList<>();
 
@@ -44,7 +44,7 @@ public class MeldTest extends TestCase {
             meldTiles.add(new Tile(colour, 1));
             meldTiles.add(new Tile(colour, 2));
             tilesAdded = meld.addTile(meldTiles);
-            assertTrue(tilesAdded);
+            assertNull(tilesAdded.colour);
             assertEquals(MeldType.RUN, meld.getMeldType());
             meldTiles = new ArrayList<>();
         }
@@ -54,21 +54,21 @@ public class MeldTest extends TestCase {
     public void testAddTileValidSet() {
         Meld meld = new Meld();
         ArrayList<Tile> meldTiles = new ArrayList<>();
-        boolean tilesAdded;
+        Tile tilesAdded;
 
         // Initial case: a SET with 3 tiles to the empty meld
         meldTiles.add(new Tile(Colour.RED, 3));
         meldTiles.add(new Tile(Colour.GREEN, 3));
         meldTiles.add(new Tile(Colour.BLUE, 3));
         tilesAdded = meld.addTile(meldTiles);
-        assertTrue(tilesAdded);
+        assertNull(tilesAdded.colour);
         assertEquals(MeldType.SET, meld.getMeldType());
         meldTiles = new ArrayList<>();
 
         // Add a fourth tile to the SET to make it valid
         meldTiles.add(new Tile(Colour.ORANGE, 3));
         tilesAdded = meld.addTile(meldTiles);
-        assertTrue(tilesAdded);
+        assertNull(tilesAdded.colour);
         assertEquals(MeldType.SET, meld.getMeldType());
         meldTiles = new ArrayList<>();
     }
@@ -77,7 +77,7 @@ public class MeldTest extends TestCase {
     public void testAddTileInvalidInitialMeld() {
         Meld meld = new Meld();
         ArrayList<Tile> meldTiles = new ArrayList<>();
-        boolean tilesAdded;
+        Tile tilesAdded;
 
         // Initial case: An invalid set of tiles added to an empty meld
         meldTiles.add(new Tile(Colour.RED, 3));
@@ -86,7 +86,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
 
         // Check if tile was not successfully added as is INVALID
-        assertFalse(tilesAdded);
+        assertNull(tilesAdded);
         assertEquals(MeldType.INVALID, meld.getMeldType());
         meldTiles = new ArrayList<>();
 
@@ -94,7 +94,7 @@ public class MeldTest extends TestCase {
         meldTiles.add(new Tile(Colour.RED, 3));
         meldTiles.add(new Tile(Colour.RED, 3));
         tilesAdded = meld.addTile(meldTiles);
-        assertFalse(tilesAdded);
+        assertNull(tilesAdded);
         assertEquals(MeldType.INVALID, meld.getMeldType());
         meldTiles = new ArrayList<>();
     }
@@ -103,7 +103,7 @@ public class MeldTest extends TestCase {
     public void testAddTileInvalidRun() {
         Meld meld = new Meld();
         ArrayList<Tile> meldTiles = new ArrayList<>();
-        boolean tilesAdded;
+        Tile tilesAdded;
 
         // Initial case: a RUN with 3 tiles to the empty meld
         meldTiles.add(new Tile(Colour.RED, 3));
@@ -115,28 +115,28 @@ public class MeldTest extends TestCase {
         // Add a same colour/same value fourth tile
         meldTiles.add(new Tile(Colour.RED, 3));
         tilesAdded = meld.addTile(meldTiles);
-        assertFalse(tilesAdded);
+        assertNull(tilesAdded);
         assertEquals(meld.getMeldType(), MeldType.RUN);
         meldTiles = new ArrayList<>();
 
         // Add a same colour/different value fourth tile to the RUN
         meldTiles.add(new Tile(Colour.RED, 7));
         tilesAdded = meld.addTile(meldTiles);
-        assertFalse(tilesAdded);
+        assertNull(tilesAdded);
         assertEquals(meld.getMeldType(), MeldType.RUN);
         meldTiles = new ArrayList<>();
 
         // Add a different colour/same value fourth tile
         meldTiles.add(new Tile(Colour.GREEN, 3));
         tilesAdded = meld.addTile(meldTiles);
-        assertFalse(tilesAdded);
+        assertNull(tilesAdded);
         assertEquals(meld.getMeldType(), MeldType.RUN);
         meldTiles = new ArrayList<>();
 
         // Add a different colour/different value fourth tile
         meldTiles.add(new Tile(Colour.GREEN, 5));
         tilesAdded = meld.addTile(meldTiles);
-        assertFalse(tilesAdded);
+        assertNull(tilesAdded);
         assertEquals(meld.getMeldType(), MeldType.RUN);
         meldTiles = new ArrayList<>();
     }
@@ -145,35 +145,35 @@ public class MeldTest extends TestCase {
     public void testAddTileInvalidSet() {
         Meld meld = new Meld();
         ArrayList<Tile> meldTiles = new ArrayList<>();
-        boolean tilesAdded;
+        Tile tilesAdded;
 
         // Initial case: a SET with 3 tiles to the empty meld
         meldTiles.add(new Tile(Colour.ORANGE, 1));
         meldTiles.add(new Tile(Colour.BLUE, 1));
         meldTiles.add(new Tile(Colour.RED, 1));
         tilesAdded = meld.addTile(meldTiles);
-        assertEquals(true, tilesAdded);
+        assertNull(tilesAdded.colour);
         assertEquals(MeldType.SET, meld.getMeldType());
         meldTiles = new ArrayList<>();
 
         // Add a same colour/same value fourth tile
         meldTiles.add(new Tile(Colour.RED, 3));
         tilesAdded = meld.addTile(meldTiles);
-        assertFalse(tilesAdded);
+        assertNull(tilesAdded);
         assertEquals(MeldType.SET, meld.getMeldType());
         meldTiles = new ArrayList<>();
 
         // Add a different colour/same value fourth tile
         meldTiles.add(new Tile(Colour.GREEN, 3));
         tilesAdded = meld.addTile(meldTiles);
-        assertFalse(tilesAdded);
+        assertNull(tilesAdded);
         assertEquals(MeldType.SET, meld.getMeldType());
         meldTiles = new ArrayList<>();
 
         // Add a different colour/different value fourth tile
         meldTiles.add(new Tile(Colour.GREEN, 5));
         tilesAdded = meld.addTile(meldTiles);
-        assertFalse(tilesAdded);
+        assertNull(tilesAdded);
         assertEquals(MeldType.SET, meld.getMeldType());
         meldTiles = new ArrayList<>();
     }
