@@ -5,18 +5,16 @@ import core.Globals.Colour;
 public class Tile {
     private Colour colour;
     private int value;
-    private boolean onTable;
+    protected boolean onTable = false;
     
     public Tile (Colour colour, int value) {
         this.colour = colour;
         this.value = value;
-        this.onTable = false;
     }
     
     public Tile (String tile) {
         this.colour = Colour.getEnum(tile.charAt(0));
         this.value = Integer.parseInt(tile.substring(1));
-        this.onTable = false;
     }
     
     public Colour getColour() {
