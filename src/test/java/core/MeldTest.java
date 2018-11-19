@@ -558,4 +558,272 @@ public class MeldTest extends TestCase {
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
     }
+    
+    // Replace a joker in a RUN
+    public void testReplaceJokerRun() {
+        Meld meld;
+        ArrayList<Tile> meldTiles;
+        Tile tilesAdded;
+        
+        // Replace a joker at the back with single tile (potential meld)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R1,J");
+        meldTiles.add(new Tile("R2"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+        
+        // Replace a joker at the front with single tile (potential meld)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("J,R2");
+        meldTiles.add(new Tile("R1"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+        
+        // Replace a joker at the front with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("J,R12,R13");
+        meldTiles.add(new Joker());
+        tilesAdded = meld.addTile(meldTiles);
+        
+        meldTiles = new ArrayList<>();
+        meldTiles.add(new Tile("R11"));
+        tilesAdded = meld.addTile(meldTiles);
+        
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Replace a joker at the back with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("O1,O2,J");
+        meldTiles.add(new Tile("O3"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Replace a joker at the back with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("B11,B12,J");
+        meldTiles.add(new Tile("B13"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Replace a joker in middle with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("G3,G4,G5,J,G7,G8");
+        meldTiles.add(new Tile("G6"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Replace a joker at the back of a full run with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("G3,G4,G5,G6,G7,J");
+        meldTiles.add(new Tile("G8"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Replace a joker at the back of a full run (that starts with a joker) with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("J,G4,G5,G6,G7,G8");
+        meldTiles.add(new Joker()); // Add joker back since it is replaced by other tiles
+        tilesAdded = meld.addTile(meldTiles);
+
+        meldTiles = new ArrayList<>();
+        meldTiles.add(new Tile("G9"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Replace a joker at the front of a full run with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("J,G8,G9,G10,G11,G12,G13");
+        meldTiles.add(new Joker()); // Add joker back since it is replaced by other tiles
+        tilesAdded = meld.addTile(meldTiles);
+
+        meldTiles = new ArrayList<>();
+        meldTiles.add(new Tile("G7"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.RUN, meld.getMeldType());
+    }
+    
+    // Replace a joker in a SET
+    public void testReplaceJokerSet() {
+        Meld meld;
+        ArrayList<Tile> meldTiles;
+        Tile tilesAdded;
+        
+        // Replace a joker at the back with single tile (potential meld)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R1,J");
+        meldTiles.add(new Tile("B1"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+        
+        // Replace a joker at the front with single tile (potential meld)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("J,R2");
+        meldTiles.add(new Tile("B2"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+        
+        // Replace a joker at the front with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("J,R1,B1");
+        meldTiles.add(new Joker());
+        tilesAdded = meld.addTile(meldTiles);
+        
+        meldTiles = new ArrayList<>();
+        meldTiles.add(new Tile("G1"));
+        tilesAdded = meld.addTile(meldTiles);
+        
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.SET, meld.getMeldType());
+        
+        // Replace a joker at the back with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R1,B1,J");
+        meldTiles.add(new Tile("G1"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.SET, meld.getMeldType());
+        
+        // Replace a joker at the back with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("B9,G9,J");
+        meldTiles.add(new Tile("O9"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.SET, meld.getMeldType());
+        
+        // Replace a joker in middle with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R3,B3,J,O3");
+        meldTiles.add(new Joker()); // Add joker back since it is replaced by other tiles
+        tilesAdded = meld.addTile(meldTiles);
+        
+        meldTiles = new ArrayList<>();
+        meldTiles.add(new Tile("G3"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.SET, meld.getMeldType());
+        
+        // Replace a joker at the back of a full set with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R3,B3,G3,J");
+        meldTiles.add(new Tile("O3"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.SET, meld.getMeldType());
+        
+        // Replace a joker at the front of a full set (that starts with a joker) with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("J,B4,G4,O4");
+        meldTiles.add(new Joker()); // Add joker back since it is replaced by other tiles
+        tilesAdded = meld.addTile(meldTiles);
+
+        meldTiles = new ArrayList<>();
+        meldTiles.add(new Tile("R4"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.SET, meld.getMeldType());
+    }
+    
+    // Add a tile to a meld with an irreplaceable joker
+    public void testIrreplaceableJoker() {
+        Meld meld;
+        ArrayList<Tile> meldTiles;
+        Tile tilesAdded;
+        
+        // Add a tile to the back of a single meld
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R1,J");
+        meldTiles.add(new Tile("R3"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertNull(tilesAdded.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Add a tile to the front of a single meld
+        meldTiles = new ArrayList<>();
+        meld = new Meld("J,R3");
+        meldTiles.add(new Tile("R1"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertNull(tilesAdded.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Add to the front of a potential meld
+        meldTiles = new ArrayList<>();
+        meld = new Meld("J,R12,R13");
+        meldTiles.add(new Joker());
+        tilesAdded = meld.addTile(meldTiles);
+        
+        meldTiles = new ArrayList<>();
+        meldTiles.add(new Tile("R10"));
+        tilesAdded = meld.addTile(meldTiles);
+        
+        assertNull(tilesAdded.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Replace a joker at the back with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("O1,O2,J");
+        meldTiles.add(new Tile("O4"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertNull(tilesAdded.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Replace a joker at the back with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("B12,B11,J");
+        meldTiles.add(new Tile("B13"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertNull(tilesAdded.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Replace a joker in middle with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("G3,G4,G5,J,G7,G8");
+        meldTiles.add(new Tile("G2"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertNull(tilesAdded.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Replace a joker at the back of a full run with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("G3,G4,G5,G6,G7,J");
+        meldTiles.add(new Tile("G9"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertNull(tilesAdded.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Replace a joker at the back of a full run (that starts with a joker) with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("J,G4,G5,G6,G7,G8");
+        meldTiles.add(new Joker()); // Add joker back since it is replaced by other tiles
+        tilesAdded = meld.addTile(meldTiles);
+
+        meldTiles = new ArrayList<>();
+        meldTiles.add(new Tile("G9"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertNull(tilesAdded.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Replace a joker at the front of a full run with single tile
+        meldTiles = new ArrayList<>();
+        meld = new Meld("J,G8,G9,G10,G11,G12,G13");
+        meldTiles.add(new Joker()); // Add joker back since it is replaced by other tiles
+        tilesAdded = meld.addTile(meldTiles);
+
+        meldTiles = new ArrayList<>();
+        meldTiles.add(new Tile("G6"));
+        tilesAdded = meld.addTile(meldTiles);
+        assertNull(tilesAdded.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());   
+    }
 }
