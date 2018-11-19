@@ -3,8 +3,8 @@ package core;
 import core.Globals.Colour;
 
 public class Tile {
-    private Colour colour;
-    private int value;
+    protected Colour colour;
+    protected int value;
     protected boolean isJoker = false;
     protected boolean onTable = false;
     
