@@ -495,22 +495,6 @@ public class MeldTest extends TestCase {
         assertNull(releasedJoker);
     }
     
-    // Add a joker to a potential SET
-    public void testAddJokerPotentialSet() {
-        Meld meld;
-        ArrayList<Tile> meldTiles;
-        Tile releasedJoker;
-        Tile joker = new Joker();
-        
-        // Default joker to back (potential meld)
-        meldTiles = new ArrayList<>();
-        meld = new Meld("R1,B1");
-        meldTiles.add(joker);
-        releasedJoker = meld.addTile(meldTiles);
-        assertNull(releasedJoker.colour);
-        assertEquals(MeldType.SET, meld.getMeldType());
-    }
-    
     // Add a joker to a SET
     public void testAddJokerSet() {
         Meld meld;
@@ -532,6 +516,22 @@ public class MeldTest extends TestCase {
         meldTiles.add(joker);
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker);
+        assertEquals(MeldType.SET, meld.getMeldType());
+    }
+    
+    // Add a joker to a potential SET
+    public void testAddJokerPotentialSet() {
+        Meld meld;
+        ArrayList<Tile> meldTiles;
+        Tile releasedJoker;
+        Tile joker = new Joker();
+        
+        // Default joker to back (potential meld)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R1,B1");
+        meldTiles.add(joker);
+        releasedJoker = meld.addTile(meldTiles);
+        assertNull(releasedJoker.colour);
         assertEquals(MeldType.SET, meld.getMeldType());
     }
     
@@ -590,14 +590,13 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
         meldTiles.add(new Tile("R11"));
         tilesAdded = meld.addTile(meldTiles);
-        
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
         
         // Replace a joker at the back with single tile
         meldTiles = new ArrayList<>();
         meld = new Meld("O1,O2,J");
-        meldTiles.add(new Tile("O3"));
+        meldTiles.add(new Tile("O4"));
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());

@@ -1,5 +1,6 @@
 package core;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,6 +17,8 @@ public class Meld {
 
     private ArrayList<Tile> meld;
     private MeldType meldType;
+    private boolean isLocked = false;
+    boolean isInitialMeld = true;
 
     public Meld() {
         this.meld = new ArrayList<>();
@@ -86,13 +89,18 @@ public class Meld {
             
             // Adding tile to a meld with a joker and one or more tiles
             if (this.meld.size() > 0) {
-                // If the joker can be replaced
-                if (joker.jokerEquals(tile)) {
-                    tempMeld.add(tile);
-                    tempMeld.addAll(this.meld);
-                    releasedJoker = jokers.remove(0);
-                    return buildMeld(tempMeld, releasedJoker);
+                // Check if the meld is locked by a joker
+                if (this.isLocked) {
+                    // If the joker can be replaced
+                    if (joker.jokerEquals(tile)) {
+                        this.isLocked = false;
+                        releasedJoker = jokers.remove(0);
+                        tempMeld.add(tile);
+                        tempMeld.addAll(this.meld);
+                        return buildMeld(tempMeld, releasedJoker);
+                    }
                 }
+
                 // Otherwise if the joker can't be replaced, check if the tile can still be added to the meld
                 tempMeld.addAll(this.meld);
                 tempMeld.add(tile);
@@ -114,18 +122,40 @@ public class Meld {
         // Check if this is a meld or a potential meld
         if (tempMeldType != MeldType.INVALID && tempMeld.size() < 3 || tempMeldType == MeldType.RUN || tempMeldType == MeldType.SET) {
             Collections.sort(tempMeld, Comparator.comparingInt(Tile::getValue)); // Sort numerically
+            // Lock the meld if a joker from the hand was added
+            if (!this.isLocked) {
+                this.isLocked = determineLockedMeld(tempMeld);
+            }
+            
             this.meld = tempMeld;
             this.meldType = tempMeldType;
-
+            
             // Return the replaced joker to be placed to the table
             if (releasedJoker != null) {
                 releasedJoker.releaseJoker();
                 return releasedJoker;
             }
+            
             // Return a null type tile to indicate that the addition was successful
             return new Tile(null, 0);
         }
         return null;
+    }
+    
+    // Locked meld = meld with joker that is from the hand
+    private boolean determineLockedMeld(ArrayList<Tile> meld) {
+        for (Tile tile : meld) {
+            if (tile.isJoker() && !tile.isOnTable()) { this.isLocked = true; }
+        }
+        return this.isLocked;
+    }
+    
+    public void lock() {
+        this.isLocked = true;
+    }
+    
+    public boolean isLocked() {
+        return this.isLocked;
     }
     
     // Determines the tile the joker will replace when added to a meld
@@ -214,7 +244,8 @@ public class Meld {
                             meld.add(i, tile);
                             if (determineMeldType(meld) == MeldType.POTENTIAL || determineMeldType(meld) == MeldType.RUN || determineMeldType(meld) == MeldType.SET) {
                                 meld.remove(i);
-                                joker = tile;
+                                joker.setColour(tile.getColour());
+                                joker.setValue(tile.getValue());
                                 return joker;
                             }
                             meld.remove(i);
