@@ -36,7 +36,7 @@ public class Meld {
         }
     }
 
-    public boolean addTile(ArrayList<Tile> tiles) {
+    public Tile addTile(ArrayList<Tile> tiles) {
         MeldType tempMeldType;
         ArrayList<Tile> tempMeld = new ArrayList<>();
 
@@ -51,13 +51,15 @@ public class Meld {
             Collections.sort(tempMeld, Comparator.comparingInt(Tile::getValue)); // Sort numerically
             this.meld = tempMeld;
             this.meldType = tempMeldType;
-            return true;
+            
+            // Return a null type tile to indicate that the addition was successful
+            return new Tile(null, 0);
         }
 
-        return false;
+        return null;
     }
 
-    public boolean addTile(Tile tile) {
+    public Tile addTile(Tile tile) {
         ArrayList<Tile> tempMeld = new ArrayList<>();
         tempMeld.add(tile);
         return this.addTile(tempMeld);
