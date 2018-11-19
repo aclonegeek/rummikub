@@ -494,4 +494,44 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker);
     }
+    
+    // Add a joker to a potential SET
+    public void testAddJokerPotentialSet() {
+        Meld meld;
+        ArrayList<Tile> meldTiles;
+        Tile releasedJoker;
+        Tile joker = new Joker();
+        
+        // Default joker to back (potential meld)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R1,B1");
+        meldTiles.add(joker);
+        releasedJoker = meld.addTile(meldTiles);
+        assertNull(releasedJoker.colour);
+        assertEquals(MeldType.SET, meld.getMeldType());
+    }
+    
+    // Add a joker to a SET
+    public void testAddJokerSet() {
+        Meld meld;
+        ArrayList<Tile> meldTiles;
+        Tile releasedJoker;
+        Tile joker = new Joker();
+        
+        // Default joker to back (normal meld)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R13,B13,G13");
+        meldTiles.add(joker);
+        releasedJoker = meld.addTile(meldTiles);
+        assertNull(releasedJoker.colour);
+        assertEquals(MeldType.SET, meld.getMeldType());
+        
+        // Disallow addition of joker, meld full
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R9,B9,G9,O9");
+        meldTiles.add(joker);
+        releasedJoker = meld.addTile(meldTiles);
+        assertNull(releasedJoker);
+        assertEquals(MeldType.SET, meld.getMeldType());
+    }
 }
