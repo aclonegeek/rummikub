@@ -418,20 +418,12 @@ public class MeldTest extends TestCase {
         assertFalse(meld2.isValidIfRemoveTile(0));
     }
     
-    // Add a joker to a potential RUN to make it valid
-    public void testAddJokerValidRun() {
+    // Add a joker to a RUN
+    public void testAddJokerRun() {
         Meld meld;
         ArrayList<Tile> meldTiles;
         Tile releasedJoker;
         Tile joker = new Joker();
-        
-        // Force joker to back (potential meld)
-        meldTiles = new ArrayList<>();
-        meld = new Meld("R1,R2");
-        meldTiles.add(joker);
-        releasedJoker = meld.addTile(meldTiles);
-        assertNull(releasedJoker.colour);
-        assertEquals(MeldType.RUN, meld.getMeldType());
         
         // Force joker to back (normal meld)
         meldTiles = new ArrayList<>();
@@ -441,26 +433,9 @@ public class MeldTest extends TestCase {
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
         
-        
-        // Force joker to front (potential meld)
-        meldTiles = new ArrayList<>();
-        meld = new Meld("B12,B13");
-        meldTiles.add(joker);
-        releasedJoker = meld.addTile(meldTiles);
-        assertNull(releasedJoker.colour);
-        assertEquals(MeldType.RUN, meld.getMeldType());
-        
         // Force joker to front (normal meld)
         meldTiles = new ArrayList<>();
         meld = new Meld("G2,G3,G4,G5,G6,G7,G8,G9,G10,G11,G12,G13");
-        meldTiles.add(joker);
-        releasedJoker = meld.addTile(meldTiles);
-        assertNull(releasedJoker.colour);
-        assertEquals(MeldType.RUN, meld.getMeldType());
-        
-        // Default joker to back (potential meld)
-        meldTiles = new ArrayList<>();
-        meld = new Meld("R2,R3");
         meldTiles.add(joker);
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
@@ -477,6 +452,38 @@ public class MeldTest extends TestCase {
         // Disallow addition of joker, meld full
         meldTiles = new ArrayList<>();
         meld = new Meld("B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,J");
+    }
+    
+    // Add a joker to a potential RUN
+    public void testAddJokerPotentialRun() {
+        Meld meld;
+        ArrayList<Tile> meldTiles;
+        Tile releasedJoker;
+        Tile joker = new Joker();
+        
+        // Force joker to back (potential meld)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R1,R2");
+        meldTiles.add(joker);
+        releasedJoker = meld.addTile(meldTiles);
+        assertNull(releasedJoker.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Force joker to front (potential meld)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("B12,B13");
+        meldTiles.add(joker);
+        releasedJoker = meld.addTile(meldTiles);
+        assertNull(releasedJoker.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Default joker to back (potential meld)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R2,R3");
+        meldTiles.add(joker);
+        releasedJoker = meld.addTile(meldTiles);
+        assertNull(releasedJoker.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
         
         // Disallow adding multiple tiles containing a joker (affects console game only)
         meldTiles = new ArrayList<>();
