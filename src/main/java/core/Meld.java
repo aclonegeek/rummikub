@@ -1,6 +1,5 @@
 package core;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -415,6 +414,7 @@ public class Meld {
     public int getValue() {
         int total = 0;
         for (Tile tile : this.meld) {
+            System.out.println("tile" + "-> " + tile.getValue());
             total += tile.getValue();
         }
         return total;

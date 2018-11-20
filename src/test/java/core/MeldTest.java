@@ -318,6 +318,11 @@ public class MeldTest extends TestCase {
         meldTiles.add(new Tile(Colour.RED, 1));
         meld.addTile(meldTiles);
         assertEquals("{O1 B1 R1}", meld.toString());
+        
+        // With joker
+        Meld meld2 = new Meld("G1,G2,J");
+        meld2.addTile(new Tile("G3"));
+        assertEquals("{G1 G2 G3 J}", meld2.toString());
     }
 
     public void testGetValue() {
@@ -944,5 +949,9 @@ public class MeldTest extends TestCase {
         meldTiles.add(new Joker());
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker);
+        
+        // Disallow adding 
     }
+    
+    
 }

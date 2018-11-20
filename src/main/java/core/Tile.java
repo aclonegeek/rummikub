@@ -14,13 +14,17 @@ public class Tile {
     public Tile(Colour colour, int value) {
         this.colour = colour;
         this.value = value;
-        alternateState = new ArrayList<>();
     }
 
     public Tile(String tile) {
+        if (tile.equals("J")) {
+            this.isJoker = true;
+            this.colour = null;
+            this.value = 0;
+            alternateState = new ArrayList<>();
+        }
         this.colour = Colour.getEnum(tile.charAt(0));
         this.value = Integer.parseInt(tile.substring(1));
-        alternateState = new ArrayList<>();
     }
 
     public Colour getColour() {
