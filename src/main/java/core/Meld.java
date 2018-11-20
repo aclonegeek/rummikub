@@ -75,7 +75,7 @@ public class Meld {
         }
         
         // If meld has 1 joker
-        if (jokers.size() == 1) {
+        if (jokers.size() > 0) {
             Tile joker = jokers.get(0);
             Tile tile = tiles.get(0);
             
@@ -142,22 +142,6 @@ public class Meld {
         return null;
     }
     
-    // Locked meld = meld with joker that is from the hand
-    private boolean determineLockedMeld(ArrayList<Tile> meld) {
-        for (Tile tile : meld) {
-            if (tile.isJoker() && !tile.isOnTable()) { this.isLocked = true; }
-        }
-        return this.isLocked;
-    }
-    
-    public void lock() {
-        this.isLocked = true;
-    }
-    
-    public boolean isLocked() {
-        return this.isLocked;
-    }
-    
     // Determines the tile the joker will replace when added to a meld
     private Tile determineJokerType(Tile joker, ArrayList<Tile> meld) {
         // If the meld is empty (adding joker to new meld)
@@ -197,21 +181,21 @@ public class Meld {
             }
         } else {
             // Case when the meld is a valid or potential run
-            // Case when the meld is a valid or potential set
             if (determineMeldType(meld) == MeldType.RUN || determineMeldType(meld) != MeldType.INVALID && meld.get(0).colour == meld.get(1).colour) {
                 // Adding to back
                 if (meld.get(0).value == 1) {
                     joker.setColour(meld.get(meld.size() - 1).colour);
                     joker.setValue(meld.get(meld.size() - 1).value + 1);
-                    // Adding to front
+                // Adding to front
                 } else if (meld.get(meld.size() - 1).value == 13) {
                     joker.setColour(meld.get(0).colour);
                     joker.setValue(meld.get(0).value - 1);
-                    // Add to back by default
+                // Add to back by default
                 } else {
                     joker.setColour(meld.get(meld.size() - 1).colour);
                     joker.setValue(meld.get(meld.size() - 1).value + 1);
                 }
+            // Case when the meld is a valid or potential set
             } else if (determineMeldType(meld) == MeldType.SET || determineMeldType(meld) != MeldType.INVALID && meld.get(0).colour != meld.get(1).colour) {
                 // Get a list of all the available colours
                 ArrayList<Colour> availableColours = new ArrayList<>();
@@ -233,9 +217,7 @@ public class Meld {
                     joker.addAlternateState(new Tile(c, meld.get(0).value));
                 }
             // Case when the meld is invalid (adding back a joker to make it valid)
-            } else {
-                // Add the joker to every position in the meld until its valid
-                
+            } else {                
                 // Check if the joker can be added back to the potential meld without making it invalid
                 if (meld.size() == 2) {
                     // In potential melds, jokers can have multiple forms. Check each one
@@ -276,12 +258,18 @@ public class Meld {
     }
 
     public Tile removeTile(int index) {
+        if (this.isLocked) { return null; }
         if (index < 0 || index >= this.meld.size()) {
             return null;
         }
 
-        Tile removedTile = this.meld.remove(index);
+        Tile removedTile = this.meld.remove(index);        
         this.meldType = determineMeldType(this.meld);
+        
+        // If the removed tile is a joker or a meld with a joker only is left, reset it
+        if (removedTile.isJoker() || (this.meld.size() == 1 && removedTile.isJoker())) { removedTile.releaseJoker(); }
+        
+        // If the meld has a single joker after splitting, reset it
         return removedTile;
     }
 
@@ -310,9 +298,8 @@ public class Meld {
     }
 
     public Meld splitMeld(int index) {
-        if (index <= 0 || index >= this.meld.size()) {
-            return null;
-        }
+        if (this.isLocked) { return null; }
+        if (index <= 0 || index >= this.meld.size()) { return null; }
 
         Meld newMeld = new Meld();
         ArrayList<Tile> secondHalf = new ArrayList<>();
@@ -329,6 +316,12 @@ public class Meld {
         // Check if the second half of the meld (which we split) is valid, return the
         // new Meld
         newMeld.addTile(secondHalf);
+        
+        // If the meld has one tile left which is a joker, reset it
+        if (this.meld.size() == 1 && this.meld.get(0).isJoker()) { this.meld.get(0).releaseJoker(); }
+        
+        // If the second half has one tile left which is a joker, reset it
+        if (secondHalf.size() == 1 && secondHalf.get(0).isJoker()) { secondHalf.get(0).releaseJoker(); }
         return newMeld;
     }
 
@@ -369,6 +362,22 @@ public class Meld {
         else if (consecutiveValues && sameColours)                                                    { return MeldType.RUN;          }
         else if (sameValues && differentColours)                                                      { return MeldType.SET;          }
         else                                                                                          { return MeldType.INVALID;      }
+    }
+    
+    // Locked meld = meld with joker that is from the hand
+    private boolean determineLockedMeld(ArrayList<Tile> meld) {
+        for (Tile tile : meld) {
+            if (tile.isJoker() && !tile.isOnTable()) { this.isLocked = true; }
+        }
+        return this.isLocked;
+    }
+    
+    public boolean isLocked() {
+        return this.isLocked;
+    }
+    
+    public void setIsLocked(boolean isLocked) {
+        this.isLocked = isLocked;
     }
 
     public int getSize() {

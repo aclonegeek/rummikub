@@ -2,7 +2,6 @@ package core;
 
 import java.util.ArrayList;
 
-import core.Globals.Colour;
 import junit.framework.TestCase;
 
 public class PlayerTest extends TestCase {
