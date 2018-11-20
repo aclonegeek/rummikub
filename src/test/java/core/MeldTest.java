@@ -540,6 +540,8 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
         meld = new Meld("R1,J");
         meldTiles.add(new Tile("R2"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
@@ -548,6 +550,8 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
         meld = new Meld("J,R2");
         meldTiles.add(new Tile("R1"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
@@ -555,8 +559,7 @@ public class MeldTest extends TestCase {
         // Replace a joker at the front with single tile
         meldTiles = new ArrayList<>();
         meld = new Meld("J,R12,R13");
-        meldTiles.add(new Joker());
-        tilesAdded = meld.addTile(meldTiles);
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
         
         meldTiles = new ArrayList<>();
         meldTiles.add(new Tile("R11"));
@@ -568,6 +571,8 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
         meld = new Meld("O1,O2,J");
         meldTiles.add(new Tile("O4"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
@@ -576,6 +581,8 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
         meld = new Meld("B11,B12,J");
         meldTiles.add(new Tile("B13"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
@@ -584,6 +591,8 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
         meld = new Meld("G3,G4,G5,J,G7,G8");
         meldTiles.add(new Tile("G6"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
@@ -592,6 +601,8 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
         meld = new Meld("G3,G4,G5,G6,G7,J");
         meldTiles.add(new Tile("G8"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
@@ -599,11 +610,9 @@ public class MeldTest extends TestCase {
         // Replace a joker at the back of a full run (that starts with a joker) with single tile
         meldTiles = new ArrayList<>();
         meld = new Meld("J,G4,G5,G6,G7,G8");
-        meldTiles.add(new Joker()); // Add joker back since it is replaced by other tiles
-        tilesAdded = meld.addTile(meldTiles);
-
-        meldTiles = new ArrayList<>();
         meldTiles.add(new Tile("G9"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
@@ -611,10 +620,8 @@ public class MeldTest extends TestCase {
         // Replace a joker at the front of a full run with single tile
         meldTiles = new ArrayList<>();
         meld = new Meld("J,G8,G9,G10,G11,G12,G13");
-        meldTiles.add(new Joker()); // Add joker back since it is replaced by other tiles
-        tilesAdded = meld.addTile(meldTiles);
-
-        meldTiles = new ArrayList<>();
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         meldTiles.add(new Tile("G7"));
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
@@ -631,6 +638,8 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
         meld = new Meld("R1,J");
         meldTiles.add(new Tile("B1"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
@@ -639,6 +648,8 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
         meld = new Meld("J,R2");
         meldTiles.add(new Tile("B2"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
@@ -646,13 +657,10 @@ public class MeldTest extends TestCase {
         // Replace a joker at the front with single tile
         meldTiles = new ArrayList<>();
         meld = new Meld("J,R1,B1");
-        meldTiles.add(new Joker());
-        tilesAdded = meld.addTile(meldTiles);
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
         
-        meldTiles = new ArrayList<>();
         meldTiles.add(new Tile("G1"));
         tilesAdded = meld.addTile(meldTiles);
-        
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.SET, meld.getMeldType());
         
@@ -660,6 +668,8 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
         meld = new Meld("R1,B1,J");
         meldTiles.add(new Tile("G1"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.SET, meld.getMeldType());
@@ -668,6 +678,8 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
         meld = new Meld("B9,G9,J");
         meldTiles.add(new Tile("O9"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.SET, meld.getMeldType());
@@ -675,11 +687,9 @@ public class MeldTest extends TestCase {
         // Replace a joker in middle with single tile
         meldTiles = new ArrayList<>();
         meld = new Meld("R3,B3,J,O3");
-        meldTiles.add(new Joker()); // Add joker back since it is replaced by other tiles
-        tilesAdded = meld.addTile(meldTiles);
-        
-        meldTiles = new ArrayList<>();
         meldTiles.add(new Tile("G3"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.SET, meld.getMeldType());
@@ -688,6 +698,8 @@ public class MeldTest extends TestCase {
         meldTiles = new ArrayList<>();
         meld = new Meld("R3,B3,G3,J");
         meldTiles.add(new Tile("O3"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.SET, meld.getMeldType());
@@ -695,11 +707,9 @@ public class MeldTest extends TestCase {
         // Replace a joker at the front of a full set (that starts with a joker) with single tile
         meldTiles = new ArrayList<>();
         meld = new Meld("J,B4,G4,O4");
-        meldTiles.add(new Joker()); // Add joker back since it is replaced by other tiles
-        tilesAdded = meld.addTile(meldTiles);
-
-        meldTiles = new ArrayList<>();
         meldTiles.add(new Tile("R4"));
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.SET, meld.getMeldType());
@@ -718,6 +728,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{R1 J R3}", meld.toString());
         
         // Add a tile to the front of a single meld
         meldTiles = new ArrayList<>();
@@ -726,75 +737,77 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{R1 J R3}", meld.toString());
         
         // Add to the front of a potential meld
         meldTiles = new ArrayList<>();
         meld = new Meld("J,R12,R13");
-        meldTiles.add(new Joker());
-        tilesAdded = meld.addTile(meldTiles);
-        
-        meldTiles = new ArrayList<>();
         meldTiles.add(new Tile("R10"));
         tilesAdded = meld.addTile(meldTiles);
         
         assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{R10 J R12 R13}", meld.toString());
         
         // Replace a joker at the back with single tile
         meldTiles = new ArrayList<>();
         meld = new Meld("O1,O2,J");
         meldTiles.add(new Tile("O4"));
         tilesAdded = meld.addTile(meldTiles);
+        
         assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{O1 O2 J O4}", meld.toString());
         
         // Replace a joker at the back with single tile
         meldTiles = new ArrayList<>();
         meld = new Meld("B12,B11,J");
         meldTiles.add(new Tile("B13"));
         tilesAdded = meld.addTile(meldTiles);
+        
         assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{J B11 B12 B13}", meld.toString());
         
         // Replace a joker in middle with single tile
         meldTiles = new ArrayList<>();
         meld = new Meld("G3,G4,G5,J,G7,G8");
         meldTiles.add(new Tile("G2"));
         tilesAdded = meld.addTile(meldTiles);
+        
         assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{G2 G3 G4 G5 J G7 G8}", meld.toString());
         
         // Replace a joker at the back of a full run with single tile
         meldTiles = new ArrayList<>();
         meld = new Meld("G3,G4,G5,G6,G7,J");
         meldTiles.add(new Tile("G9"));
         tilesAdded = meld.addTile(meldTiles);
+        
         assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{G3 G4 G5 G6 G7 J G9}", meld.toString());
         
         // Replace a joker at the back of a full run (that starts with a joker) with single tile
         meldTiles = new ArrayList<>();
-        meld = new Meld("J,G4,G5,G6,G7,G8");
-        meldTiles.add(new Joker()); // Add joker back since it is replaced by other tiles
-        tilesAdded = meld.addTile(meldTiles);
-
-        meldTiles = new ArrayList<>();
+        meld = new Meld("G4,G5,G6,G7,G8,J");
         meldTiles.add(new Tile("G9"));
+        
         tilesAdded = meld.addTile(meldTiles);
         assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{G4 G5 G6 G7 G8 G9 J}", meld.toString());
         
         // Replace a joker at the front of a full run with single tile
         meldTiles = new ArrayList<>();
         meld = new Meld("J,G8,G9,G10,G11,G12,G13");
-        meldTiles.add(new Joker()); // Add joker back since it is replaced by other tiles
-        tilesAdded = meld.addTile(meldTiles);
-
-        meldTiles = new ArrayList<>();
         meldTiles.add(new Tile("G6"));
+        
         tilesAdded = meld.addTile(meldTiles);
         assertNull(tilesAdded.colour);
-        assertEquals(MeldType.RUN, meld.getMeldType());   
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{G6 J G8 G9 G10 G11 G12 G13}", meld.toString());
     }
     
     // Remove a joker from a meld 
@@ -932,5 +945,4 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker);
     }
-    
 }

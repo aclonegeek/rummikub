@@ -40,6 +40,80 @@ public class Meld {
             }
         }
     }
+    
+    public Tile addTile(Tile tile) {
+        ArrayList<Tile> tempMeld = new ArrayList<>();
+        tempMeld.add(tile);
+        return this.addTile(tempMeld);
+    }
+
+    public Tile removeTile(int index) {
+        if (this.isLocked) { return null; }
+        if (index < 0 || index >= this.meld.size()) {
+            return null;
+        }
+
+        Tile removedTile = this.meld.remove(index);        
+        this.meldType = determineMeldType(this.meld);
+        
+        // If the removed tile is a joker or a meld with a joker only is left, reset it
+        if (removedTile.isJoker() || (this.meld.size() == 1 && removedTile.isJoker())) { removedTile.releaseJoker(); }
+        
+        // If the meld has a single joker after splitting, reset it
+        return removedTile;
+    }
+
+    public boolean isValidIfRemoveTile(int index) {
+        // Copy meld
+        Meld copyMeld = new Meld();
+        for (Tile tile : this.meld) {
+            copyMeld.addTile(tile);
+        }
+
+        // Remove from copy and check if valid
+        copyMeld.removeTile(index);
+        if (copyMeld.isValidMeld()) {
+            return true;
+        }
+        return false;
+    }
+
+    public Tile removeTileObject(Tile tile) {
+        for (int i = 0; i < this.meld.size(); i++) {
+            if (this.meld.get(i).equals(tile)) {
+                return removeTile(i);
+            }
+        }
+        return null;
+    }
+
+    public Meld splitMeld(int index) {
+        if (this.isLocked) { return null; }
+        if (index <= 0 || index >= this.meld.size()) { return null; }
+
+        Meld newMeld = new Meld();
+        ArrayList<Tile> secondHalf = new ArrayList<>();
+        int currMeldSize = this.meld.size();
+
+        // Add the second chunk of the meld to a new ArrayList
+        for (int i = index; i < currMeldSize; i++) {
+            secondHalf.add(this.meld.remove(index));
+        }
+
+        // Re-determine the meld type since the current meld has changed
+        this.meldType = determineMeldType(this.meld);
+
+        // Check if the second half of the meld (which we split) is valid, return the
+        // new Meld
+        newMeld.addTile(secondHalf);
+        
+        // If the meld has one tile left which is a joker, reset it
+        if (this.meld.size() == 1 && this.meld.get(0).isJoker()) { this.meld.get(0).releaseJoker(); }
+        
+        // If the second half has one tile left which is a joker, reset it
+        if (secondHalf.size() == 1 && secondHalf.get(0).isJoker()) { secondHalf.get(0).releaseJoker(); }
+        return newMeld;
+    }
 
     public Tile addTile(ArrayList<Tile> tiles) {
         ArrayList<Tile> tempMeld = new ArrayList<>();
@@ -48,6 +122,10 @@ public class Meld {
         
         // Disallow adding multiple tiles containing a joker (affects console game only)
         if (tiles.size() > 1) { if (tiles.removeIf(t -> t.isJoker())) { return null; } }
+        
+        // Check if the tile being added is part of an initial meld (so the joker inside is not replaced by it right away)
+        boolean meldIsFromHand = this.meld.stream().allMatch(t -> t.isOnTable());
+        if (meldIsFromHand && !tiles.get(0).isOnTable()) { this.isInitialMeld = true; }
         
         // Temporarily remove jokers from meld
         for (int i = 0; i < this.meld.size(); i++) {
@@ -75,7 +153,7 @@ public class Meld {
         }
         
         // If meld has 1 joker
-        if (jokers.size() > 0) {
+        if (jokers.size() == 1) {
             Tile joker = jokers.get(0);
             Tile tile = tiles.get(0);
             
@@ -91,8 +169,8 @@ public class Meld {
             if (this.meld.size() > 0) {
                 // Check if the meld is locked by a joker
                 if (this.isLocked) {
-                    // If the joker can be replaced
-                    if (joker.jokerEquals(tile)) {
+                    // If the joker can be replaced (unless its part of an initial meld)
+                    if (joker.jokerEquals(tile) && !this.isInitialMeld) {
                         this.isLocked = false;
                         releasedJoker = jokers.remove(0);
                         tempMeld.add(tile);
@@ -251,80 +329,6 @@ public class Meld {
         return joker;
     }
 
-    public Tile addTile(Tile tile) {
-        ArrayList<Tile> tempMeld = new ArrayList<>();
-        tempMeld.add(tile);
-        return this.addTile(tempMeld);
-    }
-
-    public Tile removeTile(int index) {
-        if (this.isLocked) { return null; }
-        if (index < 0 || index >= this.meld.size()) {
-            return null;
-        }
-
-        Tile removedTile = this.meld.remove(index);        
-        this.meldType = determineMeldType(this.meld);
-        
-        // If the removed tile is a joker or a meld with a joker only is left, reset it
-        if (removedTile.isJoker() || (this.meld.size() == 1 && removedTile.isJoker())) { removedTile.releaseJoker(); }
-        
-        // If the meld has a single joker after splitting, reset it
-        return removedTile;
-    }
-
-    public boolean isValidIfRemoveTile(int index) {
-        // Copy meld
-        Meld copyMeld = new Meld();
-        for (Tile tile : this.meld) {
-            copyMeld.addTile(tile);
-        }
-
-        // Remove from copy and check if valid
-        copyMeld.removeTile(index);
-        if (copyMeld.isValidMeld()) {
-            return true;
-        }
-        return false;
-    }
-
-    public Tile removeTileObject(Tile tile) {
-        for (int i = 0; i < this.meld.size(); i++) {
-            if (this.meld.get(i).equals(tile)) {
-                return removeTile(i);
-            }
-        }
-        return null;
-    }
-
-    public Meld splitMeld(int index) {
-        if (this.isLocked) { return null; }
-        if (index <= 0 || index >= this.meld.size()) { return null; }
-
-        Meld newMeld = new Meld();
-        ArrayList<Tile> secondHalf = new ArrayList<>();
-        int currMeldSize = this.meld.size();
-
-        // Add the second chunk of the meld to a new ArrayList
-        for (int i = index; i < currMeldSize; i++) {
-            secondHalf.add(this.meld.remove(index));
-        }
-
-        // Re-determine the meld type since the current meld has changed
-        this.meldType = determineMeldType(this.meld);
-
-        // Check if the second half of the meld (which we split) is valid, return the
-        // new Meld
-        newMeld.addTile(secondHalf);
-        
-        // If the meld has one tile left which is a joker, reset it
-        if (this.meld.size() == 1 && this.meld.get(0).isJoker()) { this.meld.get(0).releaseJoker(); }
-        
-        // If the second half has one tile left which is a joker, reset it
-        if (secondHalf.size() == 1 && secondHalf.get(0).isJoker()) { secondHalf.get(0).releaseJoker(); }
-        return newMeld;
-    }
-
     private MeldType determineMeldType(ArrayList<Tile> tiles) {
         // Redundant melds
         if (tiles.size() <= 1) { return MeldType.POTENTIAL; }
@@ -378,6 +382,14 @@ public class Meld {
     
     public void setIsLocked(boolean isLocked) {
         this.isLocked = isLocked;
+    }
+    
+    public boolean isInitialMeld() {
+        return this.isInitialMeld;
+    }
+    
+    public void setIsInitialMeld(boolean isInitialMeld) {
+        this.isInitialMeld = isInitialMeld;
     }
 
     public int getSize() {
