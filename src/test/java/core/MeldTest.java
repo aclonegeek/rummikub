@@ -440,18 +440,6 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
-        
-        // Disallow addition of joker, meld full
-        meldTiles = new ArrayList<>();
-        meld = new Meld("B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13");
-        meldTiles.add(joker);
-        releasedJoker = meld.addTile(meldTiles);
-        assertNull(releasedJoker);
-        assertEquals(MeldType.RUN, meld.getMeldType());
-        
-        // Disallow addition of joker, meld full
-        meldTiles = new ArrayList<>();
-        meld = new Meld("B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,J");
     }
     
     // Add a joker to a potential RUN
@@ -484,15 +472,6 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
-        
-        // Disallow adding multiple tiles containing a joker (affects console game only)
-        meldTiles = new ArrayList<>();
-        meld = new Meld();
-        meldTiles.add(new Tile("R1"));
-        meldTiles.add(new Tile("R2"));
-        meldTiles.add(new Joker());
-        releasedJoker = meld.addTile(meldTiles);
-        assertNull(releasedJoker);
     }
     
     // Add a joker to a SET
@@ -508,14 +487,6 @@ public class MeldTest extends TestCase {
         meldTiles.add(joker);
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
-        assertEquals(MeldType.SET, meld.getMeldType());
-        
-        // Disallow addition of joker, meld full
-        meldTiles = new ArrayList<>();
-        meld = new Meld("R9,B9,G9,O9");
-        meldTiles.add(joker);
-        releasedJoker = meld.addTile(meldTiles);
-        assertNull(releasedJoker);
         assertEquals(MeldType.SET, meld.getMeldType());
     }
     
@@ -598,7 +569,7 @@ public class MeldTest extends TestCase {
         meld = new Meld("O1,O2,J");
         meldTiles.add(new Tile("O4"));
         tilesAdded = meld.addTile(meldTiles);
-        assertTrue(tilesAdded.isJoker());
+        assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
         
         // Replace a joker at the back with single tile
@@ -825,4 +796,141 @@ public class MeldTest extends TestCase {
         assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());   
     }
+    
+    // Remove a joker from a meld 
+    public void testRemoveJoker() {
+        Meld meld;
+        Tile removedTile;
+        Tile joker;
+
+        // Remove joker at the back
+        meld = new Meld();
+        meld = new Meld("R3,R4,R5,R6,J");
+        meld.setIsLocked(false); // Unlock the meld
+        
+        removedTile = meld.removeTile(meld.getSize() - 1);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        assertTrue(removedTile.isJoker());
+        assertNull(removedTile.getColour());
+        
+        // Remove joker at front
+        meld = new Meld();
+        joker = new Joker();
+        joker.setOnTable(true);
+        
+        meld.addTile(joker);
+        meld.addTile(new Tile("R11")); 
+        meld.addTile(new Tile("R12")); 
+        meld.addTile(new Tile("R13"));
+        meld.setIsLocked(false); // Unlock the meld
+        
+        removedTile = meld.removeTile(0);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        assertTrue(removedTile.isJoker());
+        assertNull(removedTile.getColour());
+        
+        // Remove joker in middle
+        meld = new Meld();
+        
+        joker = new Joker();
+        joker.setOnTable(true);
+        
+        meld.addTile(new Tile("R10")); 
+        meld.addTile(joker);
+        meld.addTile(new Tile("R12")); 
+        meld.addTile(new Tile("R13")); 
+        meld.setIsLocked(false); // Unlock the meld
+        
+        removedTile = meld.removeTile(1);
+        assertEquals(MeldType.INVALID, meld.getMeldType());
+        assertTrue(removedTile.isJoker()); 
+        assertNull(removedTile.getColour());
+    }
+    
+    // Split a meld with a joker
+    public void testSplitMeldWithJoker() {
+        Meld meld = new Meld();
+
+        meld.addTile(new Tile("R10")); 
+        meld.addTile(new Joker());
+        meld.addTile(new Tile("R12")); 
+        meld.addTile(new Tile("R13")); 
+        meld.setIsLocked(false); // Unlock the meld
+
+        // Split in half
+        Meld returnedMeld1;
+        returnedMeld1 = meld.splitMeld(meld.getSize() / 2);
+        assertEquals("{R10 J}", meld.toString());
+        assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+        assertEquals("{R12 R13}", returnedMeld1.toString());
+        assertEquals(MeldType.POTENTIAL, returnedMeld1.getMeldType());
+
+        // Split first in middle - invalid
+        Meld returnedMeld2;
+        returnedMeld2 = meld.splitMeld(1);
+        assertEquals("{R10}", meld.toString());
+        assertEquals("{J}", returnedMeld2.toString()); // Edge case when the meld has one joker left, reset it to 0
+        assertEquals(0, returnedMeld2.getValue());
+        assertEquals(MeldType.POTENTIAL, returnedMeld2.getMeldType());
+    }
+    
+    // Test the restrictions on jokers and/or melds with jokers
+    public void testJokerRestrictions() {
+        Meld meld;
+        Tile removedTile;
+        Tile releasedJoker;
+        ArrayList<Tile> meldTiles = new ArrayList<>();
+        
+        // Disallow removing jokers from a locked meld
+        meldTiles = new ArrayList<>();
+        meld = new Meld();
+        
+        meld.addTile(new Tile("R10")); 
+        meld.addTile(new Joker());
+        meld.addTile(new Tile("R12")); 
+        meld.addTile(new Tile("R13"));
+
+        removedTile = meld.removeTile(1);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        assertNull(removedTile);
+        
+        // Disallow removing jokers from a locked meld
+        meldTiles = new ArrayList<>();
+        meld = new Meld();
+        
+        meld.addTile(new Tile("R10")); 
+        meld.addTile(new Joker());
+        meld.addTile(new Tile("R12")); 
+        meld.addTile(new Tile("R13"));
+
+        removedTile = meld.removeTile(1);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        assertNull(removedTile);
+        
+        // Disallow addition of joker, run full
+        meldTiles = new ArrayList<>();
+        meld = new Meld("B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13");
+        meldTiles.add(new Joker());
+        releasedJoker = meld.addTile(meldTiles);
+        assertNull(releasedJoker);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        
+        // Disallow addition of joker, set full
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R9,B9,G9,O9");
+        meldTiles.add(new Joker());
+        releasedJoker = meld.addTile(meldTiles);
+        assertNull(releasedJoker);
+        assertEquals(MeldType.SET, meld.getMeldType());
+        
+        // Disallow adding multiple tiles containing a joker (affects console game only)
+        meldTiles = new ArrayList<>();
+        meld = new Meld();
+        meldTiles.add(new Tile("R1"));
+        meldTiles.add(new Tile("R2"));
+        meldTiles.add(new Joker());
+        releasedJoker = meld.addTile(meldTiles);
+        assertNull(releasedJoker);
+    }
+    
 }
