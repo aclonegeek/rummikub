@@ -414,7 +414,6 @@ public class Meld {
     public int getValue() {
         int total = 0;
         for (Tile tile : this.meld) {
-            System.out.println("tile" + "-> " + tile.getValue());
             total += tile.getValue();
         }
         return total;
