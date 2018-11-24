@@ -1,6 +1,7 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 
 import core.Globals.PlayerType;
@@ -39,6 +40,7 @@ public class Game {
             this.stock.populate();
             this.stock.shuffle();
             this.createPlayers();
+            this.determinePlayerOrder();
             for (Player player : this.players) {
                 for (int i = 0; i < 14; i++) {
                     player.add(stock.draw());
@@ -176,5 +178,30 @@ public class Game {
                 }
             }
         }
+    }
+    
+    protected void determinePlayerOrder() {
+        // Rearrange players based on value of tile drawn (highest to lowest)
+        for (Player player : this.players) {
+            player.setDrawnTile(this.stock.draw());
+        }
+        this.players.sort(Comparator.comparing(o -> ((Player) o).getDrawnTile()).reversed());
+        
+        // Print the new player order
+        for (int i = 0; i < players.size(); i++) {
+            String order = "";
+            if (i == 0) {       order = "first"; }
+            else if (i == 1) {  order = "second"; }
+            else if (i == 2) {  order = "third"; }
+            else {              order = "fourth"; }
+            System.out.println(players.get(i).getName() + " drew " + players.get(i).getDrawnTile().toString() + " and goes " + order);
+        }
+        
+        // Add tiles back to stock and shuffle
+        for (Player player : this.players) {
+            this.stock.add(player.getDrawnTile());
+        }
+        this.stock.shuffle();
+        System.out.println();
     }
 }
