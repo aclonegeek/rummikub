@@ -36,14 +36,6 @@ public class Stock {
     public Tile draw() {
         return this.stock.remove(0);
     }
-    
-    public void add(Tile tile) {
-        this.stock.add(tile);
-    }
-    
-    public int getSize() {
-        return this.stock.size();
-    }
 
     public void populate() {
         for (int i = 0; i < 2; i++) {
