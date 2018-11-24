@@ -50,4 +50,12 @@ public class Stock {
     public void shuffle() {
         Collections.shuffle(this.stock);
     }
+
+    public void add(Tile tile) {
+        this.stock.add(tile);
+    }
+    
+    public int getSize() {
+        return this.stock.size();
+    }
 }
