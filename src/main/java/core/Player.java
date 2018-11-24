@@ -12,6 +12,7 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
     protected String name;
     protected int lowestHandCount = 100;
     protected boolean drawing = false;
+    protected Tile drawnTile;
 
     private ArrayList<PlayerObserver> observers;
 
@@ -89,6 +90,14 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
 
     public void setHand(Hand hand) {
         this.hand = hand;
+    }
+    
+    public void setDrawnTile(Tile tile) {
+        this.drawnTile = tile;
+    }
+    
+    public Tile getDrawnTile() {
+        return this.drawnTile;
     }
 
     @Override
