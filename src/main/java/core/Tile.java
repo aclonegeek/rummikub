@@ -2,7 +2,7 @@ package core;
 
 import core.Globals.Colour;
 
-public class Tile implements Comparable<Tile>{
+public class Tile {
     private Colour colour;
     private int value;
     private boolean onTable;
@@ -43,13 +43,4 @@ public class Tile implements Comparable<Tile>{
     public String toString() {
         return String.valueOf(this.colour.getSymbol()) + String.valueOf(this.value);
     }
-    
-    @Override
-    // If values equal, compare colour values instead (O > G > B > R)
-    public int compareTo(Tile tile) {
-      if (this.value != tile.getValue()) {
-          return Integer.compare(this.value, tile.getValue());
-      }
-      return Integer.compare(this.colour.getValue(), tile.colour.getValue());
-    }   
 }
