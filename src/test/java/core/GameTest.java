@@ -18,6 +18,72 @@ public class GameTest extends TestCase {
         return workspace;
     }
     
+    public void testDeterminePlayOrder1() {
+        Player playerHuman = new PlayerHuman("Human");
+        Player player1 = new Player1("p1");
+        Player player2 = new Player2("p2");
+        Player player3 = new Player3("p3");
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1, player2, player3));
+        
+        ArrayList<Tile> tiles = new ArrayList<>();
+        tiles.add(new Tile("R3"));  // playerHuman draws R3
+        tiles.add(new Tile("R10")); // player1 draws R10
+        tiles.add(new Tile("G10")); // player2 draws G10
+        tiles.add(new Tile("B6"));  // player3 draws B6
+        Stock stock = new Stock(tiles);
+        
+        Game game = new Game();
+        game.players = players;
+        game.stock = stock;
+        game.determinePlayOrder();
+        
+        // Verify all 4 players are still in game
+        assertEquals(4, game.players.size());
+        
+        // Verify all 4 tiles were added back to the stock
+        assertEquals(4, game.stock.getSize());
+        
+        // Verify players now in expected order (player2, player1, player3, playerHuman)
+        assertEquals("p2", game.players.get(0).getName());
+        assertEquals("p1", game.players.get(1).getName());
+        assertEquals("p3", game.players.get(2).getName());
+        assertEquals("Human", game.players.get(3).getName());
+    }
+    
+    // Case where two players draw same tile
+    public void testDeterminePlayOrder2() {
+        Player playerHuman = new PlayerHuman("Human");
+        Player player1 = new Player1("p1");
+        Player player2 = new Player2("p2");
+        Player player3 = new Player3("p3");
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1, player2, player3));
+        
+        ArrayList<Tile> tiles = new ArrayList<>();
+        tiles.add(new Tile("R3"));  // playerHuman draws R3
+        tiles.add(new Tile("R10")); // player1 draws R10
+        tiles.add(new Tile("R10")); // player2 draws R10
+        tiles.add(new Tile("B6"));  // player3 draws B6
+        Stock stock = new Stock(tiles);
+        
+        Game game = new Game();
+        game.players = players;
+        game.stock = stock;
+        game.determinePlayOrder();
+        
+        // Verify all 4 players are still in game
+        assertEquals(4, game.players.size());
+        
+        // Verify all 4 tiles were added back to the stock
+        assertEquals(4, game.stock.getSize());
+        
+        // Verify players now in expected order (player2, player1, player3, playerHuman)
+        // In case where tiles equal, whoever drew first just ends up going first
+        assertEquals("p1", game.players.get(0).getName());
+        assertEquals("p2", game.players.get(1).getName());
+        assertEquals("p3", game.players.get(2).getName());
+        assertEquals("Human", game.players.get(3).getName());
+    }
+    
     public void testGame1() {
         Hand humanHand = new Hand("R1,R11,R13,B2,B3,B9,G1,G8,G9,G11,G12,G13,O1,O7");
         Hand p1Hand = new Hand("R5,R7,R8,R11,R12,B3,B10,B11,G5,G8,G10,O2,O5,O10");
