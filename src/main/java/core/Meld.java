@@ -30,12 +30,7 @@ public class Meld {
 
         if (meld.length() != 0) {
             for (String tile : meld.split(",")) {
-                if (tile.equals("J")) {
-                    Tile joker = new Joker();
-                    this.addTile(joker);
-                } else {
-                    this.addTile(new Tile(tile));
-                }
+                this.addTile(new Tile(tile));
             }
         }
     }

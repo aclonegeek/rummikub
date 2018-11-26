@@ -2,6 +2,8 @@ package core;
 
 import java.util.ArrayList;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import core.Globals.Colour;
 import core.Meld.MeldType;
 import junit.framework.TestCase;
@@ -428,7 +430,7 @@ public class MeldTest extends TestCase {
         Meld meld;
         ArrayList<Tile> meldTiles;
         Tile releasedJoker;
-        Tile joker = new Joker();
+        Tile joker = new Tile("J");
         
         // Force joker to back (normal meld)
         meldTiles = new ArrayList<>();
@@ -452,7 +454,7 @@ public class MeldTest extends TestCase {
         Meld meld;
         ArrayList<Tile> meldTiles;
         Tile releasedJoker;
-        Tile joker = new Joker();
+        Tile joker = new Tile("J");
         
         // Force joker to back (potential meld)
         meldTiles = new ArrayList<>();
@@ -469,14 +471,6 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
-        
-        // Default joker to back (potential meld)
-        meldTiles = new ArrayList<>();
-        meld = new Meld("R2,R3");
-        meldTiles.add(joker);
-        releasedJoker = meld.addTile(meldTiles);
-        assertNull(releasedJoker.colour);
-        assertEquals(MeldType.RUN, meld.getMeldType());
     }
     
     // Add a joker to a SET
@@ -484,7 +478,7 @@ public class MeldTest extends TestCase {
         Meld meld;
         ArrayList<Tile> meldTiles;
         Tile releasedJoker;
-        Tile joker = new Joker();
+        Tile joker = new Tile("J");
         
         // Default joker to back (normal meld)
         meldTiles = new ArrayList<>();
@@ -500,7 +494,7 @@ public class MeldTest extends TestCase {
         Meld meld;
         ArrayList<Tile> meldTiles;
         Tile releasedJoker;
-        Tile joker = new Joker();
+        Tile joker = new Tile("J");
         
         // Default joker to back (potential meld)
         meldTiles = new ArrayList<>();
@@ -516,7 +510,7 @@ public class MeldTest extends TestCase {
         Meld meld;
         ArrayList<Tile> meldTiles;
         Tile releasedJoker;
-        Tile joker = new Joker();
+        Tile joker = new Tile("J");
         
         // Default joker to back (potential set)
         meldTiles = new ArrayList<>();
@@ -833,7 +827,7 @@ public class MeldTest extends TestCase {
         
         // Remove joker at front
         meld = new Meld();
-        joker = new Joker();
+        joker = new Tile("J");
         joker.setOnTable(true);
         
         meld.addTile(joker);
@@ -850,7 +844,7 @@ public class MeldTest extends TestCase {
         // Remove joker in middle
         meld = new Meld();
         
-        joker = new Joker();
+        joker = new Tile("J");
         joker.setOnTable(true);
         
         meld.addTile(new Tile("R10")); 
@@ -870,7 +864,7 @@ public class MeldTest extends TestCase {
         Meld meld = new Meld();
 
         meld.addTile(new Tile("R10")); 
-        meld.addTile(new Joker());
+        meld.addTile(new Tile("J"));
         meld.addTile(new Tile("R12")); 
         meld.addTile(new Tile("R13")); 
         meld.setIsLocked(false); // Unlock the meld
@@ -904,7 +898,7 @@ public class MeldTest extends TestCase {
         meld = new Meld();
         
         meld.addTile(new Tile("R10")); 
-        meld.addTile(new Joker());
+        meld.addTile(new Tile("J"));
         meld.addTile(new Tile("R12")); 
         meld.addTile(new Tile("R13"));
 
@@ -917,7 +911,7 @@ public class MeldTest extends TestCase {
         meld = new Meld();
         
         meld.addTile(new Tile("R10")); 
-        meld.addTile(new Joker());
+        meld.addTile(new Tile("J"));
         meld.addTile(new Tile("R12")); 
         meld.addTile(new Tile("R13"));
 
@@ -928,7 +922,7 @@ public class MeldTest extends TestCase {
         // Disallow addition of joker, run full
         meldTiles = new ArrayList<>();
         meld = new Meld("B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13");
-        meldTiles.add(new Joker());
+        meldTiles.add(new Tile("J"));
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker);
         assertEquals(MeldType.RUN, meld.getMeldType());
@@ -936,7 +930,7 @@ public class MeldTest extends TestCase {
         // Disallow addition of joker, set full
         meldTiles = new ArrayList<>();
         meld = new Meld("R9,B9,G9,O9");
-        meldTiles.add(new Joker());
+        meldTiles.add(new Tile("J"));
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker);
         assertEquals(MeldType.SET, meld.getMeldType());
@@ -946,11 +940,9 @@ public class MeldTest extends TestCase {
         meld = new Meld();
         meldTiles.add(new Tile("R1"));
         meldTiles.add(new Tile("R2"));
-        meldTiles.add(new Joker());
+        meldTiles.add(new Tile("J"));
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker);
-        
-        // Disallow adding 
     }
     
     

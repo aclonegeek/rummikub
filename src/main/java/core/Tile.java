@@ -22,9 +22,10 @@ public class Tile {
             this.colour = null;
             this.value = 0;
             alternateState = new ArrayList<>();
+        } else {
+            this.colour = Colour.getEnum(tile.charAt(0));
+            this.value = Integer.parseInt(tile.substring(1));
         }
-        this.colour = Colour.getEnum(tile.charAt(0));
-        this.value = Integer.parseInt(tile.substring(1));
     }
 
     public Colour getColour() {
