@@ -80,7 +80,7 @@ public class Game {
         String winner = null;
         boolean winningCondition = false;
 
-        // Game loop.
+        // Game loop
         while (!winningCondition) {
             for (Player player : this.players) {
                 System.out.println("Table:\n" + this.table.toString());
@@ -186,9 +186,9 @@ public class Game {
     
     protected void determinePlayerOrder(Stock tempStock) {
         // Each player draws tile, keeping track of the player who draws the highest
-        Player firstPlayer = players.get(0);
+        Player firstPlayer = this.players.get(0);
         Tile highestTile = new Tile("R0");
-        for (Player player : players) {
+        for (Player player : this.players) {
             Tile drawnTile = tempStock.draw();
             while (drawnTile.getValue() == highestTile.getValue()) {
                 drawnTile = tempStock.draw();
@@ -204,10 +204,10 @@ public class Game {
         ArrayList<Player> orderedPlayers = new ArrayList<>();
         int firstPlayerIndex = this.players.indexOf(firstPlayer);
         for (int i = firstPlayerIndex; i < this.players.size(); i++) {
-            orderedPlayers.add(players.get(i));
+            orderedPlayers.add(this.players.get(i));
         }
         for (int i = 0; i < firstPlayerIndex; i++) {
-            orderedPlayers.add(players.get(i));
+            orderedPlayers.add(this.players.get(i));
         }
         this.players = orderedPlayers;
         System.out.println(this.players.get(0).getName() + " goes first!");
