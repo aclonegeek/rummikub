@@ -39,6 +39,12 @@ public class Game {
             this.stock.populate();
             this.stock.shuffle();
             this.createPlayers();
+            
+            Stock tempStock = new Stock();
+            tempStock.populateForDraw();
+            tempStock.shuffle();
+            this.determinePlayerOrder(tempStock);
+            
             for (Player player : this.players) {
                 for (int i = 0; i < 14; i++) {
                     player.add(stock.draw());
@@ -176,5 +182,34 @@ public class Game {
                 }
             }
         }
+    }
+    
+    protected void determinePlayerOrder(Stock tempStock) {
+        // Each player draws tile, keeping track of the player who draws the highest
+        Player firstPlayer = players.get(0);
+        Tile highestTile = new Tile("R0");
+        for (Player player : players) {
+            Tile drawnTile = tempStock.draw();
+            while (drawnTile.getValue() == highestTile.getValue()) {
+                drawnTile = tempStock.draw();
+            }
+            if (drawnTile.getValue() > highestTile.getValue()) {
+                highestTile = drawnTile;
+                firstPlayer = player;
+            }
+            System.out.println(player.getName() + " drew initial tile " + drawnTile.toString());
+        }
+        
+        // Create new ArrayList with firstPlayer at index 0, other players maintaining relative positions
+        ArrayList<Player> orderedPlayers = new ArrayList<>();
+        int firstPlayerIndex = this.players.indexOf(firstPlayer);
+        for (int i = firstPlayerIndex; i < this.players.size(); i++) {
+            orderedPlayers.add(players.get(i));
+        }
+        for (int i = 0; i < firstPlayerIndex; i++) {
+            orderedPlayers.add(players.get(i));
+        }
+        this.players = orderedPlayers;
+        System.out.println(this.players.get(0).getName() + " goes first!");
     }
 }
