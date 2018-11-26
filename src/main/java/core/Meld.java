@@ -17,7 +17,7 @@ public class Meld {
     private ArrayList<Tile> meld;
     private MeldType meldType;
     private boolean isLocked = false;
-    boolean isInitialMeld = true;
+    private boolean isInitialMeld = true;
 
     public Meld() {
         this.meld = new ArrayList<>();
@@ -47,8 +47,8 @@ public class Meld {
             return null;
         }
 
-        Tile removedTile = this.meld.remove(index);        
-        this.meldType = determineMeldType(this.meld);
+        Tile removedTile = this.meld.remove(index);     
+        this.meldType = this.determineMeldType(this.meld);
         
         // If the removed tile is a joker or a meld with a joker only is left, reset it
         if (removedTile.isJoker() || (this.meld.size() == 1 && removedTile.isJoker())) { removedTile.releaseJoker(); }
@@ -95,7 +95,7 @@ public class Meld {
         }
 
         // Re-determine the meld type since the current meld has changed
-        this.meldType = determineMeldType(this.meld);
+        this.meldType = this.determineMeldType(this.meld);
 
         // Check if the second half of the meld (which we split) is valid, return the
         // new Meld
@@ -115,7 +115,7 @@ public class Meld {
         Tile releasedJoker = null;
         
         // Disallow adding multiple tiles containing a joker (affects console game only)
-        if (tiles.size() > 1) { if (tiles.removeIf(t -> t.isJoker())) { return null; } }
+        if (tiles.size() > 1 && tiles.removeIf(t -> t.isJoker())) { return null; }
         
         // Check if the tile being added is part of an initial meld (so the joker inside is not replaced by it right away)
         boolean meldIsFromHand = this.meld.stream().allMatch(t -> t.isOnTable());
@@ -136,7 +136,7 @@ public class Meld {
             
             if (tiles.get(0).isJoker()) {
                 tempMeld.addAll(this.meld);
-                Tile joker = determineJokerType(tiles.get(0), tempMeld);
+                Tile joker = this.determineJokerType(tiles.get(0), tempMeld);
                 tempMeld.add(joker);
                 return buildMeld(tempMeld, releasedJoker);
             } else {
@@ -155,7 +155,7 @@ public class Meld {
             if (this.meld.size() == 0) {
                 tempMeld.add(tile);
                 tempMeld.addAll(this.meld);
-                tempMeld.add(determineJokerType(joker, tempMeld));
+                tempMeld.add(this.determineJokerType(joker, tempMeld));
                 return buildMeld(tempMeld, releasedJoker);
             }
             
@@ -189,7 +189,7 @@ public class Meld {
         MeldType tempMeldType;
         
         // Test for a valid meld on a dummy list before changing the actual meld
-        tempMeldType = determineMeldType(tempMeld);
+        tempMeldType = this.determineMeldType(tempMeld);
 
         // Check if this is a meld or a potential meld
         if (tempMeldType != MeldType.INVALID && tempMeld.size() < 3 || tempMeldType == MeldType.RUN || tempMeldType == MeldType.SET) {
@@ -253,7 +253,7 @@ public class Meld {
             }
         } else {
             // Case when the meld is a valid or potential run
-            if (determineMeldType(meld) == MeldType.RUN || determineMeldType(meld) != MeldType.INVALID && meld.get(0).colour == meld.get(1).colour) {
+            if (this.determineMeldType(meld) == MeldType.RUN || this.determineMeldType(meld) != MeldType.INVALID && meld.get(0).colour == meld.get(1).colour) {
                 // Adding to back
                 if (meld.get(0).value == 1) {
                     joker.setColour(meld.get(meld.size() - 1).colour);
@@ -268,7 +268,7 @@ public class Meld {
                     joker.setValue(meld.get(meld.size() - 1).value + 1);
                 }
             // Case when the meld is a valid or potential set
-            } else if (determineMeldType(meld) == MeldType.SET || determineMeldType(meld) != MeldType.INVALID && meld.get(0).colour != meld.get(1).colour) {
+            } else if (this.determineMeldType(meld) == MeldType.SET || this.determineMeldType(meld) != MeldType.INVALID && meld.get(0).colour != meld.get(1).colour) {
                 // Get a list of all the available colours
                 ArrayList<Colour> availableColours = new ArrayList<>();
                 for (Colour c : Colour.values()) {
@@ -296,7 +296,7 @@ public class Meld {
                     for (Tile tile : joker.getAlternateState()) {
                         for (int i = 0; i < meld.size(); i++) {
                             meld.add(i, tile);
-                            if (determineMeldType(meld) == MeldType.POTENTIAL || determineMeldType(meld) == MeldType.RUN || determineMeldType(meld) == MeldType.SET) {
+                            if (this.determineMeldType(meld) == MeldType.POTENTIAL || this.determineMeldType(meld) == MeldType.RUN || determineMeldType(meld) == MeldType.SET) {
                                 meld.remove(i);
                                 joker.setColour(tile.getColour());
                                 joker.setValue(tile.getValue());
@@ -311,7 +311,7 @@ public class Meld {
                 // Check if the joker can be added back to the meld without making it invalid
                 for (int i = 0; i < meld.size(); i++) {
                     meld.add(i, joker);
-                    if (determineMeldType(meld) == MeldType.POTENTIAL || determineMeldType(meld) == MeldType.RUN || determineMeldType(meld) == MeldType.SET) {
+                    if (this.determineMeldType(meld) == MeldType.POTENTIAL || this.determineMeldType(meld) == MeldType.RUN || this.determineMeldType(meld) == MeldType.SET) {
                         meld.remove(i);
                         return joker;
                     }
