@@ -518,7 +518,7 @@ public class MeldTest extends TestCase {
         Tile releasedJoker;
         Tile joker = new Tile("J");
         
-        // Default joker to back (potential set)
+        // Default joker to back (potential run/set)
         meldTiles = new ArrayList<>();
         meld = new Meld("R1");
         meldTiles.add(joker);
@@ -527,7 +527,7 @@ public class MeldTest extends TestCase {
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
         assertEquals("{R1 J}", meld.toString());
         
-        // Default joker to back (potential set)
+        // Default joker to back (potential run/set)
         meldTiles = new ArrayList<>();
         meld = new Meld("R13");
         meldTiles.add(joker);
