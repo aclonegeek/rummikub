@@ -46,6 +46,15 @@ public class Stock {
             }
         }
     }
+    
+    // No duplicates, no jokers
+    public void populateForDraw() {
+        for (Colour colour : Colour.values()) {
+            for (int value = 1; value < 14; value++) {
+                this.stock.add(new Tile(colour, value));
+            }
+        }
+    }
 
     public void shuffle() {
         Collections.shuffle(this.stock);
