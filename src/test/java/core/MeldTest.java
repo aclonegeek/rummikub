@@ -439,6 +439,7 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{O1 O2 O3 O4 O5 O6 O7 O8 O9 O10 O11 O12 J}", meld.toString());
         
         // Force joker to front (normal meld)
         meldTiles = new ArrayList<>();
@@ -447,6 +448,7 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{J G2 G3 G4 G5 G6 G7 G8 G9 G10 G11 G12 G13}", meld.toString());
     }
     
     // Add a joker to a potential RUN
@@ -463,6 +465,7 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{R1 R2 J}", meld.toString());
         
         // Force joker to front (potential meld)
         meldTiles = new ArrayList<>();
@@ -471,6 +474,7 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{J B12 B13}", meld.toString());
     }
     
     // Add a joker to a SET
@@ -487,6 +491,7 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.SET, meld.getMeldType());
+        assertEquals("{R13 B13 G13 J}", meld.toString());
     }
     
     // Add a joker to a potential SET
@@ -503,6 +508,7 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.SET, meld.getMeldType());
+        assertEquals("{R1 B1 J}", meld.toString());
     }
     
     // Add a joker to a single tile to make it a potential meld
@@ -519,6 +525,7 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+        assertEquals("{R1 J}", meld.toString());
         
         // Default joker to back (potential set)
         meldTiles = new ArrayList<>();
@@ -527,6 +534,7 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+        assertEquals("{R13 J}", meld.toString()); // Jokers favour sets rather than runs {R12 R13}
     }
     
     // Replace a joker in a RUN
@@ -544,6 +552,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+        assertEquals("{R1 R2}", meld.toString());
         
         // Replace a joker at the front with single tile (potential meld)
         meldTiles = new ArrayList<>();
@@ -554,6 +563,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+        assertEquals("{R1 R2}", meld.toString());
         
         // Replace a joker at the front with single tile
         meldTiles = new ArrayList<>();
@@ -565,6 +575,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{R11 R12 R13}", meld.toString());
         
         // Replace a joker at the back with single tile
         meldTiles = new ArrayList<>();
@@ -575,6 +586,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{O1 O2 J O4}", meld.toString());
         
         // Replace a joker at the back with single tile
         meldTiles = new ArrayList<>();
@@ -585,6 +597,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{B11 B12 B13}", meld.toString());
         
         // Replace a joker in middle with single tile
         meldTiles = new ArrayList<>();
@@ -595,6 +608,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{G3 G4 G5 G6 G7 G8}", meld.toString());
         
         // Replace a joker at the back of a full run with single tile
         meldTiles = new ArrayList<>();
@@ -605,16 +619,18 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{G3 G4 G5 G6 G7 G8}", meld.toString());
         
         // Replace a joker at the back of a full run (that starts with a joker) with single tile
         meldTiles = new ArrayList<>();
-        meld = new Meld("J,G4,G5,G6,G7,G8");
+        meld = new Meld("J,G4,G5,G6,G7,G8"); // The joker goes to the back of the meld, do not be confused!
         meldTiles.add(new Tile("G9"));
         meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
         
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{G4 G5 G6 G7 G8 G9}", meld.toString());
         
         // Replace a joker at the front of a full run with single tile
         meldTiles = new ArrayList<>();
@@ -625,6 +641,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{G7 G8 G9 G10 G11 G12 G13}", meld.toString());
     }
     
     // Replace a joker in a SET
@@ -642,6 +659,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+        assertEquals("{B1 R1}", meld.toString()); //TODO: Colour sorting
         
         // Replace a joker at the front with single tile (potential meld)
         meldTiles = new ArrayList<>();
@@ -652,6 +670,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
+        assertEquals("{B2 R2}", meld.toString()); //TODO: Colour sorting
         
         // Replace a joker at the front with single tile
         meldTiles = new ArrayList<>();
@@ -662,6 +681,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.SET, meld.getMeldType());
+        assertEquals("{G1 R1 B1}", meld.toString()); //TODO: Colour sorting
         
         // Replace a joker at the back with single tile
         meldTiles = new ArrayList<>();
@@ -672,6 +692,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.SET, meld.getMeldType());
+        assertEquals("{G1 R1 B1}", meld.toString()); //TODO: Colour sorting
         
         // Replace a joker at the back with single tile
         meldTiles = new ArrayList<>();
@@ -682,6 +703,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.SET, meld.getMeldType());
+        assertEquals("{O9 B9 G9}", meld.toString()); //TODO: Colour sorting
         
         // Replace a joker in middle with single tile
         meldTiles = new ArrayList<>();
@@ -692,6 +714,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.SET, meld.getMeldType());
+        assertEquals("{G3 R3 B3 O3}", meld.toString()); //TODO: Colour sorting
         
         // Replace a joker at the back of a full set with single tile
         meldTiles = new ArrayList<>();
@@ -702,6 +725,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.SET, meld.getMeldType());
+        assertEquals("{O3 R3 B3 G3}", meld.toString()); //TODO: Colour sorting
         
         // Replace a joker at the front of a full set (that starts with a joker) with single tile
         meldTiles = new ArrayList<>();
@@ -712,6 +736,7 @@ public class MeldTest extends TestCase {
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.SET, meld.getMeldType());
+        assertEquals("{R4 B4 G4 O4}", meld.toString()); //TODO: Colour sorting
     }
     
     // Add a tile to a meld with an irreplaceable joker
@@ -824,6 +849,7 @@ public class MeldTest extends TestCase {
         assertEquals(MeldType.RUN, meld.getMeldType());
         assertTrue(removedTile.isJoker());
         assertNull(removedTile.getColour());
+        assertEquals("{R3 R4 R5 R6}", meld.toString());
         
         // Remove joker at front
         meld = new Meld();
@@ -840,6 +866,7 @@ public class MeldTest extends TestCase {
         assertEquals(MeldType.RUN, meld.getMeldType());
         assertTrue(removedTile.isJoker());
         assertNull(removedTile.getColour());
+        assertEquals("{R11 R12 R13}", meld.toString());
         
         // Remove joker in middle
         meld = new Meld();
@@ -857,6 +884,7 @@ public class MeldTest extends TestCase {
         assertEquals(MeldType.INVALID, meld.getMeldType());
         assertTrue(removedTile.isJoker()); 
         assertNull(removedTile.getColour());
+        assertEquals("{R10 R12 R13}", meld.toString());
     }
     
     // Split a meld with a joker
@@ -905,6 +933,7 @@ public class MeldTest extends TestCase {
         removedTile = meld.removeTile(1);
         assertEquals(MeldType.RUN, meld.getMeldType());
         assertNull(removedTile);
+        assertEquals("{R10 J R12 R13}", meld.toString());
         
         // Disallow removing jokers from a locked meld
         meldTiles = new ArrayList<>();
@@ -918,6 +947,7 @@ public class MeldTest extends TestCase {
         removedTile = meld.removeTile(1);
         assertEquals(MeldType.RUN, meld.getMeldType());
         assertNull(removedTile);
+        assertEquals("{R10 J R12 R13}", meld.toString());
         
         // Disallow addition of joker, run full
         meldTiles = new ArrayList<>();
@@ -926,6 +956,7 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker);
         assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{B1 B2 B3 B4 B5 B6 B7 B8 B9 B10 B11 B12 B13}", meld.toString());
         
         // Disallow addition of joker, set full
         meldTiles = new ArrayList<>();
@@ -934,6 +965,7 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker);
         assertEquals(MeldType.SET, meld.getMeldType());
+        assertEquals("{R9 B9 G9 O9}", meld.toString());
         
         // Disallow adding multiple tiles containing a joker (affects console game only)
         meldTiles = new ArrayList<>();
@@ -943,7 +975,6 @@ public class MeldTest extends TestCase {
         meldTiles.add(new Tile("J"));
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker);
-    }
-    
-    
+        assertEquals("{}", meld.toString());
+    } 
 }
