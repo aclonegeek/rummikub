@@ -18,6 +18,39 @@ public class GameTest extends TestCase {
         return workspace;
     }
     
+    public void testDeterminePlayerOrder() {
+        Player playerHuman = new PlayerHuman("Human");
+        Player player1 = new Player1("p1");
+        Player player2 = new Player2("p2");
+        Player player3 = new Player3("p3");
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1, player2, player3));
+        
+        ArrayList<Tile> tiles = new ArrayList<>();
+        tiles.add(new Tile("G4"));      // Human draws G4
+        tiles.add(new Tile("R4"));      // p1 draws R4 but draws again (because R4 = G4)
+        tiles.add(new Tile("B1"));      // p1 draws B1
+        tiles.add(new Tile("B7"));      // p2 draws B7
+        tiles.add(new Tile("O5"));      // p3 draws O5
+        Stock stock = new Stock(tiles);
+        
+        Game game = new Game();
+        game.players = players;
+        game.stock = stock;
+        
+        // Verify initial order of players
+        assertEquals("Human", game.players.get(0).getName());
+        assertEquals("p1", game.players.get(1).getName());
+        assertEquals("p2", game.players.get(2).getName());
+        assertEquals("p3", game.players.get(3).getName());
+        
+        // Test new ordering of players
+        game.determinePlayerOrder(stock);
+        assertEquals("p2", game.players.get(0).getName());
+        assertEquals("p3", game.players.get(1).getName());
+        assertEquals("Human", game.players.get(2).getName());
+        assertEquals("p1", game.players.get(3).getName());
+    }
+    
     public void testGame1() {
         Hand humanHand = new Hand("R1,R11,R13,B2,B3,B9,G1,G8,G9,G11,G12,G13,O1,O7");
         Hand p1Hand = new Hand("R5,R7,R8,R11,R12,B3,B10,B11,G5,G8,G10,O2,O5,O10");
