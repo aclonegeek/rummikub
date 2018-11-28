@@ -37,6 +37,26 @@ public class StockTest extends TestCase {
 
         assertEquals(counter, 104);
     }
+    
+    public void testPopulateForDraw() {
+        Stock stock = new Stock();
+        
+        assertTrue(stock.getStock().isEmpty());
+        stock.populateForDraw();
+        assertFalse(stock.getStock().isEmpty());
+        assertEquals(52, stock.getStock().size());
+
+        // Check all 52 tiles
+        int counter = 0;
+        for (Colour colour : Colour.values()) {
+            for (int value = 1; value < 14; value++) {
+                assertEquals(colour.getSymbol() + String.valueOf(value), stock.getStock().get(counter).toString());
+                counter++;
+            }
+        }
+
+        assertEquals(counter, 52);
+    }
 
     public void testShuffle() {
         Stock stock = new Stock();
