@@ -15,6 +15,9 @@ public class Table {
 
     public boolean setState(ArrayList<Meld> melds) {
         if (isValidState(melds)) {
+            for (Meld meld : melds) {
+                meld.setIsLocked(true);
+            }
             this.melds = melds;
             return true;
         }

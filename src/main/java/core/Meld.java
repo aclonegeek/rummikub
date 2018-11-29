@@ -51,7 +51,7 @@ public class Meld {
         this.meldType = this.determineMeldType(this.meld);
         
         // If the removed tile is a joker or a meld with a joker only is left, reset it
-        if (removedTile.isJoker() || (this.meld.size() == 1 && removedTile.isJoker())) { removedTile.releaseJoker(); }
+        if (removedTile.isJoker()) { removedTile.releaseJoker(); }
         
         // If the meld has a single joker after splitting, reset it
         return removedTile;
@@ -82,8 +82,7 @@ public class Meld {
     }
 
     public Meld splitMeld(int index) {
-        if (this.isLocked) { return null; }
-        if (index <= 0 || index >= this.meld.size()) { return null; }
+        if (this.isLocked || index <= 0 || index >= this.meld.size()) { return null; }
 
         Meld newMeld = new Meld();
         ArrayList<Tile> secondHalf = new ArrayList<>();
@@ -97,7 +96,7 @@ public class Meld {
         // Re-determine the meld type since the current meld has changed
         this.meldType = this.determineMeldType(this.meld);
 
-        // Check if the second half of the meld (which we split) is valid, return the // new Meld
+        // Check if the second half of the meld (which we split) is valid
         for (Tile tile : secondHalf) {
             newMeld.addTile(tile);
         }
@@ -115,11 +114,11 @@ public class Meld {
         ArrayList<Tile> jokers = new ArrayList<>();
         Tile releasedJoker = null;
         
-        // Disallow adding multiple tiles containing a joker (affects console game only)
+        // Disallow adding multiple tiles containing a joker (affects console game only) TODO: Remove console game support
         if (tiles.size() > 1 && tiles.removeIf(t -> t.isJoker())) { return null; }
         
         // Check if the tile being added is part of an initial meld (so the joker inside is not replaced by it right away)
-        boolean meldIsFromHand = this.meld.stream().allMatch(t -> t.isOnTable());
+        boolean meldIsFromHand = this.meld.stream().allMatch(t -> t.isOnTable() == false);
         if (meldIsFromHand && !tiles.get(0).isOnTable()) { this.isInitialMeld = true; }
         
         // Temporarily remove jokers from meld
@@ -400,6 +399,9 @@ public class Meld {
     }
     
     public void setIsInitialMeld(boolean isInitialMeld) {
+        for (Tile tile : this.meld) {
+            tile.setOnTable(true);
+        }
         this.isInitialMeld = isInitialMeld;
     }
 

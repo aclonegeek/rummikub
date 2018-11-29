@@ -550,7 +550,6 @@ public class MeldTest extends TestCase {
         meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
         
         tilesAdded = meld.addTile(meldTiles);
-        System.out.println(meld);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
         assertEquals("{R1 R2}", meld.toString());
@@ -880,7 +879,6 @@ public class MeldTest extends TestCase {
         // Remove joker at front
         meld = new Meld();
         joker = new Tile("J");
-        joker.setOnTable(true);
         
         meld.addTile(joker);
         meld.addTile(new Tile("R11")); 
