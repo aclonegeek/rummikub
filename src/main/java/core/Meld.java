@@ -372,12 +372,11 @@ public class Meld {
     // Locked meld = meld with a joker that has not been replaced yet
     private boolean determineLockedMeld(ArrayList<Tile> meld) {
         for (Tile tile : meld) {
-            if (tile.isJoker() && !tile.isReplaced()) {
-                tile.setIsReplaced(false);
-                this.isLocked = true;
+            if (tile.isJoker() && tile.isReplaced() == false) {
+                return true;
             }
         }
-        return this.isLocked;
+        return false;
     }
     
     public boolean isLocked() {
@@ -389,7 +388,7 @@ public class Meld {
         // Lock this meld manually by looking for a joker and setting isReplaced
         for (Tile tile : this.meld) {
             if (tile.isJoker()) {
-                tile.setIsReplaced(isLocked);
+                tile.setIsReplaced(!isLocked);
                 this.isLocked = isLocked;
             }
         }
