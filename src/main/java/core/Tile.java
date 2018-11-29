@@ -7,9 +7,12 @@ import core.Globals.Colour;
 public class Tile {
     protected Colour colour;
     protected int value;
-    protected ArrayList<Tile> alternateState;
-    protected boolean isJoker = false;
     protected boolean onTable = false;
+    
+    // Jokers
+    private ArrayList<Tile> alternateState;
+    private boolean isJoker = false;
+    private boolean isReplaced = false;
 
     public Tile(Colour colour, int value) {
         this.colour = colour;
@@ -58,9 +61,18 @@ public class Tile {
 
     public void releaseJoker() {
         if (this.isJoker) {
+            this.isReplaced = true;
             this.colour = null;
             this.value = 0;
         }
+    }
+    
+    public boolean isReplaced() {
+        return this.isReplaced;
+    }
+    
+    public void setIsReplaced(boolean isReplaced) {
+        this.isReplaced = isReplaced;
     }
 
     public void addAlternateState(Tile alternateState) {
