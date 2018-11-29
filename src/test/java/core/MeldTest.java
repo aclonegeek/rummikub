@@ -475,6 +475,18 @@ public class MeldTest extends TestCase {
         assertNull(releasedJoker.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
         assertEquals("{J B12 B13}", meld.toString());
+        
+        // Force joker to front (potential meld, single tile)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("B13");
+        meldTiles.add(joker);
+        meld.addTile(meldTiles);
+        meld.setIsInitialMeld(false);
+        assertEquals("{B13 J}", meld.toString());
+        
+        releasedJoker = meld.addTile(new Tile("B12"));
+        assertNull(releasedJoker.colour);
+        assertEquals(MeldType.POTENTIAL, meld.getMeldType());
     }
     
     // Add a joker to a SET
