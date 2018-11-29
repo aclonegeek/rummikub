@@ -193,10 +193,8 @@ public class Meld {
     }
     
     private Tile buildMeld(ArrayList<Tile> tempMeld, Tile releasedJoker) {
-        MeldType tempMeldType;
-        
         // Test for a valid meld on a dummy list before changing the actual meld
-        tempMeldType = this.determineMeldType(tempMeld);
+        MeldType tempMeldType = this.determineMeldType(tempMeld);
 
         // Check if this is a meld or a potential meld
         if (tempMeldType != MeldType.INVALID && tempMeld.size() < 3 || tempMeldType == MeldType.RUN || tempMeldType == MeldType.SET) {
@@ -262,7 +260,7 @@ public class Meld {
             if (this.determineMeldType(meld) == MeldType.RUN || this.determineMeldType(meld) != MeldType.INVALID && meld.get(0).colour == meld.get(1).colour) {
                 // Adding to back
                 if (meld.get(0).value == 1) {
-                    joker.setColour(meld.get(meld.size() - 1).colour);
+                    joker.setColour(meld.get(0).colour);
                     joker.setValue(meld.get(meld.size() - 1).value + 1);
                 // Adding to front
                 } else if (meld.get(meld.size() - 1).value == 13) {
@@ -270,7 +268,7 @@ public class Meld {
                     joker.setValue(meld.get(0).value - 1);
                 // Add to back by default
                 } else {
-                    joker.setColour(meld.get(meld.size() - 1).colour);
+                    joker.setColour(meld.get(0).colour);
                     joker.setValue(meld.get(meld.size() - 1).value + 1);
                 }
             // Case when the meld is a valid or potential set
