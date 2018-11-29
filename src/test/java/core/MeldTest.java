@@ -550,6 +550,7 @@ public class MeldTest extends TestCase {
         meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
         
         tilesAdded = meld.addTile(meldTiles);
+        System.out.println(meld);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.POTENTIAL, meld.getMeldType());
         assertEquals("{R1 R2}", meld.toString());
@@ -590,14 +591,14 @@ public class MeldTest extends TestCase {
         
         // Replace a joker at the back with single tile
         meldTiles = new ArrayList<>();
-        meld = new Meld("B11,B12,J");
-        meldTiles.add(new Tile("B13"));
+        meld = new Meld("J,B11,B12");
+        meldTiles.add(new Tile("B10"));
         meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
         
         tilesAdded = meld.addTile(meldTiles);
         assertTrue(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
-        assertEquals("{B11 B12 B13}", meld.toString());
+        assertEquals("{B10 B11 B12}", meld.toString());
         
         // Replace a joker in middle with single tile
         meldTiles = new ArrayList<>();
@@ -832,6 +833,31 @@ public class MeldTest extends TestCase {
         assertNull(tilesAdded.colour);
         assertEquals(MeldType.RUN, meld.getMeldType());
         assertEquals("{G6 J G8 G9 G10 G11 G12 G13}", meld.toString());
+        
+        // Default joker to back (potential meld)
+        Tile releasedJoker;
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R2,R3");
+        tilesAdded = meld.addTile(new Tile("J"));
+        assertEquals("{R2 R3 J}", meld.toString());
+        
+        releasedJoker = meld.addTile(new Tile("R1"));
+        assertNull(releasedJoker.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{R1 R2 R3 J}", meld.toString());
+        
+        // Default joker to back (potential meld)
+        meldTiles = new ArrayList<>();
+        meld = new Meld("R12,R13");
+        
+        tilesAdded = meld.addTile(new Tile("J"));
+        assertEquals("{J R12 R13}", meld.toString());
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
+        releasedJoker = meld.addTile(new Tile("R11"));
+        assertNull(releasedJoker.colour);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{R11 R12 R13}", meld.toString());
     }
     
     // Remove a joker from a meld 
@@ -976,5 +1002,56 @@ public class MeldTest extends TestCase {
         releasedJoker = meld.addTile(meldTiles);
         assertNull(releasedJoker);
         assertEquals("{}", meld.toString());
-    } 
+        
+        // Disallow replacing a joker (that has not yet been replaced) with a tile that is on the table
+        meld = new Meld("J,G8,G9,G10,G11,G12,G13");
+        Tile tileOnTable = new Tile("G7");
+        tileOnTable.setOnTable(true);
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        Tile tilesAdded = meld.addTile(tileOnTable);
+        
+        assertNull(tilesAdded);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{J G8 G9 G10 G11 G12 G13}", meld.toString());
+        
+        // Allow replacing a joker (that has been previously replaced) with a tile that is on the table
+        meld = new Meld("J,G8,G9,G10,G11,G12,G13");
+        meld.setIsLocked(false); // Mimic a meld that is not locked by a joker
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        
+        tileOnTable = new Tile("G7");
+        tileOnTable.setOnTable(true);
+        tilesAdded = meld.addTile(tileOnTable);
+
+        System.out.println(meld);
+        System.out.println(tilesAdded);
+        assertNull(tilesAdded.colour);
+        assertTrue(tilesAdded.isJoker());
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{G7 G8 G9 G10 G11 G12 G13}", meld.toString());
+        
+        // Allow adding a tile that does not replace a joker to a locked meld
+        meld = new Meld("J,G8,G9,G10,G11,G12,G13");
+        tileOnTable = new Tile("G6");
+        tileOnTable.setOnTable(true);
+        tilesAdded = meld.addTile(tileOnTable);
+
+        assertNull(tilesAdded.colour);
+        assertFalse(tilesAdded.isJoker());
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{G6 J G8 G9 G10 G11 G12 G13}", meld.toString());
+        
+        // Allow adding a tile that does not replace a joker to an unlocked meld
+        meld = new Meld("J,G8,G9,G10,G11,G12,G13");
+        tileOnTable = new Tile("G6");
+        tileOnTable.setOnTable(true);
+        meld.setIsLocked(false); // Mimic a meld that is not locked by a joker
+        meld.setIsInitialMeld(false); // Mimic a meld that is on the table and not coming from the hand
+        tilesAdded = meld.addTile(tileOnTable);
+
+        assertNull(tilesAdded.colour);
+        assertFalse(tilesAdded.isJoker());
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{G6 J G8 G9 G10 G11 G12 G13}", meld.toString());
+    }
 }
