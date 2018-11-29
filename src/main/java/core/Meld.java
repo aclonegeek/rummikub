@@ -250,7 +250,7 @@ public class Meld {
             if (meld.get(0).value == 1) {
                 joker.addAlternateState(new Tile(meld.get(0).colour, meld.get(0).value + 1));
             } else if (meld.get(0).value == 13) {
-                joker.addAlternateState(new Tile(meld.get(0).colour, meld.get(0).value + 1));
+                joker.addAlternateState(new Tile(meld.get(0).colour, meld.get(0).value - 1));
             } else {
                 joker.addAlternateState(new Tile(meld.get(0).colour, meld.get(0).value - 1));
                 joker.addAlternateState(new Tile(meld.get(0).colour, meld.get(0).value + 1));
