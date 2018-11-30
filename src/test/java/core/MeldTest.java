@@ -2,8 +2,6 @@ package core;
 
 import java.util.ArrayList;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import core.Globals.Colour;
 import core.Meld.MeldType;
 import junit.framework.TestCase;
