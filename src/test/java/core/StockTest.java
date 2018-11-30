@@ -14,7 +14,7 @@ public class StockTest extends TestCase {
         assertTrue(stock.getStock().isEmpty());
         stock.populate();
         assertFalse(stock.getStock().isEmpty());
-        assertEquals(104, stock.getStock().size());
+        assertEquals(106, stock.getStock().size());
 
         int counter = 0;
         // Check the first 52 tiles
@@ -36,11 +36,15 @@ public class StockTest extends TestCase {
         }
 
         assertEquals(counter, 104);
+
+        // The last 2 elements in the stock should be Jokers
+        assertEquals(stock.getStock().get(stock.getSize() - 2).isJoker(), true);
+        assertEquals(stock.getStock().get(stock.getSize() - 1).isJoker(), true);
     }
-    
+
     public void testPopulateForDraw() {
         Stock stock = new Stock();
-        
+
         assertTrue(stock.getStock().isEmpty());
         stock.populateForDraw();
         assertFalse(stock.getStock().isEmpty());
@@ -79,7 +83,7 @@ public class StockTest extends TestCase {
             shuffledStock.shuffle();
             shuffledStockTiles = shuffledStock.getStock().stream()
                 .map(Object::toString)
-                .collect(Collectors.joining(","));   
+                .collect(Collectors.joining(","));
         }
         assertNotEquals(stockTiles, shuffledStockTiles);
     }
