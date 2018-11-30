@@ -139,11 +139,10 @@ public class Meld {
                 Tile joker = this.determineJokerType(tiles.get(0), tempMeld);
                 tempMeld.add(joker);
                 return this.buildMeld(tempMeld, releasedJoker);
-            } else {
-                tempMeld.addAll(this.meld);
-                tempMeld.addAll(tiles);   
-                return this.buildMeld(tempMeld, releasedJoker);
             }
+             tempMeld.addAll(this.meld);
+             tempMeld.addAll(tiles);   
+             return this.buildMeld(tempMeld, releasedJoker);
         }
         
         // If meld has 1 joker
