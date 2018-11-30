@@ -138,11 +138,11 @@ public class Meld {
                 tempMeld.addAll(this.meld);
                 Tile joker = this.determineJokerType(tiles.get(0), tempMeld);
                 tempMeld.add(joker);
-                return buildMeld(tempMeld, releasedJoker);
+                return this.buildMeld(tempMeld, releasedJoker);
             } else {
                 tempMeld.addAll(this.meld);
                 tempMeld.addAll(tiles);   
-                return buildMeld(tempMeld, releasedJoker);
+                return this.buildMeld(tempMeld, releasedJoker);
             }
         }
         
@@ -154,9 +154,8 @@ public class Meld {
             // Adding tile to a meld with a joker only
             if (this.meld.size() == 0) {
                 tempMeld.add(tile);
-                tempMeld.addAll(this.meld);
                 tempMeld.add(this.determineJokerType(joker, tempMeld));
-                return buildMeld(tempMeld, releasedJoker);
+                return this.buildMeld(tempMeld, releasedJoker);
             }
             
             // Adding tile to a meld with a joker and one or more tiles
@@ -166,9 +165,9 @@ public class Meld {
                     // If this tile is on the table but is being added to a meld that is locked 
                     if (tile.onTable && this.isLocked) { 
                         // Add the joker back
-                        joker = determineJokerType(joker, tempMeld);
+                        joker = this.determineJokerType(joker, tempMeld);
                         this.meld.add(joker);
-                        buildMeld(this.meld, releasedJoker);
+                        this.buildMeld(this.meld, releasedJoker);
                         return null;
                     }
                     // Otherwise this meld is not locked or the tile being added is from the hand
@@ -176,17 +175,17 @@ public class Meld {
                     releasedJoker = jokers.remove(0);
                     tempMeld.add(tile);
                     tempMeld.addAll(this.meld);
-                    return buildMeld(tempMeld, releasedJoker);
+                    return this.buildMeld(tempMeld, releasedJoker);
                 }
                 
                 // Otherwise the joker can't be replaced. Check if the tile can still be added to the meld
                 tempMeld.addAll(this.meld);
                 tempMeld.add(tile);
                 Collections.sort(tempMeld, Comparator.comparingInt(Tile::getValue)); // Sort numerically
-                joker = determineJokerType(joker, tempMeld);
+                joker = this.determineJokerType(joker, tempMeld);
                 if (joker == null) { return null; }
                 tempMeld.add(joker);
-                return buildMeld(tempMeld, releasedJoker);
+                return this.buildMeld(tempMeld, releasedJoker);
             }
         }
         return null;
