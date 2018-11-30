@@ -124,6 +124,10 @@ public class Game {
 
         this.determinePlayerScores(winner);
         System.out.println(winner.getName() + " has won!");
+        System.out.println("Scores:");
+        for (Player player : this.players) {
+            System.out.println(player.getName() + ": " + this.playerScores.get(player));
+        }
     }
     
     protected void createPlayers() {
@@ -218,12 +222,12 @@ public class Game {
     }
     
     protected void determinePlayerScores(Player winner) {
-        playerScores = new HashMap<Player, Integer>();
-        playerScores.put(winner, 0);
+        this.playerScores = new HashMap<Player, Integer>();
+        this.playerScores.put(winner, 0);
         for (Player player : this.players) {
             if (player != winner) {
-                playerScores.put(player, player.getScore() * -1);
-                playerScores.put(winner, playerScores.get(winner) + player.getScore());
+                this.playerScores.put(player, player.getScore() * -1);
+                this.playerScores.put(winner, this.playerScores.get(winner) + player.getScore());
             }
         }
     }
