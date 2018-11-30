@@ -51,6 +51,31 @@ public class GameTest extends TestCase {
         assertEquals("p1", game.players.get(3).getName());
     }
     
+    public void testDeterminePlayerScores() {
+        Hand humanHand = new Hand("R2,R3,R4,R5");
+        Hand p1Hand = new Hand("G1,G2,O10,R12,B13");
+        Hand p2Hand = new Hand("J,O1,B9");
+        Hand p3Hand = new Hand("");
+        Player playerHuman = new PlayerHuman("Human");
+        Player player1 = new Player1("p1");
+        Player player2 = new Player2("p2");
+        Player player3 = new Player3("p3");
+        playerHuman.setHand(humanHand);
+        player1.setHand(p1Hand);
+        player2.setHand(p2Hand);
+        player3.setHand(p3Hand);
+        
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1, player2, player3));
+        Game game = new Game();
+        game.players = players;
+        game.determinePlayerScores(player3); // player3 is the winner
+        
+        assertTrue(game.playerScores.get(playerHuman).equals(-14));
+        assertTrue(game.playerScores.get(player1).equals(-42));
+        assertTrue(game.playerScores.get(player2).equals(-49));
+        assertTrue(game.playerScores.get(player3).equals(105));
+    }
+    
     public void testGame1() {
         Hand humanHand = new Hand("R1,R11,R13,B2,B3,B9,G1,G8,G9,G11,G12,G13,O1,O7");
         Hand p1Hand = new Hand("R5,R7,R8,R11,R12,B3,B10,B11,G5,G8,G10,O2,O5,O10");
