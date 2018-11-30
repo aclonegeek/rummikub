@@ -1,6 +1,8 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import core.Globals.PlayerType;
@@ -9,6 +11,7 @@ public class Game {
     protected Stock stock;
     protected ArrayList<Player> players;
     protected Table table;
+    protected Map <Player, Integer> playerScores;
 
     // Testing related attributes
     private boolean testing = false;
@@ -77,7 +80,7 @@ public class Game {
         System.out.println("\n--- GAME ---");
         Tile tile; // Used to store the tile drawn from the stock.
         ArrayList<Meld> workspace; // Store the player's workspace.
-        String winner = null;
+        Player winner = null;
         boolean winningCondition = false;
 
         // Game loop
@@ -98,7 +101,7 @@ public class Game {
                 // 1. Player has a hand size of 0, OR
                 // 2. The stock is empty, so the player with the smallest hand wins
                 if (player.getHandSize() == 0) {
-                    winner = player.getName();
+                    winner = player;
                     winningCondition = true;
                     break;
                 } else if (this.stock.getStock().size() == 0) {
@@ -110,16 +113,17 @@ public class Game {
 
         if (winningCondition && winner == null) {
             int lowestHandCount = this.players.get(0).getHandSize();
-            winner = this.players.get(0).getName();
+            winner = this.players.get(0);
             for (Player player : this.players.subList(1, this.players.size())) {
                 if (player.getHandSize() < lowestHandCount) {
                     lowestHandCount = player.getHandSize();
-                    winner = player.getName();
+                    winner = player;
                 }
             }
         }
 
-        System.out.println(winner + " has won!");
+        this.determinePlayerScores(winner);
+        System.out.println(winner.getName() + " has won!");
     }
     
     protected void createPlayers() {
@@ -211,5 +215,16 @@ public class Game {
         }
         this.players = orderedPlayers;
         System.out.println(this.players.get(0).getName() + " goes first!");
+    }
+    
+    protected void determinePlayerScores(Player winner) {
+        playerScores = new HashMap<Player, Integer>();
+        playerScores.put(winner, 0);
+        for (Player player : this.players) {
+            if (player != winner) {
+                playerScores.put(player, player.getScore() * -1);
+                playerScores.put(winner, playerScores.get(winner) + player.getScore());
+            }
+        }
     }
 }
