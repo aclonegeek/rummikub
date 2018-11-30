@@ -88,11 +88,9 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
             Tile tile = this.hand.getTile(i);
             if (tile.isJoker()) {
                 score += 30;
-            }
-            else if (tile.getValue() >= 2 && tile.getValue() <= 9) {
-                score += this.hand.getTile(i).getValue();
-            }
-            else {
+            } else if (tile.getValue() >= 2 && tile.getValue() <= 9) {
+                score += tile.getValue();
+            } else {
                 score += 10;
             }
         }

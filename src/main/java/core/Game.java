@@ -11,7 +11,7 @@ public class Game {
     protected Stock stock;
     protected ArrayList<Player> players;
     protected Table table;
-    protected Map <Player, Integer> playerScores;
+    protected Map<Player, Integer> playerScores;
 
     // Testing related attributes
     private boolean testing = false;
