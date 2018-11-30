@@ -31,7 +31,7 @@ public abstract class PlayBehaviour {
                     }
 
                     // If tile is added to cloned meld, add this meld to ArrayList
-                    if (newMeld.addTile(hand.getTile(i))) {
+                    if (newMeld.addTile(hand.getTile(i)) != null) {
                         arrayList.add(newMeld);
                     }
                 }
@@ -161,14 +161,14 @@ public abstract class PlayBehaviour {
         for (Meld potentialMeld : potentialMelds) {
             for (int i = 0; i < workspace.size(); i++) {
                 Meld tempMeld = workspace.get(i);
-                if (tempMeld.isValidIfRemoveTile(0) && potentialMeld.addTile(tempMeld.getTile(0))) {
+                if (tempMeld.isValidIfRemoveTile(0) && potentialMeld.addTile(tempMeld.getTile(0)) != null) {
                     tempMeld.removeTile(0);
                     hand.remove(potentialMeld);
                     workspace.add(potentialMeld);
                     break;
                 }
                 int n = tempMeld.getSize() - 1;
-                if (tempMeld.isValidIfRemoveTile(n) && potentialMeld.addTile(tempMeld.getTile(n))) {
+                if (tempMeld.isValidIfRemoveTile(n) && potentialMeld.addTile(tempMeld.getTile(n)) != null) {
                     tempMeld.removeTile(n);
                     hand.remove(potentialMeld);
                     workspace.add(potentialMeld);
@@ -187,14 +187,14 @@ public abstract class PlayBehaviour {
 
             for (int j = 0; j < workspace.size(); j++) {
                 Meld tempMeld = workspace.get(j);
-                if (tempMeld.isValidIfRemoveTile(0) && newMeld.addTile(tempMeld.getTile(0))) {
+                if (tempMeld.isValidIfRemoveTile(0) && newMeld.addTile(tempMeld.getTile(0)) != null) {
                     tileRemoved = tempMeld.getTile(0);
                     meldRemovedFrom = tempMeld;
                     tempMeld.removeTile(0);
                     hand.remove(tileRemoved);
                 }
                 int n = tempMeld.getSize() - 1;
-                if (tempMeld.isValidIfRemoveTile(n) && newMeld.addTile(tempMeld.getTile(n))) {
+                if (tempMeld.isValidIfRemoveTile(n) && newMeld.addTile(tempMeld.getTile(n)) != null) {
                     tileRemoved = tempMeld.getTile(n);
                     meldRemovedFrom = tempMeld;
                     tempMeld.removeTile(n);
@@ -215,7 +215,7 @@ public abstract class PlayBehaviour {
             boolean tileAdded = false;
             for (int i = 0; i < hand.getSize(); i++) {
                 for (Meld tempMeld : workspace) {
-                    if (tempMeld.addTile(hand.getTile(i))) {
+                    if (tempMeld.addTile(hand.getTile(i)) != null) {
                         tileAdded = true;
                         hand.remove(i);
                         break;
