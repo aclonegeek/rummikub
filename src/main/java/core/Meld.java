@@ -35,6 +35,16 @@ public class Meld {
         }
     }
     
+    public Meld(Meld meld) {
+        this.meld = new ArrayList<>();
+        for (Tile tile : meld.meld) {
+            this.meld.add(new Tile(tile));
+        }
+        this.meldType = meld.meldType;
+        this.isLocked = meld.isLocked;
+        this.isInitialMeld = meld.isInitialMeld;
+    }
+    
     public Tile addTile(Tile tile) {
         ArrayList<Tile> tempMeld = new ArrayList<>();
         tempMeld.add(tile);
@@ -59,10 +69,7 @@ public class Meld {
 
     public boolean isValidIfRemoveTile(int index) {
         // Copy meld
-        Meld copyMeld = new Meld();
-        for (Tile tile : this.meld) {
-            copyMeld.addTile(tile);
-        }
+        Meld copyMeld = new Meld(this);
 
         // Remove from copy and check if valid
         copyMeld.removeTile(index);
