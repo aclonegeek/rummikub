@@ -27,6 +27,9 @@ public class Table {
     public void setState(ArrayList<Meld> melds) {
         for (Meld meld : melds) {
             meld.setIsLocked(true);
+            for (int i = 0; i < meld.getSize(); i++) {
+                meld.getTile(i).setOnTable(true);
+            }
         }
         this.melds = melds;
     }
