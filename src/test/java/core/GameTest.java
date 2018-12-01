@@ -969,7 +969,7 @@ public class GameTest extends TestCase {
         game.setup();
         game.table = table;
         
-        // Verify table and player hand are reverted and player picks up 3 tiles (B1, B2, B3)
+        // Verify table and player hand are not reverted and player does not incur penalty
         assertEquals("1: {R1 R2 R3}\n2: {G4 O4 B4}\n3: {O10 O11 O12}\n", game.table.toString());
         assertEquals(4, game.players.get(0).getHandSize());
         
