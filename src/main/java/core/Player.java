@@ -81,6 +81,21 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
             this.lowestHandCount = lowestHandCount;
         }
     }
+    
+    public int getScore() {
+        int score = 0;
+        for (int i = 0; i < this.hand.getSize(); i++) {
+            Tile tile = this.hand.getTile(i);
+            if (tile.isJoker()) {
+                score += 30;
+            } else if (tile.getValue() >= 2 && tile.getValue() <= 9) {
+                score += tile.getValue();
+            } else {
+                score += 10;
+            }
+        }
+        return score;
+    }
 
     // Required for testing purposes
     public void setInitialMove(boolean initialMove) {

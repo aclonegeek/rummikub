@@ -77,6 +77,14 @@ public class Hand {
     }
 
     private void sort() {
+        // Remove jokers
+        ArrayList<Tile> jokers = new ArrayList<>();
+        for (int i = 0; i < this.hand.size(); i++) {
+            if (this.hand.get(i).isJoker()) {
+                jokers.add(this.hand.remove(i));
+            }
+        }
+        
         // Sort by colour
         int n = this.hand.size();
         for (int i = 0; i < n - 1; i++) {
@@ -103,6 +111,11 @@ public class Hand {
                     this.hand.set(j + 1, temp);
                 }
             }
+        }
+        
+        // Add jokers to front of hand
+        for (Tile joker : jokers) {
+            this.hand.add(0, joker);
         }
     }
 }

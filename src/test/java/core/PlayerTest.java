@@ -40,4 +40,16 @@ public class PlayerTest extends TestCase {
         assertEquals(2, p1.getHandSize());
         assertEquals("p1: 2 tiles\n[O5 O6]\n", p1.toString());
     }
+    
+    public void testGetScore() {
+        Player p1 = new Player1("p1");
+        assertEquals(0, p1.getScore());
+        
+        Player p2 = new Player1("p1");
+        p2.add(new Tile("R1"));
+        p2.add(new Tile("R2"));
+        p2.add(new Tile("R3"));
+        p2.add(new Tile("J"));
+        assertEquals(45, p2.getScore());
+    }
 }
