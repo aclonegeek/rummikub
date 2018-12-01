@@ -69,10 +69,7 @@ public class Meld {
 
     public boolean isValidIfRemoveTile(int index) {
         // Copy meld
-        Meld copyMeld = new Meld();
-        for (Tile tile : this.meld) {
-            copyMeld.addTile(tile);
-        }
+        Meld copyMeld = new Meld(this);
 
         // Remove from copy and check if valid
         copyMeld.removeTile(index);
