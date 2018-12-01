@@ -1,93 +1,83 @@
 package core;
 
+import static org.junit.Assert.assertNotEquals;
+
 import java.util.ArrayList;
 
 import core.Globals.Colour;
 import junit.framework.TestCase;
 
 public class TableTest extends TestCase {
+    public void testCopyConstructor() {
+        ArrayList<Meld> melds = new ArrayList<>();
+        melds.add(new Meld("R1,R2,R3,J"));
+        melds.add(new Meld("O5,G5,B5"));
+        
+        Table table1 = new Table();
+        table1.setState(melds);
+        Table table2 = new Table(table1);
+        assertNotEquals(table1, table2);
+        assertEquals(table1.toString(), table2.toString());
+    }
+    
     public void testSetState() {
         Table table = new Table();
-        Meld meld1 = new Meld();
-        ArrayList<Meld> melds = new ArrayList<>();
-
-        // Test setState failure
-        // Create list of melds
-        ArrayList<Tile> set = new ArrayList<>();
-        set.add(new Tile(Colour.RED, 7));
-        set.add(new Tile(Colour.BLUE, 7));
-        set.add(new Tile(Colour.GREEN, 7));
-        set.add(new Tile(Colour.ORANGE, 7));
-        meld1.addTile(set);
-
-        assertTrue(meld1.isValidMeld());
-
-        // Split the meld to make an invalid meld
-        Meld invalidMeld = meld1.splitMeld(1);
-        melds.add(invalidMeld);
-        melds.add(meld1);
-
-        // Should be false because the table has one valid and one invalid meld, therefore the table is invalid
-        assertFalse(table.setState(melds));
-
-        // Test setState success
+        
+        // Create a set and split it so table is invalid
+        ArrayList<Meld> melds1 = new ArrayList<>();
+        Meld meld1 = new Meld("R7,B7,O7,G7");
+        Meld meld2 = meld1.splitMeld(1);
+        melds1.add(meld2);
+        melds1.add(meld1);
+        table.setState(melds1);
+        assertEquals("1: {B7 O7 G7}\n2: {R7}\n", table.toString());
+        for (Meld meld : table.getState()) {
+            for (int i = 0; i < meld.getSize(); i++) {
+                assertTrue(meld.getTile(i).isOnTable());
+            }
+        }
+        
         // Create a run
-        melds = new ArrayList<>();
-        meld1 = new Meld();
-
-        // Make a new run and add it to melds
-        ArrayList<Tile> run = new ArrayList<>();
-        run.add(new Tile(Colour.RED, 1));
-        run.add(new Tile(Colour.RED, 2));
-        run.add(new Tile(Colour.RED, 3));
-
-        meld1.addTile(run);
-        melds.add(meld1);
-
-        // Should be true since meld1 is now a run
-        assertTrue(table.setState(melds));
+        ArrayList<Meld> melds2 = new ArrayList<>();
+        Meld meld3 = new Meld("R1,R2,R3");
+        melds2.add(meld3);
+        table.setState(melds2);
+        assertEquals("1: {R1 R2 R3}\n", table.toString());
+        for (Meld meld : table.getState()) {
+            for (int i = 0; i < meld.getSize(); i++) {
+                assertTrue(meld.getTile(i).isOnTable());
+            }
+        }
     }
     
     public void testSetStateJokers() {
         Table table = new Table();
-        Meld meld1 = new Meld();
-        ArrayList<Meld> melds = new ArrayList<>();
 
-        // Test setState failure
-        // Create list of melds
-        ArrayList<Tile> set = new ArrayList<>();
-        set.add(new Tile(Colour.RED, 7));
-        set.add(new Tile(Colour.BLUE, 7));
-        set.add(new Tile(Colour.GREEN, 7));
-        set.add(new Tile(Colour.ORANGE, 7));
-        meld1.addTile(set);
-
-        assertTrue(meld1.isValidMeld());
-
-        // Split the meld to make an invalid meld
-        Meld invalidMeld = meld1.splitMeld(1);
-        melds.add(invalidMeld);
-        melds.add(meld1);
-
-        // Should be false because the table has one valid and one invalid meld, therefore the table is invalid
-        assertFalse(table.setState(melds));
-
-        // Test setState success
+        // Create a set and split it so table is invalid
+        ArrayList<Meld> melds1 = new ArrayList<>();
+        Meld meld1 = new Meld("R7,B7,O7,G7");
+        Meld meld2 = meld1.splitMeld(1);
+        melds1.add(meld2);
+        melds1.add(meld1);
+        table.setState(melds1);
+        assertEquals("1: {B7 O7 G7}\n2: {R7}\n", table.toString());
+        for (Meld meld : table.getState()) {
+            for (int i = 0; i < meld.getSize(); i++) {
+                assertTrue(meld.getTile(i).isOnTable());
+            }
+        }
+        
         // Create a run
-        melds = new ArrayList<>();
-        meld1 = new Meld();
-
-        // Make a new run and add it to melds
-        ArrayList<Tile> run = new ArrayList<>();
-        run.add(new Tile(Colour.RED, 1));
-        run.add(new Tile(Colour.RED, 2));
-        run.add(new Tile(Colour.RED, 3));
-
-        meld1.addTile(run);
-        melds.add(meld1);
-
-        // Should be true since meld1 is now a run
-        assertTrue(table.setState(melds));
+        ArrayList<Meld> melds2 = new ArrayList<>();
+        Meld meld3 = new Meld("R1,R2,R3,J");
+        melds2.add(meld3);
+        table.setState(melds2);
+        assertEquals("1: {R1 R2 R3 J}\n", table.toString());
+        for (Meld meld : table.getState()) {
+            for (int i = 0; i < meld.getSize(); i++) {
+                assertTrue(meld.getTile(i).isOnTable());
+            }
+        }
     }
 
     public void testToString() {
@@ -105,7 +95,7 @@ public class TableTest extends TestCase {
         set.add(new Tile(Colour.ORANGE, 7));
         meld1.addTile(set);
         melds.add(meld1);
-        assertTrue(table.setState(melds));
+        table.setState(melds);
 
         assertEquals("1: {R7 B7 G7 O7}\n", table.toString());
 
@@ -115,7 +105,7 @@ public class TableTest extends TestCase {
         run.add(new Tile(Colour.RED, 3));
         meld2.addTile(run);
         melds.add(meld2);
-        assertTrue(table.setState(melds));
+        table.setState(melds);
 
         assertEquals("1: {R7 B7 G7 O7}\n2: {R1 R2 R3}\n", table.toString());
     }

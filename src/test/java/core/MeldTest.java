@@ -438,6 +438,9 @@ public class MeldTest extends TestCase {
 
         Meld meld2 = new Meld("R1,R2,R3");
         assertFalse(meld2.isValidIfRemoveTile(0));
+        
+        Meld meld3 = new Meld("J,R2,R3,R4");
+        assertFalse(meld3.isValidIfRemoveTile(0));
     }
     
     // Add a joker to a RUN

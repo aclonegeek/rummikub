@@ -20,6 +20,15 @@ public class Hand {
             }
         }
     }
+    
+    public Hand(Hand hand) {
+        this.hand = new ArrayList<>();
+        
+        for (int i = 0; i < hand.getSize(); i++) {
+            this.hand.add(new Tile(hand.getTile(i)));
+            this.sort();
+        }
+    }
 
     public void add(Tile tile) {
         this.hand.add(tile);

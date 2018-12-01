@@ -892,4 +892,98 @@ public class GameTest extends TestCase {
         else { game.players.get(4).add(game.stock.draw()); }
         assertEquals("1: {R10 B10 G10}\n2: {R11 B11 G11}\n3: {R12 B12 G12}\n4: {R13 B13 G13}\n5: {R9 B9 G9 O9}\n6: {G1 G2 G3}\n7: {R1 R2 R3}\n", game.table.toString());    // req. 21
     }
+    
+    // Test case where table state is invalid and reverts back
+    public void testGameWithMemento1() {
+        Hand humanHand = new Hand("R4,B9,B10");
+        Hand p1Hand = new Hand("R1,R3,R5");
+        Player playerHuman = new PlayerHuman("Human");
+        playerHuman.setInitialMove(false);
+        Player player1 = new Player1("p1");
+        playerHuman.setHand(humanHand);
+        player1.setHand(p1Hand);
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1));
+        
+        ArrayList<Meld> melds = new ArrayList<>();
+        Table table = new Table();
+        melds.add(new Meld("R1,R2,R3"));
+        melds.add(new Meld("G4,O4,B4"));
+        melds.add(new Meld("O10,O11,O12"));
+        table.setState(melds);
+        
+        ArrayList<Tile> tiles = new ArrayList<>();
+        tiles.add(new Tile("B1"));
+        tiles.add(new Tile("B2"));
+        tiles.add(new Tile("B3"));
+        Stock stock = new Stock(tiles);
+        
+        Game game = new Game(true);
+        game.rig(players, stock);
+        game.setup();
+        game.table = table;
+        
+        // Verify table and player hand are reverted and player picks up 3 tiles (B1, B2, B3)
+        assertEquals("1: {R1 R2 R3}\n2: {G4 O4 B4}\n3: {O10 O11 O12}\n", game.table.toString());
+        assertEquals(3, game.players.get(0).getHandSize());
+        
+        game.setSavedState(game.players.get(0));
+        ArrayList<Meld> workspace = new ArrayList<>();
+        workspace = this.playHuman(game.players.get(0), "R4 > NM", game.table.getState());
+        if (workspace != null) { game.table.setState(workspace); }
+        else { game.players.get(0).add(game.stock.draw()); }
+        
+        if (!game.determineValidState()) {
+            game.restoreSavedStateWithPenalty(game.players.get(0));
+        }
+        
+        assertEquals("1: {R1 R2 R3}\n2: {G4 O4 B4}\n3: {O10 O11 O12}\n", game.table.toString());
+        assertEquals(6, game.players.get(0).getHandSize());
+    }
+    
+    // Test case where table state is valid and does not revert back
+    public void testGameWithMemento2() {
+        Hand humanHand = new Hand("G1,G2,G3,O7");
+        Hand p1Hand = new Hand("R1,R3,R5");
+        Player playerHuman = new PlayerHuman("Human");
+        playerHuman.setInitialMove(false);
+        Player player1 = new Player1("p1");
+        playerHuman.setHand(humanHand);
+        player1.setHand(p1Hand);
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1));
+        
+        ArrayList<Meld> melds = new ArrayList<>();
+        Table table = new Table();
+        melds.add(new Meld("R1,R2,R3"));
+        melds.add(new Meld("G4,O4,B4"));
+        melds.add(new Meld("O10,O11,O12"));
+        table.setState(melds);
+        
+        ArrayList<Tile> tiles = new ArrayList<>();
+        tiles.add(new Tile("B1"));
+        tiles.add(new Tile("B2"));
+        tiles.add(new Tile("B3"));
+        Stock stock = new Stock(tiles);
+        
+        Game game = new Game(true);
+        game.rig(players, stock);
+        game.setup();
+        game.table = table;
+        
+        // Verify table and player hand are not reverted and player does not incur penalty
+        assertEquals("1: {R1 R2 R3}\n2: {G4 O4 B4}\n3: {O10 O11 O12}\n", game.table.toString());
+        assertEquals(4, game.players.get(0).getHandSize());
+        
+        game.setSavedState(game.players.get(0));
+        ArrayList<Meld> workspace = new ArrayList<>();
+        workspace = this.playHuman(game.players.get(0), "G1 G2 G3 > NM", game.table.getState());
+        if (workspace != null) { game.table.setState(workspace); }
+        else { game.players.get(0).add(game.stock.draw()); }
+        
+        if (!game.determineValidState()) {
+            game.restoreSavedStateWithPenalty(game.players.get(0));
+        }
+        
+        assertEquals("1: {R1 R2 R3}\n2: {G4 O4 B4}\n3: {O10 O11 O12}\n4: {G1 G2 G3}\n", game.table.toString());
+        assertEquals(1, game.players.get(0).getHandSize());
+    }
 }
