@@ -37,10 +37,10 @@ public class Meld {
     
     public Meld(Meld meld) {
         this.meld = new ArrayList<>();
-        this.meldType = MeldType.INVALID;
         for(Tile tile : meld.meld) {
-            this.addTile(new Tile(tile));
+            this.meld.add(new Tile(tile));
         }
+        this.meldType = meld.meldType;
         this.isLocked = meld.isLocked;
         this.isInitialMeld = meld.isInitialMeld;
     }
