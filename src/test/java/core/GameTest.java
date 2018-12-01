@@ -932,7 +932,7 @@ public class GameTest extends TestCase {
         if (workspace != null) { game.table.setState(workspace); }
         else { game.players.get(0).add(game.stock.draw()); }
         
-        if (!game.determineValidState(game.players.get(0))) {
+        if (!game.determineValidState()) {
             game.restoreSavedStateWithPenalty(game.players.get(0));
         }
         
@@ -979,7 +979,7 @@ public class GameTest extends TestCase {
         if (workspace != null) { game.table.setState(workspace); }
         else { game.players.get(0).add(game.stock.draw()); }
         
-        if (!game.determineValidState(game.players.get(0))) {
+        if (!game.determineValidState()) {
             game.restoreSavedStateWithPenalty(game.players.get(0));
         }
         

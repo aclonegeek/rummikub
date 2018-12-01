@@ -102,7 +102,8 @@ public class Game {
                     this.table.setState(workspace);
                 }
                 
-                if (!this.determineValidState(player)) {
+                if (!this.determineValidState()) {
+                    System.out.println("Table is in an invalid state! Reverting and applying 3-tile penalty to " + player.getName() + ".");
                     this.restoreSavedStateWithPenalty(player);
                 }
 
@@ -254,11 +255,7 @@ public class Game {
         player.add(this.stock.draw());
     }
     
-    protected boolean determineValidState(Player player) {
-        if (!this.table.isValidState()) {
-            System.out.println("Table is in invalid state! Reverting back and applying penalty.");
-            return false;
-        }
-        return true;
+    protected boolean determineValidState() {
+        return this.table.isValidState();
     }
 }
