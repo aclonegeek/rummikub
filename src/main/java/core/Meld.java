@@ -65,8 +65,8 @@ public class Meld {
         }
 
         // Remove from copy and check if valid
-        copyMeld.removeTile(index);
-        if (copyMeld.isValidMeld()) {
+        Tile removed = copyMeld.removeTile(index);
+        if (copyMeld.isValidMeld() && removed != null) {
             return true;
         }
         return false;
