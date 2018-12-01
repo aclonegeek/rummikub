@@ -18,6 +18,21 @@ public class Tile {
         this.colour = colour;
         this.value = value;
     }
+    
+    public Tile(Tile tile) {
+        this.colour = tile.colour;
+        this.value = tile.value;
+        this.onTable = tile.onTable;
+        this.isJoker = tile.isJoker;
+        this.isReplaced = tile.isReplaced;
+        
+        if (this.isJoker) {
+            alternateState = new ArrayList<>();
+            for (Tile alternateTile : tile.alternateState) {
+                alternateState.add(new Tile(alternateTile));
+            }
+        }
+    }
 
     public Tile(String tile) {
         if (tile.equals("J")) {

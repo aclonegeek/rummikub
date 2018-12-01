@@ -1,5 +1,7 @@
 package core;
 
+import static org.junit.Assert.assertNotEquals;
+
 import java.util.ArrayList;
 
 import core.Globals.Colour;
@@ -413,6 +415,21 @@ public class MeldTest extends TestCase {
         Meld meld5 = new Meld();
         Meld meld6 = new Meld("");
         assertEquals(meld5.toString(), meld6.toString());
+    }
+    
+    public void testCopyConstructor() {
+        Meld originalMeld = new Meld("R1,R2,R3,J");
+        originalMeld.setIsInitialMeld(true);
+        originalMeld.setIsLocked(true);
+        
+        Meld newMeld = new Meld(originalMeld);
+        assertNotEquals(originalMeld, newMeld);
+        assertEquals(originalMeld.toString(), newMeld.toString());
+        assertEquals(originalMeld.getMeldType(), newMeld.getMeldType());
+        assertEquals(originalMeld.isInitialMeld(), newMeld.isInitialMeld());
+        assertEquals(originalMeld.isLocked(), newMeld.isLocked());
+        assertEquals(originalMeld.getSize(), newMeld.getSize());
+        assertEquals(originalMeld.getValue(), newMeld.getValue());
     }
 
     public void testIsValidIfRemoveTile() {

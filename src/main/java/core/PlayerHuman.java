@@ -18,11 +18,7 @@ public class PlayerHuman extends Player {
     protected ArrayList<Meld> play(ArrayList<Meld> tableState) {
         ArrayList<Meld> tableCopy = new ArrayList<>();
         for (Meld meld : tableState) {
-            Meld newMeld = new Meld();
-            for (int i = 0; i < meld.getSize(); i++) {
-                newMeld.addTile(new Tile(meld.getTile(i).toString()));
-            }
-            tableCopy.add(newMeld);
+            tableCopy.add(new Meld(meld));
         }
         
         System.out.println(this.toString());
