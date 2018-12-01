@@ -12,10 +12,7 @@ public class Table {
     public Table(Table table) {
         this.melds = new ArrayList<>();
         for (Meld meld : table.getState()) {
-            Meld newMeld = new Meld();
-            for (int i = 0; i < meld.getSize(); i++) {
-                newMeld.addTile(new Tile(meld.getTile(i).toString()));
-            }
+            Meld newMeld = new Meld(meld);
             melds.add(newMeld);
         }
     }

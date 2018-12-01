@@ -25,7 +25,7 @@ public class Hand {
         this.hand = new ArrayList<>();
         
         for (int i = 0; i < hand.getSize(); i++) {
-            this.hand.add(new Tile(hand.getTile(i).toString()));
+            this.hand.add(new Tile(hand.getTile(i)));
             this.sort();
         }
     }
