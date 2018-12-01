@@ -29,6 +29,10 @@ public class Stock {
         this.stock.removeIf(t -> existing.contains(t));
     }
 
+    public int getSize() {
+        return this.stock.size();
+    }
+
     public ArrayList<Tile> getStock() {
         return this.stock;
     }
@@ -45,8 +49,10 @@ public class Stock {
                 }
             }
         }
+        this.stock.add(new Tile("J"));
+        this.stock.add(new Tile("J"));
     }
-    
+
     // No duplicates, no jokers
     public void populateForDraw() {
         for (Colour colour : Colour.values()) {
