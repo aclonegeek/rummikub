@@ -37,7 +37,7 @@ public class Meld {
     
     public Meld(Meld meld) {
         this.meld = new ArrayList<>();
-        for(Tile tile : meld.meld) {
+        for (Tile tile : meld.meld) {
             this.meld.add(new Tile(tile));
         }
         this.meldType = meld.meldType;
