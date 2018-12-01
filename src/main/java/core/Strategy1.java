@@ -55,11 +55,7 @@ public class Strategy1 extends PlayBehaviour {
         // Make deep copy of workspace
         ArrayList<Meld> workspaceCopy = new ArrayList<Meld>();
         for (Meld meld : workspace) {
-            Meld newMeld = new Meld();
-            for (int i = 0; i < meld.getSize(); i++) {
-                newMeld.addTile(new Tile(meld.getTile(i).toString()));
-            }
-            workspaceCopy.add(newMeld);
+            workspaceCopy.add(new Meld(meld));
         }
 
         workspace = this.playUsingHand(hand, workspace);
