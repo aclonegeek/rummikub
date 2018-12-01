@@ -12,6 +12,9 @@ public class Game {
     protected ArrayList<Player> players;
     protected Table table;
     protected Map<Player, Integer> playerScores;
+    
+    protected Table savedTable;
+    protected Hand savedHand;
 
     // Testing related attributes
     private boolean testing = false;
@@ -56,6 +59,8 @@ public class Game {
         }
         
         this.table = new Table();
+        this.savedTable = new Table();
+        this.savedHand = new Hand();
 
         // Display each player's initial hand
         for (Player player : this.players) {
@@ -78,7 +83,6 @@ public class Game {
         this.setup();
 
         System.out.println("\n--- GAME ---");
-        Tile tile; // Used to store the tile drawn from the stock.
         ArrayList<Meld> workspace; // Store the player's workspace.
         Player winner = null;
         boolean winningCondition = false;
@@ -88,13 +92,18 @@ public class Game {
             for (Player player : this.players) {
                 System.out.println("Table:\n" + this.table.toString());
                 System.out.println(player.getName() + "'s turn");
-
+                this.setSavedState(player);
+                
                 workspace = player.play(this.table.getState());
+                
                 if (workspace == null) {
-                    tile = this.stock.draw();
-                    player.add(tile);
+                    player.add(this.stock.draw());
                 } else {
                     this.table.setState(workspace);
+                }
+                
+                if (!this.determineValidState(player)) {
+                    this.restoreSavedStateWithPenalty(player);
                 }
 
                 // Check for winning conditions
@@ -230,5 +239,26 @@ public class Game {
                 this.playerScores.put(winner, this.playerScores.get(winner) + player.getScore());
             }
         }
+    }
+    
+    protected void setSavedState(Player player) {
+        this.savedTable = new Table(this.table);
+        this.savedHand = new Hand(player.getHand());
+    }
+    
+    protected void restoreSavedStateWithPenalty(Player player) {
+        this.table = this.savedTable;
+        player.setHand(this.savedHand);
+        player.add(this.stock.draw());
+        player.add(this.stock.draw());
+        player.add(this.stock.draw());
+    }
+    
+    protected boolean determineValidState(Player player) {
+        if (!this.table.isValidState()) {
+            System.out.println("Table is in invalid state! Reverting back and applying penalty.");
+            return false;
+        }
+        return true;
     }
 }
