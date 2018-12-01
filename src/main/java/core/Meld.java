@@ -35,6 +35,16 @@ public class Meld {
         }
     }
     
+    public Meld(Meld meld) {
+        this.meld = new ArrayList<>();
+        this.meldType = MeldType.INVALID;
+        for(Tile tile : meld.meld) {
+            this.addTile(new Tile(tile));
+        }
+        this.isLocked = meld.isLocked;
+        this.isInitialMeld = meld.isInitialMeld;
+    }
+    
     public Tile addTile(Tile tile) {
         ArrayList<Tile> tempMeld = new ArrayList<>();
         tempMeld.add(tile);
