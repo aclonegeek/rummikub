@@ -1,5 +1,7 @@
 package core;
 
+import static org.junit.Assert.assertNotEquals;
+
 import core.Globals.Colour;
 import junit.framework.TestCase;
 
@@ -12,6 +14,13 @@ public class HandTest extends TestCase {
         Hand hand2 = new Hand("R4,G5,O1,R1,B12");
         assertEquals(5, hand2.getSize());
         assertEquals("[R1 R4 B12 G5 O1]", hand2.toString());
+    }
+    
+    public void testCopyConstructor() {
+        Hand hand1 = new Hand("R1,R2,R3,R4,R5,J");
+        Hand hand2 = new Hand(hand1);
+        assertNotEquals(hand1, hand2);
+        assertEquals(hand1.toString(), hand2.toString());
     }
 
     // Tests add()
