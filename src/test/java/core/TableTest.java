@@ -31,6 +31,11 @@ public class TableTest extends TestCase {
         melds1.add(meld1);
         table.setState(melds1);
         assertEquals("1: {B7 O7 G7}\n2: {R7}\n", table.toString());
+        for (Meld meld : table.getState()) {
+            for (int i = 0; i < meld.getSize(); i++) {
+                assertTrue(meld.getTile(i).isOnTable());
+            }
+        }
         
         // Create a run
         ArrayList<Meld> melds2 = new ArrayList<>();
@@ -38,6 +43,11 @@ public class TableTest extends TestCase {
         melds2.add(meld3);
         table.setState(melds2);
         assertEquals("1: {R1 R2 R3}\n", table.toString());
+        for (Meld meld : table.getState()) {
+            for (int i = 0; i < meld.getSize(); i++) {
+                assertTrue(meld.getTile(i).isOnTable());
+            }
+        }
     }
     
     public void testSetStateJokers() {
@@ -51,6 +61,11 @@ public class TableTest extends TestCase {
         melds1.add(meld1);
         table.setState(melds1);
         assertEquals("1: {B7 O7 G7}\n2: {R7}\n", table.toString());
+        for (Meld meld : table.getState()) {
+            for (int i = 0; i < meld.getSize(); i++) {
+                assertTrue(meld.getTile(i).isOnTable());
+            }
+        }
         
         // Create a run
         ArrayList<Meld> melds2 = new ArrayList<>();
@@ -58,6 +73,11 @@ public class TableTest extends TestCase {
         melds2.add(meld3);
         table.setState(melds2);
         assertEquals("1: {R1 R2 R3 J}\n", table.toString());
+        for (Meld meld : table.getState()) {
+            for (int i = 0; i < meld.getSize(); i++) {
+                assertTrue(meld.getTile(i).isOnTable());
+            }
+        }
     }
 
     public void testToString() {
