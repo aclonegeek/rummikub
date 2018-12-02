@@ -153,7 +153,7 @@ public class Meld {
         }
         
         // If meld has 1 joker
-        if (jokers.size() == 1) {
+        if (jokers.size() == 1 && tiles.get(0).isJoker() == false) {
             Tile joker = jokers.get(0);
             Tile tile = tiles.get(0);
             
@@ -187,6 +187,18 @@ public class Meld {
                 // Otherwise the joker can't be replaced. Check if the tile can still be added to the meld
                 tempMeld.addAll(this.meld);
                 tempMeld.add(tile);
+                
+                // Ensure that the tile being added doesn't create an invalid meld
+                if (determineMeldType(tempMeld) == MeldType.INVALID) {
+                    tempMeld.remove(tempMeld.size() - 1);
+                    Collections.sort(tempMeld, Comparator.comparingInt(Tile::getValue)); // Sort numerically
+                    joker = this.determineJokerType(joker, tempMeld);
+                    if (joker == null) { return null; }
+                    tempMeld.add(joker);
+                    this.buildMeld(tempMeld, releasedJoker);
+                    return null;
+                }
+                
                 Collections.sort(tempMeld, Comparator.comparingInt(Tile::getValue)); // Sort numerically
                 joker = this.determineJokerType(joker, tempMeld);
                 if (joker == null) { return null; }
@@ -439,6 +451,15 @@ public class Meld {
     public boolean containsTile(Tile tile) {
         for (Tile tempTile : this.meld) {
             if (tempTile.toString().equals(tile.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean containsJoker() {
+        for (Tile tempTile : this.meld) {
+            if (tempTile.isJoker()) {
                 return true;
             }
         }
