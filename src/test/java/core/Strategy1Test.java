@@ -45,6 +45,15 @@ public class Strategy1Test extends TestCase {
         Hand hand = new Hand("G1,G2,G3,G4,G8,O8,B8,R9,G5,O2,R11,R12,R7");
        assertEquals("[{R1 R2 R3}, {R10 O10 G10 B10}, {B5 B6 B7 B8}, {B8 G8 O8}, {G1 G2 G3 G4 G5}]", strategy1.determineInitialMove(hand, workspace).toString());
     }
+    
+    // Test first move with joker
+    // TODO: figure out why this doesn't work
+    public void testDetermineInitialMove5() {
+        Strategy1 strategy1 = new Strategy1();
+        ArrayList<Meld> workspace = new ArrayList<>();
+        Hand hand = new Hand("G10,O10,B10,R10,J,R7,R6,R5,R4");
+        assertEquals("[{R4 R5 R6 R7 J}]", strategy1.determineInitialMove(hand, workspace).toString());
+    }
 
     // 8a - player can play a single run
     public void testRegularMove1() {
@@ -182,8 +191,8 @@ public class Strategy1Test extends TestCase {
         workspace.add(meld4);
 
         Hand hand = new Hand("R1,R4,B8,B13,O1,G9");
-        assertEquals("[{R1 R2 R3 R4}, {G9 G10 G11 G12}, {B8 B9 B10 B11 B12 B13}, {B1 G1 O1 R1}]", strategy1.determineRegularMove(hand, workspace).toString());
-        assertEquals("[O1]", hand.toString());
+        assertEquals("[{R2 R3 R4}, {G9 G10 G11 G12}, {B8 B9 B10 B11 B12 B13}, {G1 O1 R1}, {O1 R1 B1}]", strategy1.determineRegularMove(hand, workspace).toString());
+        assertEquals("[]", hand.toString());
     }
 
     // 9g - player can play a meld that requires organization of several melds on the table
@@ -216,5 +225,23 @@ public class Strategy1Test extends TestCase {
         Hand hand = new Hand("G8");
         assertEquals(null, strategy1.determineRegularMove(hand, workspace));
         assertEquals("[G8]", hand.toString());
+    }
+    
+    // Regular move with joker
+    public void testRegularMove14() {
+        Strategy1 strategy1 = new Strategy1();
+        ArrayList<Meld> workspace = new ArrayList<>();
+        Meld meld1 = new Meld("R1,R2,R3");
+        Meld meld2 = new Meld("G10,G11,G12");
+        Meld meld3 = new Meld("B9,B10,B11,B12");
+        Meld meld4 = new Meld("B1,G1,O1");
+        workspace.add(meld1);
+        workspace.add(meld2);
+        workspace.add(meld3);
+        workspace.add(meld4);
+
+        Hand hand = new Hand("R1,R4,B8,B13,O1,G9,J");
+        assertEquals("[{R2 R3 R4}, {G9 G10 G11 G12}, {B8 B9 B10 B11 B12 B13}, {G1 O1 R1}, {R1 O1 B1 J}]", strategy1.determineRegularMove(hand, workspace).toString());
+        assertEquals("[]", hand.toString());
     }
 }
