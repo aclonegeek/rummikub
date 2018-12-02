@@ -14,7 +14,7 @@ public abstract class PlayBehaviour {
         for (int i = 0; i < hand.getSize(); i++) {
             ArrayList<Meld> melds = new ArrayList<>();
             Meld meld = new Meld();
-            meld.addTile(hand.getTile(i));
+            meld.addTile(new Tile(hand.getTile(i)));
             melds.add(meld);
             allMelds.add(melds);
         }
@@ -24,14 +24,11 @@ public abstract class PlayBehaviour {
         for (int i = 0; i < hand.getSize(); i++) {
             for (ArrayList<Meld> arrayList : allMelds) {
                 for (int j = 0; j < arrayList.size(); j++) {
-                    // Clone meld
-                    Meld newMeld = new Meld();
-                    for (int k = 0; k < arrayList.get(j).getSize(); k++) {
-                        newMeld.addTile(arrayList.get(j).getTile(k));
-                    }
+                    //Deep copy meld
+                    Meld newMeld = new Meld(arrayList.get(j));
 
                     // If tile is added to cloned meld, add this meld to ArrayList
-                    if (newMeld.addTile(hand.getTile(i)) != null) {
+                    if (newMeld.addTile(new Tile(hand.getTile(i))) != null) {
                         arrayList.add(newMeld);
                     }
                 }
@@ -126,7 +123,10 @@ public abstract class PlayBehaviour {
         }
 
         workspaceCopy = this.playUsingHand(hand, workspaceCopy);
-        workspaceCopy = this.playUsingHandAndTable(hand, workspaceCopy);
+        workspaceCopy = this.playUsingHandAndTable_AddToPotentialMeldsInHand(hand, workspaceCopy);
+        workspaceCopy = this.playUsingHandAndTable_AddToTilesInHand(hand, workspaceCopy);
+        workspaceCopy = this.playUsingHandAndTable_AddToMeldsOnTable(hand, workspaceCopy);
+
         if (hand.getSize() == 0) {
             return workspaceCopy;
         } else {
@@ -150,54 +150,118 @@ public abstract class PlayBehaviour {
         return workspace;
     }
 
-    // Plays using both tiles in hand and on table (but not only from hand)
-    protected ArrayList<Meld> playUsingHandAndTable(Hand hand, ArrayList<Meld> workspace) {
-        // Add tiles on table to potential melds in hand, removing from the first and last index of the meld
+    // Add tiles on table to potential melds in hand, removing from the first and last index of the meld
+    protected ArrayList<Meld> playUsingHandAndTable_AddToPotentialMeldsInHand(Hand hand, ArrayList<Meld> workspace) {
         ArrayList<Meld> potentialMelds = this.createPotentialMeldsFromHand(hand);
         for (Meld potentialMeld : potentialMelds) {
+            // Remove tiles from potential meld that are no longer in the player's hand (ie. that have already been played)
+            for (int i = 0; i < potentialMeld.getSize(); i++) {
+                if (!hand.containsTile(potentialMeld.getTile(i))) {
+                    potentialMeld.setIsLocked(false);
+                    potentialMeld.removeTile(i);
+                    potentialMeld.setIsLocked(true);
+                }
+            }
+            
+            // If it's no longer a potential meld of size 2, we don't worry about it here
+            if (potentialMeld.getSize() < 2) { continue; }
+            
             for (int i = 0; i < workspace.size(); i++) {
                 Meld tempMeld = workspace.get(i);
-                if (tempMeld.isValidIfRemoveTile(0) && potentialMeld.addTile(tempMeld.getTile(0)) != null) {
+                
+                // If meld contains a joker, don't do anything to this meld
+                if (tempMeld.containsJoker()) { continue; }
+                
+                // Attempt to split meld and extract a tile to add to the potential meld
+                if (tempMeld.getSize() >= 7) {
+                    for (int j = 3; j < tempMeld.getSize() - 3; j++) {
+                        if (potentialMeld.addTile(tempMeld.getTile(j)) != null) {
+                            Meld splitMeld = tempMeld.splitMeld(j);
+                            splitMeld.removeTile(0);
+                            workspace.add(splitMeld);
+                            workspace.add(potentialMeld);
+                        }
+                    }
+                }
+                
+                //Otherwise, just work from the front and back of the meld
+                int n = tempMeld.getSize() - 1;
+                Tile firstTile = tempMeld.getTile(0);
+                Tile lastTile = tempMeld.getTile(n);
+                
+                // If tempMeld is valid if first tile is removed, and that tile can be added to the potentialMeld: do it
+                // break because we now have a valid meld that can be added to the workspace
+                firstTile.setOnTable(false);
+                if (tempMeld.isValidIfRemoveTile(0) && potentialMeld.addTile(firstTile) != null) {
                     tempMeld.removeTile(0);
                     hand.remove(potentialMeld);
                     workspace.add(potentialMeld);
+                    firstTile.setOnTable(true);
                     break;
                 }
-                int n = tempMeld.getSize() - 1;
-                if (tempMeld.isValidIfRemoveTile(n) && potentialMeld.addTile(tempMeld.getTile(n)) != null) {
+                
+                // If tempMeld is valid if last tile is removed, and that tile can be added to the potentialMeld: do it
+                // break because we now have a valid meld that can be added to the workspace
+                lastTile.setOnTable(false);
+                if (tempMeld.isValidIfRemoveTile(n) && potentialMeld.addTile(lastTile) != null) {
                     tempMeld.removeTile(n);
                     hand.remove(potentialMeld);
                     workspace.add(potentialMeld);
+                    lastTile.setOnTable(true);
                     break;
                 }
+                
+                firstTile.setOnTable(true);
+                lastTile.setOnTable(true);
             }
         }
 
-        // Add tiles on table to tiles in hand, removing from the first and last index of the meld
+        return workspace;
+    }
+    
+    // Add tiles on table to tiles in hand, removing from the first and last index of the meld
+    protected ArrayList<Meld> playUsingHandAndTable_AddToTilesInHand(Hand hand, ArrayList<Meld> workspace) {
         for (int i = 0; i < hand.getSize(); i++) {
             Meld newMeld = new Meld();
             newMeld.addTile(hand.getTile(i));
 
             Meld meldRemovedFrom = new Meld();
-            Tile tileRemoved = new Tile("R1");
+            Tile tileRemoved = new Tile("R0");
 
             for (int j = 0; j < workspace.size(); j++) {
                 Meld tempMeld = workspace.get(j);
-                if (tempMeld.isValidIfRemoveTile(0) && newMeld.addTile(tempMeld.getTile(0)) != null) {
+                
+                // If meld contains a joker, don't do anything to this meld
+                if (tempMeld.containsJoker()) { continue; }
+                
+                int n = tempMeld.getSize() - 1;
+                Tile firstTile = tempMeld.getTile(0);
+                Tile lastTile = tempMeld.getTile(n);
+                
+                // If tempMeld is valid if first tile is removed, and that tile can be added to the potentialMeld: do it
+                firstTile.setOnTable(false);
+                if (tempMeld.isValidIfRemoveTile(0) && newMeld.addTile(firstTile) != null) {
                     tileRemoved = tempMeld.getTile(0);
                     meldRemovedFrom = tempMeld;
                     tempMeld.removeTile(0);
                     hand.remove(tileRemoved);
                 }
-                int n = tempMeld.getSize() - 1;
-                if (tempMeld.isValidIfRemoveTile(n) && newMeld.addTile(tempMeld.getTile(n)) != null) {
+                
+                // If tempMeld is valid if last tile is removed, and that tile can be added to the potentialMeld: do it
+                lastTile.setOnTable(false);
+                if (tempMeld.isValidIfRemoveTile(n) && newMeld.addTile(lastTile) != null) {
                     tileRemoved = tempMeld.getTile(n);
                     meldRemovedFrom = tempMeld;
                     tempMeld.removeTile(n);
                     hand.remove(tileRemoved);
                 }
+                
+                firstTile.setOnTable(true);
+                lastTile.setOnTable(true);
             }
 
+            // If newMeld is valid, add it to the table; otherwise, disregard it
+            // TODO: I don't think meldRemovedFrom.addTile(tileRemoved) should be done here... could be more than one meld
             if (newMeld.isValidMeld()) {
                 workspace.add(newMeld);
                 hand.remove(i);
@@ -206,11 +270,19 @@ public abstract class PlayBehaviour {
             }
         }
 
-        // Add remaining tiles in hand to each meld on table
+        return workspace;
+    }
+    
+    // Attempt to add remaining tiles to each meld on table
+    protected ArrayList<Meld> playUsingHandAndTable_AddToMeldsOnTable(Hand hand, ArrayList<Meld> workspace) {
         while (hand.getSize() > 0) {
             boolean tileAdded = false;
             for (int i = 0; i < hand.getSize(); i++) {
                 for (Meld tempMeld : workspace) {
+                    // If meld contains a joker, don't do anything to this meld
+                    if (tempMeld.containsJoker()) { continue; }
+                    
+                    // Attempt to add tile to each meld; if added, remove it from the hand
                     if (tempMeld.addTile(hand.getTile(i)) != null) {
                         tileAdded = true;
                         hand.remove(i);
@@ -218,11 +290,42 @@ public abstract class PlayBehaviour {
                     }
                 }
             }
+            // If no tiles were added during this iteration, we're done
             if (!tileAdded) {
                 break;
             }
         }
 
+        return workspace;
+    }
+    
+    // Rearrange workspace before trying to play more tiles
+    protected ArrayList<Meld> rearrangeWorkspace(ArrayList<Meld> workspace) {
+        for (int i = 0; i < workspace.size(); i++) {
+            Meld tempMeld = workspace.get(i);
+            
+            if (tempMeld.containsJoker()) { continue; }
+            int n = tempMeld.getSize() - 1;
+            Tile firstTile = tempMeld.getTile(0);
+            Tile lastTile = tempMeld.getTile(n);
+
+            if (tempMeld.isValidIfRemoveTile(0)) {
+                for (int j = i; j < workspace.size(); j++) {
+                    if (workspace.get(j).addTile(firstTile) != null) {
+                        tempMeld.removeTile(0);
+                    }
+                }
+            }
+            
+            if (tempMeld.isValidIfRemoveTile(n)) {
+                for (int j = i; j < workspace.size(); j++) {
+                    if (workspace.get(j).addTile(lastTile) != null) {
+                        tempMeld.removeTile(n);
+                    }
+                }
+            }
+        }
+        
         return workspace;
     }
     
