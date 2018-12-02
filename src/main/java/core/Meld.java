@@ -184,24 +184,30 @@ public class Meld {
                     return this.buildMeld(tempMeld, releasedJoker);
                 }
                 
+                
                 // Otherwise the joker can't be replaced. Check if the tile can still be added to the meld
                 tempMeld.addAll(this.meld);
                 tempMeld.add(tile);
+                Collections.sort(tempMeld, Comparator.comparingInt(Tile::getValue)); // Sort numerically
                 
-                // Ensure that the tile being added doesn't create an invalid meld
-                if (determineMeldType(tempMeld) == MeldType.INVALID) {
-                    tempMeld.remove(tempMeld.size() - 1);
+                // Try adjusting the joker to this newly added tile
+                Tile adjustedJoker = this.determineJokerType(joker, tempMeld);
+                
+                // If this joker could not be added to this meld because of the new tile
+                // Then the new tile must have mad the whole meld invalid
+                if (adjustedJoker == null) {
+                    // Remove the tile
+                    tempMeld.remove(tile);
                     Collections.sort(tempMeld, Comparator.comparingInt(Tile::getValue)); // Sort numerically
+                    
+                    // Add the joker back
                     joker = this.determineJokerType(joker, tempMeld);
-                    if (joker == null) { return null; }
                     tempMeld.add(joker);
                     this.buildMeld(tempMeld, releasedJoker);
                     return null;
                 }
                 
-                Collections.sort(tempMeld, Comparator.comparingInt(Tile::getValue)); // Sort numerically
-                joker = this.determineJokerType(joker, tempMeld);
-                if (joker == null) { return null; }
+                // Otherwise, the joker and the new tile could be added to the new meld
                 tempMeld.add(joker);
                 return this.buildMeld(tempMeld, releasedJoker);
             }
