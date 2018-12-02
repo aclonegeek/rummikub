@@ -58,7 +58,7 @@ public class Hand {
     // Removes each tile in meld from hand
     public void remove(Meld meld) {
         for (int i = 0; i < meld.getSize(); i++) {
-            this.hand.remove(meld.getTile(i));
+            this.remove(meld.getTile(i));
         }
     }
 
