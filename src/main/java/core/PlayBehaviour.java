@@ -311,6 +311,7 @@ public abstract class PlayBehaviour {
 
             if (tempMeld.isValidIfRemoveTile(0)) {
                 for (int j = i; j < workspace.size(); j++) {
+                    if (workspace.get(j).containsJoker()) { continue; }
                     if (workspace.get(j).addTile(firstTile) != null) {
                         tempMeld.removeTile(0);
                     }
@@ -319,6 +320,7 @@ public abstract class PlayBehaviour {
             
             if (tempMeld.isValidIfRemoveTile(n)) {
                 for (int j = i; j < workspace.size(); j++) {
+                    if (workspace.get(j).containsJoker()) { continue; }
                     if (workspace.get(j).addTile(lastTile) != null) {
                         tempMeld.removeTile(n);
                     }
