@@ -26,14 +26,14 @@ public class PlayBehaviourTest extends TestCase {
         assertEquals("[{R1 R2 R3}, {R1 R2 R3 R4}, {R1 R2 R3 R4 R5}, {R1 R2 R3 R4 R5 R6}, {R1 R2 R3 R4 R5 R6 R7}, {R2 R3 R4}, {R2 R3 R4 R5}, {R2 R3 R4 R5 R6}, {R2 R3 R4 R5 R6 R7}, {R3 R4 R5}, {R3 R4 R5 R6}, {R3 R4 R5 R6 R7}, {R4 R5 R6}, {R4 R5 R6 R7}, {R5 R6 R7}]",
                      strategy1.createMeldsFromHand(hand5).toString());
         
-        // Joker only ever appears at the ned, does not create {J R2 R3}, {R1 J R3}, etc.
         Hand hand6 = new Hand("R1,R2,R3,J,O10,B10");
         ArrayList<Meld> result = strategy1.createMeldsFromHand(hand6);
-        assertEquals("[{R1 R2 J}, {R2 R3 J}, {R1 R2 R3 J}, {B10 O10 J}, {R1 R2 R3}]", result.toString());
+        assertEquals("[{R1 R2 J}, {R1 J R3}, {R2 R3 J}, {R1 R2 R3 J}, {B10 O10 J}, {R1 R2 R3}]", result.toString());
         assertEquals(6, result.get(0).getValue());
-        assertEquals(9, result.get(1).getValue());
-        assertEquals(10, result.get(2).getValue());
-        assertEquals(30, result.get(3).getValue());
+        assertEquals(6, result.get(1).getValue());
+        assertEquals(9, result.get(2).getValue());
+        assertEquals(10, result.get(3).getValue());
+        assertEquals(30, result.get(4).getValue());
     }
 
     public void testCreatePotentialMeldsFromHand() {

@@ -47,7 +47,6 @@ public class Strategy1Test extends TestCase {
     }
     
     // Test first move with joker
-    // TODO: figure out why this doesn't work
     public void testDetermineInitialMove5() {
         Strategy1 strategy1 = new Strategy1();
         ArrayList<Meld> workspace = new ArrayList<>();
@@ -241,7 +240,7 @@ public class Strategy1Test extends TestCase {
         workspace.add(meld4);
 
         Hand hand = new Hand("R1,R4,B8,B13,O1,G9,J");
-        assertEquals("[{R2 R3 R4}, {G9 G10 G11 G12}, {B8 B9 B10 B11 B12 B13}, {G1 O1 R1}, {R1 O1 B1 J}]", strategy1.determineRegularMove(hand, workspace).toString());
+        assertEquals("[{R2 R3 R4}, {G9 G10 G11 G12}, {B8 B9 B10 B11 B12 B13}, {B1 G1 O1 R1}, {R1 O1 J}]", strategy1.determineRegularMove(hand, workspace).toString());
         assertEquals("[]", hand.toString());
     }
 }

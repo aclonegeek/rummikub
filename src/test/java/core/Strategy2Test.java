@@ -146,13 +146,13 @@ public class Strategy2Test extends TestCase {
         Strategy2 strategy2 = new Strategy2();
         ArrayList<Meld> workspace = new ArrayList<>();
 
-        workspace.add(new Meld("R1,R2,R3,R4,R5,R6,R7"));
+        workspace.add(new Meld("R1,R2,R3,R4,R5,R6"));
         workspace.add(new Meld("G2,G3,G4,G5"));
         workspace.add(new Meld("G3,R3,B3,O3"));
-        assertEquals("[{R1 R2 R3 R4 R5 R6 R7}, {G2 G3 G4 G5}, {G3 R3 B3 O3}]", workspace.toString());
+        assertEquals("[{R1 R2 R3 R4 R5 R6}, {G2 G3 G4 G5}, {G3 R3 B3 O3}]", workspace.toString());
 
-        Hand hand = new Hand("R2,R8,G1,O7,J");
-        assertEquals("[{R2 R3 R4 R5 R6 R7 R8}, {G3 G4 G5}, {R3 B3 O3}, {R1 R2 J}, {G1 G2 G3}]", strategy2.determineRegularMove(hand, workspace).toString());
+        Hand hand = new Hand("R2,R7,G1,O7,J");
+        assertEquals("[{R2 R3 R4 R5 R6 R7}, {G3 G4 G5}, {R3 B3 O3}, {R1 R2 J}, {G1 G2 G3}]", strategy2.determineRegularMove(hand, workspace).toString());
         assertEquals(1, hand.getSize());
     }
 }
