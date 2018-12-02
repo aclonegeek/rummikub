@@ -135,13 +135,20 @@ public class HandTest extends TestCase {
         hand.add(tile4);
         hand.add(tile5);
 
-        assertEquals("R1", hand.remove(tile1).toString());
+        assertEquals("R1", hand.remove(new Tile("R1")).toString());
         assertEquals("[J R1 R2 G3]", hand.toString());
-        assertEquals("R1", hand.remove(tile1).toString());
-        assertEquals(null, hand.remove(tile1));
-        assertEquals("R2", hand.remove(tile2).toString());
-        assertEquals("G3", hand.remove(tile3).toString());
-        assertEquals("J", hand.remove(tile5).toString());
+        assertEquals("R1", hand.remove(new Tile("R1")).toString());
+        assertEquals(null, hand.remove(new Tile("R1")));
+        assertEquals("R2", hand.remove(new Tile("R2")).toString());
+        assertEquals("G3", hand.remove(new Tile("G3")).toString());
+        assertEquals("J", hand.remove(new Tile("J")).toString());
         assertEquals(0, hand.getSize());
+    }
+    
+    public void testRemoveByMeld() {
+        Hand hand = new Hand("R1,R2,R3,R4");
+        Meld meld = new Meld("R1,R2,R3");
+        hand.remove(meld);
+        assertEquals("[R4]", hand.toString());
     }
 }
