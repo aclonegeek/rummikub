@@ -308,6 +308,7 @@ public class Meld {
                 }
 
                 // Set the joker colour as the first colour in the available colours list
+                if (availableColours.size() == 0) { return null; }
                 joker.setColour(availableColours.get(0));
                 joker.setValue(meld.get(0).value);
                 
