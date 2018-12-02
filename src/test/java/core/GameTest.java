@@ -429,7 +429,7 @@ public class GameTest extends TestCase {
         workspace = game.players.get(2).play(game.table.getState());
         if (workspace != null) { game.table.setState(workspace); }
         else { game.players.get(2).add(game.stock.draw()); }
-        assertEquals("1: {R12 G12 B12}\n2: {R10 B10 G10}\n3: {R8 R9 R10 R11 R12}\n4: {G8 G9 G10 G11}\n5: {B12 G12 O12}\n", game.table.toString());  // req. 9e
+        assertEquals("1: {R12 G12 B12}\n2: {R10 B10 G10}\n3: {R8 R9 R10 R11}\n4: {G8 G9 G10 G11}\n5: {B12 G12 O12 R12}\n", game.table.toString());  // req. 9e
     }
     
     public void testGame6() {
