@@ -130,4 +130,16 @@ public class Strategy4Test extends TestCase {
         Hand hand = new Hand("R12,B2,G2,O2,B3,B4,B5,B6,O1,O2");
         assertEquals("[{R1 R2 R3}, {G2 R2 B2 O2}, {R9 R10 R11 R12}, {B2 G2 O2}, {B3 B4 B5 B6}]", strategy4.determineRegularMove(hand, workspace).toString());
     }
+    
+    // Determine regular move with set prioritization, where doing so means the other run cannot be played
+    public void testDetermineRegularMove5() {
+        Strategy4 strategy4 = new Strategy4();
+        ArrayList<Meld> workspace = new ArrayList<>();
+        workspace.add(new Meld("R1,R2,R3"));
+        workspace.add(new Meld("G2,R2,B2"));
+        
+        Hand hand = new Hand("O2,G2,B2,B3,B4");
+        assertEquals("[{R1 R2 R3}, {G2 R2 B2}, {B2 G2 O2}]", strategy4.determineRegularMove(hand, workspace).toString());
+        assertEquals("[B3 B4]", hand.toString());
+    }
 }
