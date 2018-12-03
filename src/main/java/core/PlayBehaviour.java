@@ -163,7 +163,7 @@ public abstract class PlayBehaviour {
                 }
             }
             
-            // If it's no longer a potential meld of size 2, we don't worry about it here
+            // If meld is no longer a potential meld of size 2, we don't worry about it here
             if (potentialMeld.getSize() < 2) { continue; }
             
             for (int i = 0; i < workspace.size(); i++) {
@@ -189,7 +189,7 @@ public abstract class PlayBehaviour {
                 Tile firstTile = tempMeld.getTile(0);
                 Tile lastTile = tempMeld.getTile(n);
                 
-                // If tempMeld is valid if first tile is removed, and that tile can be added to the potentialMeld: do it
+                // If tempMeld is valid when first tile is removed, and that tile can be added to the potentialMeld: do it
                 // break because we now have a valid meld that can be added to the workspace
                 firstTile.setOnTable(false);
                 if (tempMeld.isValidIfRemoveTile(0) && potentialMeld.addTile(firstTile) != null) {
@@ -200,7 +200,7 @@ public abstract class PlayBehaviour {
                     break;
                 }
                 
-                // If tempMeld is valid if last tile is removed, and that tile can be added to the potentialMeld: do it
+                // If tempMeld is valid when last tile is removed, and that tile can be added to the potentialMeld: do it
                 // break because we now have a valid meld that can be added to the workspace
                 lastTile.setOnTable(false);
                 if (tempMeld.isValidIfRemoveTile(n) && potentialMeld.addTile(lastTile) != null) {
@@ -261,7 +261,6 @@ public abstract class PlayBehaviour {
             }
 
             // If newMeld is valid, add it to the table; otherwise, disregard it
-            // TODO: I don't think meldRemovedFrom.addTile(tileRemoved) should be done here... could be more than one meld
             if (newMeld.isValidMeld()) {
                 workspace.add(newMeld);
                 hand.remove(i);
@@ -299,7 +298,7 @@ public abstract class PlayBehaviour {
         return workspace;
     }
     
-    // Rearrange workspace before trying to play more tiles
+    // Tries to add the first and last tile in each meld to all proceding melds
     protected ArrayList<Meld> rearrangeWorkspace(ArrayList<Meld> workspace) {
         for (int i = 0; i < workspace.size(); i++) {
             Meld tempMeld = workspace.get(i);
