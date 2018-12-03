@@ -493,6 +493,10 @@ public class Meld {
         }
         return true;
     }
+    
+    public String toHighlightedString() {
+        return this.meld.stream().map(t -> t.toHighlightedString()).collect(Collectors.joining(" ", "{", "}"));
+    }
 
     @Override
     public String toString() {

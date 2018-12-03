@@ -22,6 +22,7 @@ public class Table {
     }
 
     public void setState(ArrayList<Meld> melds) {
+        System.out.println("Table before Set: " + this.toHighlightedString(melds));
         for (Meld meld : melds) {
             meld.setIsLocked(true);
             for (int i = 0; i < meld.getSize(); i++) {
@@ -42,6 +43,15 @@ public class Table {
             }
         }
         return true;
+    }
+    
+    public String toHighlightedString(ArrayList<Meld> workspace) {
+        String table = new String();
+        int counter = 1;
+        for (Meld meld : workspace) {
+            table += counter++ + ": " + meld.toHighlightedString() +"\n";
+        }
+        return table;
     }
 
     @Override

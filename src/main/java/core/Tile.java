@@ -13,6 +13,9 @@ public class Tile {
     private ArrayList<Tile> alternateState;
     private boolean isJoker = false;
     private boolean isReplaced = false;
+    
+    // Highlighting
+    public boolean fromMeld = false;
 
     public Tile(Colour colour, int value) {
         this.colour = colour;
@@ -20,6 +23,7 @@ public class Tile {
     }
     
     public Tile(Tile tile) {
+        // State
         this.colour = tile.colour;
         this.value = tile.value;
         this.onTable = tile.onTable;
@@ -32,6 +36,9 @@ public class Tile {
                 alternateState.add(new Tile(alternateTile));
             }
         }
+        
+        // Highlighting
+        this.fromMeld = tile.fromMeld;
     }
 
     public Tile(String tile) {
@@ -105,6 +112,24 @@ public class Tile {
     public boolean jokerEquals(Tile tile) {
         return (this.colour == tile.getColour() && this.value == tile.getValue())
                 || this.alternateState.stream().anyMatch(t -> t.equals(tile));
+    }
+    
+    public String toHighlightedString() {
+        String symbol = "";
+        
+        if (this.onTable == false && this.fromMeld) {
+            symbol += "*!";
+        } else if (this.onTable == false) {
+            symbol += "*";
+        } else if (this.fromMeld) {
+            symbol += "!";
+        }
+        
+        if (this.isJoker) {
+            return symbol + this.toString();
+        }
+        System.out.println(this.toString() + " => onTable = " + this.onTable);
+        return symbol + this.toString();
     }
 
     @Override
