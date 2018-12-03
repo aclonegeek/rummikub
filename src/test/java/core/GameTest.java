@@ -939,7 +939,7 @@ public class GameTest extends TestCase {
         
         assertEquals("1: {R1 R2 R3}\n2: {G4 O4 B4}\n3: {O10 O11 O12}\n", game.table.toString());
         assertEquals(6, game.players.get(0).getHandSize());
-        //assertEquals(6, game.players.get(1).getLowestHandCount());
+        assertEquals(6, game.players.get(1).getLowestHandCount());
     }
     
     // Test case where table state is valid and does not revert back

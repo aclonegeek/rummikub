@@ -248,11 +248,21 @@ public class Game {
     
     // Restore state (table and current player's hand)
     protected void restoreMementoWithPenalty(GameMemento memento, Player player) {
-        System.out.println("restore");
         this.table = memento.getTableState();
         player.setHand(memento.getHandState());
         player.add(this.stock.draw());
         player.add(this.stock.draw());
         player.add(this.stock.draw());
+        
+        // Reset lowest hand counts
+        int newLowestHandCount = 100;
+        for (Player thePlayer : this.players) {
+            if (thePlayer.getHandSize() < newLowestHandCount) {
+                newLowestHandCount = thePlayer.getHandSize();
+            }
+        }
+        for (Player thePlayer : this.players) {
+            thePlayer.setLowestHandCount(newLowestHandCount);
+        }
     }
 }
