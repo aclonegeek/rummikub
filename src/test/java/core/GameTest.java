@@ -76,6 +76,59 @@ public class GameTest extends TestCase {
         assertTrue(game.playerScores.get(player3).equals(105));
     }
     
+    public void testTableStateConsistency() {
+        ArrayList<Meld> melds = new ArrayList<>();
+        melds.add(new Meld("R1,R2,R3,R4"));
+        melds.add(new Meld("O2,B2,J"));
+        Table table = new Table();
+        table.setState(melds);
+        Table tableCopy = new Table(table);
+        
+        Player player1 = new Player1();
+        Hand hand = new Hand("O1,J");
+        player1.setHand(hand);
+        player1.setInitialMove(false);
+        
+        ArrayList<Meld> originalState = tableCopy.getState();
+        ArrayList<Meld> newState = player1.play(table.getState());
+        assertEquals("[{R1 R2 R3 R4}, {O2 B2 J}]", originalState.toString());
+        assertEquals("[{R2 R3 R4}, {O2 B2 J}, {O1 R1 J}]", newState.toString());
+        
+        // Meld 0: verify tiles maintain state
+        Meld originalMeld0 = originalState.get(0);
+        Meld newMeld0 = newState.get(0);
+        assertEquals(originalMeld0.isLocked(), newMeld0.isLocked());
+        assertEquals(originalMeld0.isInitialMeld(), newMeld0.isInitialMeld());
+        for (int i = 1; i < newMeld0.getSize(); i++) {
+            assertTrue(newMeld0.getTile(i).isOnTable());
+            assertEquals(newMeld0.getTile(i).toString(), originalMeld0.getTile(i + 1).toString());
+            assertEquals(newMeld0.getTile(i).isJoker(), originalMeld0.getTile(i + 1).isJoker());
+            assertEquals(newMeld0.getTile(i).isReplaced(), originalMeld0.getTile(i + 1).isReplaced());
+            assertEquals(newMeld0.getTile(i).getAlternateState(), originalMeld0.getTile(i + 1).getAlternateState());
+        }
+        
+        // Meld 1: verify tiles maintain state
+        Meld originalMeld1 = originalState.get(1);
+        Meld newMeld1 = newState.get(1);
+        assertEquals(originalMeld1.isLocked(), newMeld1.isLocked());
+        assertEquals(originalMeld1.isInitialMeld(), newMeld1.isInitialMeld());
+        for (int i = 1; i < newMeld1.getSize(); i++) {
+            assertTrue(newMeld1.getTile(i).isOnTable());
+            assertEquals(newMeld1.getTile(i).toString(), originalMeld1.getTile(i).toString());
+            assertEquals(newMeld1.getTile(i).isJoker(), originalMeld1.getTile(i).isJoker());
+            assertEquals(newMeld1.getTile(i).isReplaced(), originalMeld1.getTile(i).isReplaced());
+            if (newMeld1.getTile(i).isJoker()) {
+                assertEquals(newMeld1.getTile(i).getAlternateState().toString(), originalMeld1.getTile(i).getAlternateState().toString());
+            }
+        }
+        
+        // Meld 2: verify the two new tiles added to workspace have isOnTable == false
+        Meld newMeld2 = newState.get(2);
+        assertFalse(newMeld2.getTile(0).isOnTable());
+        assertTrue(newMeld2.getTile(1).isOnTable());
+        assertFalse(newMeld2.getTile(2).isOnTable());
+    }
+    
     public void testGame1() {
         Hand humanHand = new Hand("R1,R11,R13,B2,B3,B9,G1,G8,G9,G11,G12,G13,O1,O7");
         Hand p1Hand = new Hand("R5,R7,R8,R11,R12,B3,B10,B11,G5,G8,G10,O2,O5,O10");
