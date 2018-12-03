@@ -836,7 +836,7 @@ public class GameTest extends TestCase {
         else { game.players.get(1).add(game.stock.draw()); }
         assertEquals(null, workspace);
         assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n", game.table.toString());
-
+        
         // P2 plays initial melds
         workspace = game.players.get(2).play(game.table.getState());
         if (workspace != null) { game.table.setState(workspace); }
@@ -1038,5 +1038,54 @@ public class GameTest extends TestCase {
         
         assertEquals("1: {R1 R2 R3}\n2: {G4 O4 B4}\n3: {O10 O11 O12}\n4: {G1 G2 G3}\n", game.table.toString());
         assertEquals(1, game.players.get(0).getHandSize());
+    }
+    
+    public void testTileHighlighting() {
+        // Setting individual players
+        Player playerHuman = new PlayerHuman("Human");
+        Player player1 = new Player1("p1");
+        playerHuman.setInitialMove(false);
+        player1.setInitialMove(false);
+        
+        // Setting player hands
+        Hand humanHand = new Hand("G12,B12");
+        Hand p1Hand = new Hand("G11,G12,O7");
+        playerHuman.setHand(humanHand);
+        player1.setHand(p1Hand);
+        
+        // Setting player list
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1));
+        
+        // Setting table
+        ArrayList<Meld> melds = new ArrayList<>();
+        Table table = new Table();
+        melds.add(new Meld("R10,B10,O10,G10"));
+        melds.add(new Meld("R10,R11,R12,R13"));
+        melds.add(new Meld("B9,G9,O9"));
+        System.out.println("-------- RIGGED TABLE ---------");
+        table.setState(melds);
+        System.out.println("-------- END RIGGED TABLE ---------");
+        
+        // Setting stock
+        ArrayList<Tile> tiles = new ArrayList<>();
+        tiles.add(new Tile("B1"));
+        tiles.add(new Tile("B2"));
+        tiles.add(new Tile("B3"));
+        Stock stock = new Stock(tiles);
+        
+        // Initializing game
+        Game game = new Game(true);
+        game.rig(players, stock);
+        game.setup();
+        game.table = table;
+        
+        // P1 plays
+        ArrayList<Meld> workspace = new ArrayList<>();
+        workspace = game.players.get(1).play(game.table.getState());
+        if (workspace != null) { game.table.setState(workspace); }
+        else { game.players.get(1).add(game.stock.draw()); }
+
+        System.out.println(game.table.toString());
+        
     }
 }
