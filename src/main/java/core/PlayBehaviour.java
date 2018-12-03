@@ -159,7 +159,7 @@ public abstract class PlayBehaviour {
                 if (!hand.containsTile(potentialMeld.getTile(i))) {
                     potentialMeld.setIsLocked(false);
                     potentialMeld.removeTile(i);
-                    potentialMeld.setIsLocked(true);
+                    if (potentialMeld.containsJoker()) { potentialMeld.setIsLocked(true); }
                 }
             }
             
