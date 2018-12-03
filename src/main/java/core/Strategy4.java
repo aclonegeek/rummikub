@@ -75,8 +75,13 @@ public class Strategy4 extends PlayBehaviour {
             workspaceCopy.add(new Meld(meld));
         }
         
-        workspace = this.playUsingHand(filteredHand, workspace);
-        workspace = this.playUsingHandAndTable(filteredHand, workspace);
+        for (int i = 0; i < 3; i++) {
+            workspace = this.playUsingHand(filteredHand, workspace);
+            workspace = this.playUsingHandAndTable_AddToPotentialMeldsInHand(filteredHand, workspace);
+            workspace = this.playUsingHandAndTable_AddToTilesInHand(filteredHand, workspace);
+            workspace = this.playUsingHandAndTable_AddToMeldsOnTable(filteredHand, workspace);
+            workspace = this.rearrangeWorkspace(workspace);
+        }
         
         // Remove tiles from hand that were removed from filteredHand
         for (int i = 0; i < filteredHandCopy.getSize(); i++) {

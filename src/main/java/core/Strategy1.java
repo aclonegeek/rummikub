@@ -57,10 +57,15 @@ public class Strategy1 extends PlayBehaviour {
         for (Meld meld : workspace) {
             workspaceCopy.add(new Meld(meld));
         }
-
-        workspace = this.playUsingHand(hand, workspace);
-        workspace = this.playUsingHandAndTable(hand, workspace);
-
+        
+        for (int i = 0; i < 3; i++) {
+            workspace = this.playUsingHand(hand, workspace);
+            workspace = this.playUsingHandAndTable_AddToPotentialMeldsInHand(hand, workspace);
+            workspace = this.playUsingHandAndTable_AddToTilesInHand(hand, workspace);
+            workspace = this.playUsingHandAndTable_AddToMeldsOnTable(hand, workspace);
+            workspace = this.rearrangeWorkspace(workspace);
+        }
+        
         if (tilesAddedToWorkspace(workspace, workspaceCopy)) {
             return workspace;
         }
