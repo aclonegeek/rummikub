@@ -250,9 +250,9 @@ public class Game {
     protected void restoreSavedStateWithPenalty(Player player) {
         this.table = this.savedTable;
         player.setHand(this.savedHand);
-        player.add(this.stock.draw());
-        player.add(this.stock.draw());
-        player.add(this.stock.draw());
+        if (this.stock.getSize() > 0) { player.add(this.stock.draw()); }
+        if (this.stock.getSize() > 0) { player.add(this.stock.draw()); }
+        if (this.stock.getSize() > 0) { player.add(this.stock.draw()); }
     }
     
     protected boolean determineValidState() {
