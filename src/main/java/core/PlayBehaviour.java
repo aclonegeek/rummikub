@@ -211,11 +211,17 @@ public abstract class PlayBehaviour {
                     break;
                 }
                 
+                if (firstTilewasInHand) {
+                    firstTile.setOnTable(false);
+                } else {
+                    firstTile.setOnTable(true);
+                }
+                
                 // If tempMeld is valid if last tile is removed, and that tile can be added to the potentialMeld: do it
                 // break because we now have a valid meld that can be added to the workspace
                 lastTile.setOnTable(false);
                 if (tempMeld.isValidIfRemoveTile(n) && potentialMeld.addTile(lastTile) != null) {
-                    tempMeld.removeTile(n);
+                    lastTile = tempMeld.removeTile(n);
                     hand.remove(potentialMeld);
                     workspace.add(potentialMeld);
                     
@@ -227,13 +233,7 @@ public abstract class PlayBehaviour {
                     
                     break;
                 }
-                
-                if (firstTilewasInHand) {
-                    firstTile.setOnTable(false);
-                } else {
-                    firstTile.setOnTable(true);
-                }
-                
+     
                 if (lastTilewasInHand) {
                     lastTile.setOnTable(false);
                 } else {
@@ -278,6 +278,12 @@ public abstract class PlayBehaviour {
                     hand.remove(tileRemoved);
                 }
                 
+                if (firstTilewasInHand) {
+                    firstTile.setOnTable(false);
+                } else {
+                    firstTile.setOnTable(true);
+                }
+                
                 // If tempMeld is valid if last tile is removed, and that tile can be added to the potentialMeld: do it
                 lastTile.setOnTable(false);
                 if (tempMeld.isValidIfRemoveTile(n) && newMeld.addTile(lastTile) != null) {
@@ -287,11 +293,6 @@ public abstract class PlayBehaviour {
                     hand.remove(tileRemoved);
                 }
                 
-                if (firstTilewasInHand) {
-                    firstTile.setOnTable(false);
-                } else {
-                    firstTile.setOnTable(true);
-                }
                 
                 if (lastTilewasInHand) {
                     lastTile.setOnTable(false);

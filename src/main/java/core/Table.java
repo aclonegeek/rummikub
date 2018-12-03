@@ -22,7 +22,7 @@ public class Table {
     }
 
     public void setState(ArrayList<Meld> melds) {
-        System.out.println("Table before Set: " + this.toHighlightedString(melds));
+        System.out.println("Table before Set:\n" + this.toHighlightedString(melds));
         for (Meld meld : melds) {
             meld.setIsLocked(true);
             for (int i = 0; i < meld.getSize(); i++) {
@@ -30,6 +30,7 @@ public class Table {
             }
         }
         this.melds = melds;
+        System.out.println("Table after Set:\n" + this.toString());
     }
 
     public boolean isValidState() {
