@@ -12,7 +12,9 @@ public class Game {
     protected ArrayList<Player> players;
     protected Table table;
     protected Map<Player, Integer> playerScores;
-    protected GameMemento savedState;
+    
+    protected Table savedTable;
+    protected Hand savedHand;
 
     // Testing related attributes
     private boolean testing = false;
@@ -57,7 +59,8 @@ public class Game {
         }
         
         this.table = new Table();
-        this.savedState = new GameMemento();
+        this.savedTable = new Table();
+        this.savedHand = new Hand();
 
         // Display each player's initial hand
         for (Player player : this.players) {
@@ -240,13 +243,13 @@ public class Game {
     }
     
     protected void setSavedState(Player player) {
-        this.savedState.setSavedTable(table);
-        this.savedState.setSavedHand(player.getHand());
+        this.savedTable = new Table(this.table);
+        this.savedHand = new Hand(player.getHand());
     }
     
     protected void restoreSavedStateWithPenalty(Player player) {
-        this.table = this.savedState.restoreSavedTable();
-        player.setHand(this.savedState.restoreSavedHand());
+        this.table = this.savedTable;
+        player.setHand(this.savedHand);
         player.add(this.stock.draw());
         player.add(this.stock.draw());
         player.add(this.stock.draw());
