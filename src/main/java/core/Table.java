@@ -59,7 +59,7 @@ public class Table {
 
         for (Meld meld : workspace) {
             for (Tile tile : meld.getMeld()) {
-                if (meld.hasChild(tile) == false) {
+                if (tile.isOnTable() && meld.hasChild(tile) == false) {
                     tile.setIsJustMoved(true);
                 } else if (meld.hasChild(tile) == true) {
                     tile.setIsJustMoved(false);

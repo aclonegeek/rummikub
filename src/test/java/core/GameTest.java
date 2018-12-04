@@ -1208,22 +1208,9 @@ public class GameTest extends TestCase {
         assertEquals("1: {R7 B7 G7 O7}\n2: {R4 R5 R6 R7}\n3: {*B7 *G7 *R7}\n",
                 game.table.toHighlightedString(workspace));
         
-        workspace = this.playHuman(game.players.get(0), "M1R7 > NM", game.table.getState());
-        assertEquals("1: {B7 G7 O7}\n2: {R4 R5 R6 R7}\n3: {*B7 *G7 *R7}\n4: {!R7}\n",
-                game.table.toHighlightedString(workspace));
-        
-        workspace = this.playHuman(game.players.get(0), "M3R7 > M1", game.table.getState());
-        assertEquals("1: {B7 G7 O7 *!R7}\n2: {R4 R5 R6 R7}\n3: {*B7 *G7}\n4: {!R7}\n",
-                game.table.toHighlightedString(workspace));
-        
-        workspace = this.playHuman(game.players.get(0), "M4R7 > M3", game.table.getState());
-        System.out.println(game.table.toHighlightedString(workspace));
-        assertEquals("1: {B7 G7 O7 *!R7}\n2: {R4 R5 R6 R7}\n3: {*B7 *G7 !R7}\n4: {}\n",
-                game.table.toHighlightedString(workspace));
-        
         if (workspace != null) {
             game.table.setState(workspace);
-            assertEquals("1: {B7 G7 O7 R7}\n2: {R4 R5 R6 R7}\n3: {B7 G7 R7}\n",
+            assertEquals("1: {R7 B7 G7 O7}\n2: {R4 R5 R6 R7}\n3: {B7 G7 R7}\n",
                     game.table.toHighlightedString(workspace));
         } else {
             game.players.get(1).add(game.stock.draw());
