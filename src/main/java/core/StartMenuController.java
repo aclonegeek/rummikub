@@ -1,5 +1,8 @@
 package core;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -15,6 +18,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class StartMenuController {
@@ -145,6 +149,40 @@ public class StartMenuController {
                     this.enableRiggingFields(false);
                 }
 			});
+
+        this.loadFileButton.setOnAction(event -> {
+                FileChooser fc = new FileChooser();
+                fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+                File file = fc.showOpenDialog(null);
+                if (file == null) {
+                    return;
+                }
+
+                ArrayList<String> lines = new ArrayList<String>();
+
+                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        lines.add(line);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                String stockLine = lines.get(0).split(":")[1];
+                String deciderStockLine = lines.get(1).split(":")[1];
+                String p1HandLine = lines.get(2).split(":")[1];
+                String p2HandLine = lines.get(3).split(":")[1];
+                String p3HandLine = lines.get(4).split(":")[1];
+                String p4HandLine = lines.get(5).split(":")[1];
+
+                this.stockField.setText(stockLine);
+                this.deciderStockField.setText(deciderStockLine);
+                this.p1HandField.setText(p1HandLine);
+                this.p2HandField.setText(p2HandLine);
+                this.p3HandField.setText(p3HandLine);
+                this.p4HandField.setText(p4HandLine);
+            });
     }
 
     private void enableRiggingFields(boolean setting) {
