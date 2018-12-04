@@ -2,11 +2,16 @@ package core;
 
 import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class Table {
     private ArrayList<Meld> melds;
+    private ObservableList<Meld> tableList;
 
     public Table() {
         this.melds = new ArrayList<>();
+        this.tableList = FXCollections.observableArrayList();
     }
     
     public Table(Table table) {
@@ -14,6 +19,18 @@ public class Table {
         for (Meld meld : table.getState()) {
             Meld newMeld = new Meld(meld);
             melds.add(newMeld);
+        }
+        this.tableList = FXCollections.observableArrayList();
+    }
+
+    public ObservableList<Meld> getTableList() {
+        return this.tableList;
+    }
+
+    public void updateTableList() {
+        this.tableList.clear();
+        for (Meld meld : this.melds) {
+            this.tableList.add(meld);
         }
     }
 
