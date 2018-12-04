@@ -73,6 +73,11 @@ public class StartMenuController {
         gameController.setNumPlayers(this.numPlayersChoice.getValue());
         gameController.setPlayerNames(this.getPlayerNames());
         gameController.setPlayerStrategies(this.getPlayerStrategies());
+        if (this.enableRiggingCheckBox.isSelected()) {
+            gameController.setRiggedAttributes(this.getRiggedStock(this.stockField.getText()),
+                                               this.getRiggedStock(this.deciderStockField.getText()),
+                                               this.getRiggedHands());
+        }
 
         gameController.play();
     }
@@ -194,5 +199,36 @@ public class StartMenuController {
         }
 
         return playerStrategies;
+    }
+
+    private Stock getRiggedStock(String text) {
+        Stock stock = new Stock();
+
+        for (String tile : text.split(",")) {
+            Tile t = new Tile(tile);
+            stock.add(t);
+        }
+
+        return stock;
+    }
+
+    private ArrayList<Hand> getRiggedHands() {
+        ArrayList<Hand> hands = new ArrayList<Hand>();
+
+        Hand p1Hand = new Hand(this.p1HandField.getText());
+        Hand p2Hand = new Hand(this.p2HandField.getText());
+        hands.add(p1Hand);
+        hands.add(p2Hand);
+
+        if (this.numPlayersChoice.getValue() >= 3) {
+            Hand p3Hand = new Hand(this.p3HandField.getText());
+            hands.add(p3Hand);
+        }
+        if (this.numPlayersChoice.getValue() >= 4) {
+            Hand p4Hand = new Hand(this.p4HandField.getText());
+            hands.add(p4Hand);
+        }
+
+        return hands;
     }
 }
