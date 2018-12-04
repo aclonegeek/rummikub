@@ -949,10 +949,10 @@ public class GameTest extends TestCase {
     // Test case where table state is invalid and reverts back
     public void testGameWithMemento1() {
         Hand humanHand = new Hand("R4,B9,B10");
-        Hand p1Hand = new Hand("R1,R3,R5");
+        Hand p1Hand = new Hand("R1,R2,R3,R4,R5,R6,R7,R8,R9,R10,R11,R12");
         Player playerHuman = new PlayerHuman("Human");
         playerHuman.setInitialMove(false);
-        Player player1 = new Player1("p1");
+        Player player1 = new Player3("p3");
         playerHuman.setHand(humanHand);
         player1.setHand(p1Hand);
         ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1));
@@ -979,27 +979,29 @@ public class GameTest extends TestCase {
         assertEquals("1: {R1 R2 R3}\n2: {G4 O4 B4}\n3: {O10 O11 O12}\n", game.table.toString());
         assertEquals(3, game.players.get(0).getHandSize());
         
-        game.setSavedState(game.players.get(0));
+        GameMemento savedState = game.createMemento(game.players.get(0));
+
         ArrayList<Meld> workspace = new ArrayList<>();
         workspace = this.playHuman(game.players.get(0), "R4 > NM", game.table.getState());
         if (workspace != null) { game.table.setState(workspace); }
         else { game.players.get(0).add(game.stock.draw()); }
         
         if (!game.determineValidState()) {
-            game.restoreSavedStateWithPenalty(game.players.get(0));
+            game.restoreMementoWithPenalty(savedState, game.players.get(0));
         }
         
         assertEquals("1: {R1 R2 R3}\n2: {G4 O4 B4}\n3: {O10 O11 O12}\n", game.table.toString());
         assertEquals(6, game.players.get(0).getHandSize());
+        assertEquals(6, game.players.get(1).getLowestHandCount());
     }
     
     // Test case where table state is valid and does not revert back
     public void testGameWithMemento2() {
         Hand humanHand = new Hand("G1,G2,G3,O7");
-        Hand p1Hand = new Hand("R1,R3,R5");
+        Hand p1Hand = new Hand("R1,R2,R3,R4,R5,R6,R7,R8,R9,R10,R11,R12");
         Player playerHuman = new PlayerHuman("Human");
         playerHuman.setInitialMove(false);
-        Player player1 = new Player1("p1");
+        Player player1 = new Player3("p3");
         playerHuman.setHand(humanHand);
         player1.setHand(p1Hand);
         ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1));
@@ -1026,17 +1028,19 @@ public class GameTest extends TestCase {
         assertEquals("1: {R1 R2 R3}\n2: {G4 O4 B4}\n3: {O10 O11 O12}\n", game.table.toString());
         assertEquals(4, game.players.get(0).getHandSize());
         
-        game.setSavedState(game.players.get(0));
+        GameMemento savedState = game.createMemento(game.players.get(0));
+        
         ArrayList<Meld> workspace = new ArrayList<>();
         workspace = this.playHuman(game.players.get(0), "G1 G2 G3 > NM", game.table.getState());
         if (workspace != null) { game.table.setState(workspace); }
         else { game.players.get(0).add(game.stock.draw()); }
         
         if (!game.determineValidState()) {
-            game.restoreSavedStateWithPenalty(game.players.get(0));
+            game.restoreMementoWithPenalty(savedState, game.players.get(0));
         }
         
         assertEquals("1: {R1 R2 R3}\n2: {G4 O4 B4}\n3: {O10 O11 O12}\n4: {G1 G2 G3}\n", game.table.toString());
         assertEquals(1, game.players.get(0).getHandSize());
+        assertEquals(1, game.players.get(1).getLowestHandCount());
     }
 }
