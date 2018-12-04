@@ -1,11 +1,10 @@
 package core;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import core.Globals.PlayerType;
+import javafx.util.Pair;
 
 public class GameModel {
     private Stock stock;
@@ -13,7 +12,7 @@ public class GameModel {
     private Table table;
 
     private int numPlayers;
-    private Map<String, String> playerData;
+    private ArrayList<Pair<String, String>> playerData;
 
     private GameMemento memento;
 
@@ -27,7 +26,7 @@ public class GameModel {
         this.stock = new Stock();
         this.table = new Table();
         this.players = new ArrayList<>();
-        this.playerData = new HashMap<String, String>();
+        this.playerData = new ArrayList<>();
     }
 
     public void setup() {
@@ -39,19 +38,19 @@ public class GameModel {
         }
 
         // Create the players
-        this.playerData.forEach((key, value) -> {
-                if (value == "StrategyHuman") {
-                    this.players.add(new PlayerHuman(key));
-                } else if (value == "Strategy1") {
-                    this.players.add(new Player1(key));
-                } else if (value == "Strategy2") {
-                    this.players.add(new Player2(key));
-                } else if (value == "Strategy3") {
-                    this.players.add(new Player3(key));
-                } else {
-                    this.players.add(new Player4(key));
-                }
-            });
+        for (Pair<String, String> data : this.playerData) {
+            if (data.getValue() == "StrategyHuman") {
+                this.players.add(new PlayerHuman(data.getKey()));
+            } else if (data.getValue() == "Strategy1") {
+                this.players.add(new Player1(data.getKey()));
+            } else if (data.getValue() == "Strategy2") {
+                this.players.add(new Player2(data.getKey()));
+            } else if (data.getValue() == "Strategy3") {
+                this.players.add(new Player3(data.getKey()));
+            } else {
+                this.players.add(new Player4(data.getKey()));
+            }
+        }
 
         // Register each player that uses Strategy3 or Strategy4 as observers of the other players
         for (Player player : this.players) {
@@ -146,7 +145,7 @@ public class GameModel {
         Iterator<String> namesIt = playerNames.iterator();
         Iterator<String> strategiesIt = playerStrategies.iterator();
         while (namesIt.hasNext() && strategiesIt.hasNext()) {
-            this.playerData.put(namesIt.next(), strategiesIt.next());
+            this.playerData.add(new Pair<>(namesIt.next(), strategiesIt.next()));
         }
     }
 
