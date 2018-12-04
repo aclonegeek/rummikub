@@ -6,27 +6,25 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.StartMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.StartMenuController">
    <children>
-      <Label layoutX="229.0" layoutY="6.0" text="RUMMIKUB" AnchorPane.bottomAnchor="180.0" AnchorPane.leftAnchor="229.0" AnchorPane.rightAnchor="228.0" AnchorPane.topAnchor="6.0" />
-      <Label layoutX="14.0" layoutY="30.0" text="# of players:" />
-      <Label layoutX="10.0" layoutY="59.0" text="Player 1 Name:" />
-      <ChoiceBox fx:id="numPlayersChoice" layoutX="115.0" layoutY="25.0" prefHeight="24.0" prefWidth="13.0" />
-      <Label layoutX="10.0" layoutY="93.0" text="Player 2 Name:" />
-      <Label layoutX="10.0" layoutY="128.0" text="Player 3 Name:" />
-      <Label layoutX="10.0" layoutY="161.0" text="Player 4 Name:" />
-      <TextField fx:id="p1NameField" layoutX="115.0" layoutY="54.0" />
-      <TextField fx:id="p2NameField" layoutX="115.0" layoutY="88.0" />
-      <TextField fx:id="p3NameField" layoutX="115.0" layoutY="123.0" />
-      <TextField fx:id="p4NameField" layoutX="115.0" layoutY="156.0" />
-      <Label layoutX="241.0" layoutY="59.0" text="Player 1 Strategy:" />
-      <Label layoutX="241.0" layoutY="93.0" text="Player 2 Strategy:" />
-      <Label layoutX="241.0" layoutY="128.0" text="Player 3 Strategy:" />
-      <Label layoutX="241.0" layoutY="161.0" text="Player 4 Strategy:" />
-      <Button fx:id="playButton" layoutX="235.0" layoutY="187.0" mnemonicParsing="false" onAction="#handlePlayButtonPressed" text="Play" />
-      <ChoiceBox fx:id="p1StrategyChoice" layoutX="373.0" layoutY="54.0" prefHeight="24.0" prefWidth="132.0" />
-      <ChoiceBox fx:id="p2StrategyChoice" layoutX="373.0" layoutY="88.0" prefHeight="24.0" prefWidth="132.0" />
-      <ChoiceBox fx:id="p3StrategyChoice" layoutX="373.0" layoutY="123.0" prefHeight="24.0" prefWidth="132.0" />
-      <ChoiceBox fx:id="p4StrategyChoice" layoutX="373.0" layoutY="156.0" prefHeight="24.0" prefWidth="132.0" />
+      <Label layoutX="229.0" layoutY="6.0" prefHeight="24.0" prefWidth="65.0" text="RUMMIKUB" AnchorPane.bottomAnchor="220.0" AnchorPane.leftAnchor="229.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="6.0" />
+      <Label layoutX="183.0" layoutY="37.0" text="# of players:" />
+      <ChoiceBox fx:id="numPlayersChoice" layoutX="282.0" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="39.0" />
+      <Label layoutX="167.0" layoutY="59.0" text="Name" />
+      <Label layoutX="311.0" layoutY="59.0" text="Strategy" />
+      <Label layoutX="93.0" layoutY="86.0" text="P1" />
+      <Label layoutX="93.0" layoutY="118.0" text="P2" />
+      <Label layoutX="93.0" layoutY="154.0" text="P3" />
+      <Label layoutX="93.0" layoutY="185.0" text="P4" />
+      <TextField fx:id="p1NameField" layoutX="117.0" layoutY="81.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="132.0" />
+      <TextField fx:id="p2NameField" layoutX="117.0" layoutY="113.0" prefHeight="24.0" prefWidth="132.0" />
+      <TextField fx:id="p3NameField" layoutX="117.0" layoutY="149.0" prefHeight="24.0" prefWidth="132.0" />
+      <TextField fx:id="p4NameField" layoutX="117.0" layoutY="180.0" prefHeight="24.0" prefWidth="132.0" />
+      <ChoiceBox fx:id="p1StrategyChoice" layoutX="276.0" layoutY="81.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="132.0" />
+      <ChoiceBox fx:id="p2StrategyChoice" layoutX="276.0" layoutY="113.0" prefHeight="24.0" prefWidth="132.0" />
+      <ChoiceBox fx:id="p3StrategyChoice" layoutX="276.0" layoutY="149.0" prefHeight="24.0" prefWidth="132.0" />
+      <ChoiceBox fx:id="p4StrategyChoice" layoutX="276.0" layoutY="180.0" prefHeight="24.0" prefWidth="132.0" />
+      <Button fx:id="playButton" layoutX="235.0" layoutY="212.0" mnemonicParsing="false" onAction="#handlePlayButtonPressed" text="Play" />
    </children>
 </AnchorPane>
