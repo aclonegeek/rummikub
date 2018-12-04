@@ -21,12 +21,12 @@
       <Label layoutX="93.0" layoutY="227.0" text="P4" />
       <TextField fx:id="p1NameField" layoutX="117.0" layoutY="102.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="132.0" />
       <TextField fx:id="p2NameField" layoutX="117.0" layoutY="142.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="132.0" />
-      <TextField fx:id="p3NameField" layoutX="117.0" layoutY="182.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="132.0" />
-      <TextField fx:id="p4NameField" layoutX="117.0" layoutY="222.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="132.0" />
+      <TextField fx:id="p3NameField" disable="true" layoutX="117.0" layoutY="182.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="132.0" />
+      <TextField fx:id="p4NameField" disable="true" layoutX="117.0" layoutY="222.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="132.0" />
       <ChoiceBox fx:id="p1StrategyChoice" layoutX="276.0" layoutY="98.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="132.0" />
       <ChoiceBox fx:id="p2StrategyChoice" layoutX="276.0" layoutY="138.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="132.0" />
-      <ChoiceBox fx:id="p3StrategyChoice" layoutX="276.0" layoutY="178.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="132.0" />
-      <ChoiceBox fx:id="p4StrategyChoice" layoutX="276.0" layoutY="218.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="132.0" />
+      <ChoiceBox fx:id="p3StrategyChoice" disable="true" layoutX="276.0" layoutY="178.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="132.0" />
+      <ChoiceBox fx:id="p4StrategyChoice" disable="true" layoutX="276.0" layoutY="218.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="132.0" />
       <Separator layoutY="260.0" prefHeight="14.0" prefWidth="520.0" />
       <Label layoutX="233.0" layoutY="274.0" text="RIGGING" />
       <CheckBox fx:id="enableRiggingCheckBox" layoutX="17.0" layoutY="292.0" mnemonicParsing="false" text="Enable Rigging" />
@@ -41,9 +41,9 @@
       <Label layoutX="17.0" layoutY="473.0" text="P2 Hand:" />
       <TextField fx:id="p2HandField" layoutX="82.0" layoutY="468.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="433.0" />
       <Label layoutX="17.0" layoutY="503.0" text="P3 Hand:" />
-      <TextField fx:id="p3HandField" layoutX="82.0" layoutY="498.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="433.0" />
+      <TextField fx:id="p3HandField" disable="true" layoutX="82.0" layoutY="498.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="433.0" />
       <Label layoutX="17.0" layoutY="533.0" text="P4 Hand:" />
-      <TextField fx:id="p4HandField" layoutX="82.0" layoutY="528.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="433.0" />
+      <TextField fx:id="p4HandField" disable="true" layoutX="82.0" layoutY="528.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="433.0" />
       <Button fx:id="playButton" layoutX="234.0" layoutY="562.0" mnemonicParsing="false" onAction="#handlePlayButtonPressed" text="Play" />
    </children>
 </AnchorPane>

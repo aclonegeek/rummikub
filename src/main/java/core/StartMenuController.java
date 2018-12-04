@@ -135,11 +135,6 @@ public class StartMenuController {
         this.p3StrategyChoice.setItems(strategies);
         this.p4StrategyChoice.setItems(strategies);
 
-        this.p3NameField.setDisable(true);
-        this.p3StrategyChoice.setDisable(true);
-        this.p4NameField.setDisable(true);
-        this.p4StrategyChoice.setDisable(true);
-
         // Rigging fields
         this.enableRiggingFields(false);
         this.enableRiggingCheckBox.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
@@ -169,20 +164,42 @@ public class StartMenuController {
                     e.printStackTrace();
                 }
 
-                String stockLine = lines.get(0).split(":")[1];
-                String deciderStockLine = lines.get(1).split(":")[1];
-                String p1HandLine = lines.get(2).split(":")[1];
-                String p2HandLine = lines.get(3).split(":")[1];
-                String p3HandLine = lines.get(4).split(":")[1];
-                String p4HandLine = lines.get(5).split(":")[1];
-
-                this.stockField.setText(stockLine);
-                this.deciderStockField.setText(deciderStockLine);
-                this.p1HandField.setText(p1HandLine);
-                this.p2HandField.setText(p2HandLine);
-                this.p3HandField.setText(p3HandLine);
-                this.p4HandField.setText(p4HandLine);
+                this.parseFile(lines);
             });
+    }
+
+    private void parseFile(ArrayList<String> lines) {
+        int numPlayers = Integer.parseInt(lines.get(0).split(":")[1]);
+        String stockLine = lines.get(1).split(":")[1];
+        String deciderStockLine = lines.get(2).split(":")[1];
+        String[] p1 = lines.get(3).split(":");
+        String[] p2 = lines.get(4).split(":");
+        String[] p3 = lines.get(5).split(":");
+        String[] p4 = lines.get(6).split(":");
+
+        this.numPlayersChoice.setValue(numPlayers);
+
+        this.stockField.setText(stockLine);
+        this.deciderStockField.setText(deciderStockLine);
+
+        this.p1NameField.setText(p1[1]);
+        this.p1StrategyChoice.getSelectionModel().select(p1[2]);
+        this.p1HandField.setText(p1[3]);
+
+        this.p2NameField.setText(p2[1]);
+        this.p2StrategyChoice.getSelectionModel().select(p2[2]);
+        this.p2HandField.setText(p2[3]);
+
+        if (numPlayers >= 3) {
+            this.p3NameField.setText(p3[1]);
+            this.p3StrategyChoice.getSelectionModel().select(p3[2]);
+            this.p3HandField.setText(p3[3]);
+        }
+        if (numPlayers >= 4) {
+            this.p4NameField.setText(p4[1]);
+            this.p4StrategyChoice.getSelectionModel().select(p4[2]);
+            this.p4HandField.setText(p4[3]);
+        }
     }
 
     private void enableRiggingFields(boolean setting) {
@@ -208,10 +225,8 @@ public class StartMenuController {
     private ArrayList<String> getPlayerNames() {
         ArrayList<String> playerNames = new ArrayList<>();
 
-        if (this.numPlayersChoice.getValue() >= 2) {
-            playerNames.add(p1NameField.getText());
-            playerNames.add(p2NameField.getText());
-        }
+        playerNames.add(p1NameField.getText());
+        playerNames.add(p2NameField.getText());
         if (this.numPlayersChoice.getValue() >= 3) {
             playerNames.add(p3NameField.getText());
         }
@@ -225,10 +240,8 @@ public class StartMenuController {
     private ArrayList<String> getPlayerStrategies() {
         ArrayList<String> playerStrategies = new ArrayList<>();
 
-        if (this.numPlayersChoice.getValue() >= 2) {
-            playerStrategies.add(p1StrategyChoice.getValue());
-            playerStrategies.add(p2StrategyChoice.getValue());
-        }
+        playerStrategies.add(p1StrategyChoice.getValue());
+        playerStrategies.add(p2StrategyChoice.getValue());
         if (this.numPlayersChoice.getValue() >= 3) {
             playerStrategies.add(p3StrategyChoice.getValue());
         }
