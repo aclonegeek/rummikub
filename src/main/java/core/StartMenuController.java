@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -38,6 +39,27 @@ public class StartMenuController {
     private ChoiceBox<String> p4StrategyChoice;
 
     @FXML
+    private CheckBox enableRiggingCheckBox;
+    @FXML
+    private CheckBox showPlayerHandsCheckBox;
+
+    @FXML
+    private Button loadFileButton;
+
+    @FXML
+    private TextField stockField;
+    @FXML
+    private TextField deciderStockField;
+    @FXML
+    private TextField p1HandField;
+    @FXML
+    private TextField p2HandField;
+    @FXML
+    private TextField p3HandField;
+    @FXML
+    private TextField p4HandField;
+
+    @FXML
     private Button playButton;
 
     @FXML
@@ -63,22 +85,37 @@ public class StartMenuController {
         this.numPlayersChoice.valueProperty().addListener((ChangeListener<Integer>) (observable, oldValue, newValue) -> {
                 switch (newValue) {
                 case 2:
-                    p3NameField.setDisable(true);
-                    p3StrategyChoice.setDisable(true);
-                    p4NameField.setDisable(true);
-                    p4StrategyChoice.setDisable(true);
+                    this.p3NameField.setDisable(true);
+                    this.p3StrategyChoice.setDisable(true);
+                    this.p4NameField.setDisable(true);
+                    this.p4StrategyChoice.setDisable(true);
+
+                    if (this.enableRiggingCheckBox.isSelected()) {
+                        this.enableRiggingFields(true);
+                    }
+
                     break;
                 case 3:
-                    p3NameField.setDisable(false);
-                    p3StrategyChoice.setDisable(false);
-                    p4NameField.setDisable(true);
-                    p4StrategyChoice.setDisable(true);
+                    this.p3NameField.setDisable(false);
+                    this.p3StrategyChoice.setDisable(false);
+                    this.p4NameField.setDisable(true);
+                    this.p4StrategyChoice.setDisable(true);
+
+                    if (this.enableRiggingCheckBox.isSelected()) {
+                        this.enableRiggingFields(true);
+                    }
+
                     break;
                 case 4:
-                    p3NameField.setDisable(false);
-                    p3StrategyChoice.setDisable(false);
-                    p4NameField.setDisable(false);
-                    p4StrategyChoice.setDisable(false);
+                    this.p3NameField.setDisable(false);
+                    this.p3StrategyChoice.setDisable(false);
+                    this.p4NameField.setDisable(false);
+                    this.p4StrategyChoice.setDisable(false);
+
+                    if (this.enableRiggingCheckBox.isSelected()) {
+                        this.enableRiggingFields(true);
+                    }
+
                     break;
                 }
             });
@@ -93,6 +130,36 @@ public class StartMenuController {
         this.p3StrategyChoice.setDisable(true);
         this.p4NameField.setDisable(true);
         this.p4StrategyChoice.setDisable(true);
+
+        // Rigging fields
+        this.enableRiggingFields(false);
+        this.enableRiggingCheckBox.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+                if (newValue) {
+                    this.enableRiggingFields(true);
+                } else {
+                    this.enableRiggingFields(false);
+                }
+			});
+    }
+
+    private void enableRiggingFields(boolean setting) {
+        setting = !setting;
+        this.showPlayerHandsCheckBox.setDisable(setting);
+        this.loadFileButton.setDisable(setting);
+        this.stockField.setDisable(setting);
+        this.deciderStockField.setDisable(setting);
+        this.p1HandField.setDisable(setting);
+        this.p2HandField.setDisable(setting);
+        if (this.numPlayersChoice.getValue() >= 3) {
+            this.p3HandField.setDisable(setting);
+        } else {
+            this.p3HandField.setDisable(true);
+        }
+        if (this.numPlayersChoice.getValue() >= 4) {
+            this.p4HandField.setDisable(setting);
+        } else {
+            this.p4HandField.setDisable(true);
+        }
     }
 
     private ArrayList<String> getPlayerNames() {
