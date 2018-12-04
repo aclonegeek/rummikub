@@ -836,7 +836,7 @@ public class GameTest extends TestCase {
         else { game.players.get(1).add(game.stock.draw()); }
         assertEquals(null, workspace);
         assertEquals("1: {B1 B2 B3}\n2: {O1 O2 O3}\n3: {O7 O8 O9}\n", game.table.toString());
-        
+
         // P2 plays initial melds
         workspace = game.players.get(2).play(game.table.getState());
         if (workspace != null) { game.table.setState(workspace); }
@@ -1040,52 +1040,193 @@ public class GameTest extends TestCase {
         assertEquals(1, game.players.get(0).getHandSize());
     }
     
-    public void testTileHighlighting() {
+    // Simple: Highlighting meld just played from the hand
+    public void testTileHighlighting1() {
         // Setting individual players
         Player playerHuman = new PlayerHuman("Human");
-        Player player1 = new Player1("p1");
+        Player player2 = new Player1("p2");
         playerHuman.setInitialMove(false);
-        player1.setInitialMove(false);
-        
+        player2.setInitialMove(false);
+
         // Setting player hands
-        Hand humanHand = new Hand("G12,B12");
-        Hand p1Hand = new Hand("G11,G12,O7");
+        Hand humanHand = new Hand("B8,B9,B10");
+        Hand p2Hand = new Hand("O7,O8,J,O10,G11,G12");
         playerHuman.setHand(humanHand);
-        player1.setHand(p1Hand);
-        
+        player2.setHand(p2Hand);
+
         // Setting player list
-        ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1));
-        
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player2));
+
         // Setting table
         ArrayList<Meld> melds = new ArrayList<>();
         Table table = new Table();
-        melds.add(new Meld("R10,B10,O10,G10"));
-        melds.add(new Meld("R10,R11,R12,R13"));
-        melds.add(new Meld("B9,G9,O9"));
-        System.out.println("-------- RIGGED TABLE ---------");
+        melds.add(new Meld("B8,B9,B10"));
+        melds.add(new Meld("R3,B3,O3"));
         table.setState(melds);
-        System.out.println("-------- END RIGGED TABLE ---------");
-        
+
         // Setting stock
         ArrayList<Tile> tiles = new ArrayList<>();
         tiles.add(new Tile("B1"));
         tiles.add(new Tile("B2"));
         tiles.add(new Tile("B3"));
         Stock stock = new Stock(tiles);
-        
+
         // Initializing game
         Game game = new Game(true);
         game.rig(players, stock);
         game.setup();
         game.table = table;
-        
+
         // P1 plays
         ArrayList<Meld> workspace = new ArrayList<>();
         workspace = game.players.get(1).play(game.table.getState());
-        if (workspace != null) { game.table.setState(workspace); }
-        else { game.players.get(1).add(game.stock.draw()); }
+        if (workspace != null) {
+            assertEquals("1: {B8 B9 B10}\n2: {R3 B3 O3}\n3: {*O7 *O8 *J *O10}\n",
+                    game.table.toHighlightedString(workspace));
+            game.table.setState(workspace);
+            assertEquals("1: {B8 B9 B10}\n2: {R3 B3 O3}\n3: {O7 O8 J O10}\n",
+                    game.table.toHighlightedString(workspace));
+        } else {
+            game.players.get(1).add(game.stock.draw());
+        }
 
         System.out.println(game.table.toString());
+
+    }
+    
+    // Intermediate: Highlighting tiles just played from the hand with one tile from another meld
+    public void testTileHighlighting2() {
+        // Setting individual players
+        Player playerHuman = new PlayerHuman("Human");
+        Player player1 = new Player1("p1");
+        playerHuman.setInitialMove(false);
+        player1.setInitialMove(false);
+
+        // Setting player hands
+        Hand humanHand = new Hand("G12,B12");
+        Hand p1Hand = new Hand("G11,G12,O7");
+        playerHuman.setHand(humanHand);
+        player1.setHand(p1Hand);
+
+        // Setting player list
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1));
+
+        // Setting table
+        ArrayList<Meld> melds = new ArrayList<>();
+        Table table = new Table();
+        melds.add(new Meld("R10,B10,O10,G10"));
+        melds.add(new Meld("R10,R11,R12,R13"));
+        melds.add(new Meld("B9,G9,O9"));
+        table.setState(melds);
+
+        // Setting stock
+        ArrayList<Tile> tiles = new ArrayList<>();
+        tiles.add(new Tile("B1"));
+        tiles.add(new Tile("B2"));
+        tiles.add(new Tile("B3"));
+        Stock stock = new Stock(tiles);
+
+        // Initializing game
+        Game game = new Game(true);
+        game.rig(players, stock);
+        game.setup();
+        game.table = table;
+
+        // P2 plays
+        ArrayList<Meld> workspace = new ArrayList<>();
+        workspace = game.players.get(1).play(game.table.getState());
+        if (workspace != null) {
+            assertEquals("1: {R10 B10 O10}\n2: {R10 R11 R12 R13}\n3: {B9 G9 O9}\n4: {!G10 *G11 *G12}\n",
+                    game.table.toHighlightedString(workspace));
+            game.table.setState(workspace);
+            assertEquals("1: {R10 B10 O10}\n2: {R10 R11 R12 R13}\n3: {B9 G9 O9}\n4: {G10 G11 G12}\n",
+                    game.table.toString());
+        } else {
+            game.players.get(1).add(game.stock.draw());
+        }
+    }
+    
+    // Complex: Highlighting meld just played, adding to it two tiles just moved then moving both back
+    // then moving a tile just played from its current meld into a pre-existing meld (causing the *! sign)
+    public void testTileHighlighting3() {
+        // Setting individual players
+        Player playerHuman = new PlayerHuman("Human");
+        Player player1 = new Player1("p1");
+        playerHuman.setInitialMove(false);
+        player1.setInitialMove(false);
+
+        // Setting player hands
+        Hand humanHand = new Hand("R7,B7,G7,G12,B12");
+        Hand p1Hand = new Hand("G11,G12,O7");
+        playerHuman.setHand(humanHand);
+        player1.setHand(p1Hand);
+
+        // Setting player list
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1));
+
+        // Setting table
+        ArrayList<Meld> melds = new ArrayList<>();
+        Table table = new Table();
+        melds.add(new Meld("R7,B7,O7,G7"));
+        melds.add(new Meld("R4,R5,R6,R7"));
+        table.setState(melds);
+
+        // Setting stock
+        ArrayList<Tile> tiles = new ArrayList<>();
+        tiles.add(new Tile("B1"));
+        tiles.add(new Tile("B2"));
+        tiles.add(new Tile("B3"));
+        Stock stock = new Stock(tiles);
+
+        // Initializing game
+        Game game = new Game(true);
+        game.rig(players, stock);
+        game.setup();
+        game.table = table;
+
+        // P2 plays
+        ArrayList<Meld> workspace = new ArrayList<>();
+        System.out.println(game.table.toString());
         
+        workspace = this.playHuman(game.players.get(0), "B7 G7 > NM", game.table.getState());
+        assertEquals("1: {R7 B7 O7 G7}\n2: {R4 R5 R6 R7}\n3: {*B7 *G7}\n",
+                game.table.toHighlightedString(workspace));
+        
+        workspace = this.playHuman(game.players.get(0), "M1O7 M2R7 > M3", game.table.getState());
+        assertEquals("1: {R7 B7 G7}\n2: {R4 R5 R6}\n3: {*B7 *G7 !O7 !R7}\n",
+                game.table.toHighlightedString(workspace));
+        
+        workspace = this.playHuman(game.players.get(0), "M3O7 > M1", game.table.getState());
+        assertEquals("1: {R7 B7 G7 O7}\n2: {R4 R5 R6}\n3: {*B7 *G7 !R7}\n",
+                game.table.toHighlightedString(workspace));
+        
+        workspace = this.playHuman(game.players.get(0), "M3R7 > M2", game.table.getState());
+        assertEquals("1: {R7 B7 G7 O7}\n2: {R4 R5 R6 R7}\n3: {*B7 *G7}\n",
+                game.table.toHighlightedString(workspace));
+        
+        workspace = this.playHuman(game.players.get(0), "R7 > M3", game.table.getState());
+        assertEquals("1: {R7 B7 G7 O7}\n2: {R4 R5 R6 R7}\n3: {*B7 *G7 *R7}\n",
+                game.table.toHighlightedString(workspace));
+        
+        workspace = this.playHuman(game.players.get(0), "M1R7 > NM", game.table.getState());
+        assertEquals("1: {B7 G7 O7}\n2: {R4 R5 R6 R7}\n3: {*B7 *G7 *R7}\n4: {!R7}\n",
+                game.table.toHighlightedString(workspace));
+        
+        workspace = this.playHuman(game.players.get(0), "M3R7 > M1", game.table.getState());
+        assertEquals("1: {B7 G7 O7 *!R7}\n2: {R4 R5 R6 R7}\n3: {*B7 *G7}\n4: {!R7}\n",
+                game.table.toHighlightedString(workspace));
+        
+        workspace = this.playHuman(game.players.get(0), "M4R7 > M3", game.table.getState());
+        System.out.println(game.table.toHighlightedString(workspace));
+        assertEquals("1: {B7 G7 O7 *!R7}\n2: {R4 R5 R6 R7}\n3: {*B7 *G7 !R7}\n4: {}\n",
+                game.table.toHighlightedString(workspace));
+        
+        if (workspace != null) {
+            game.table.setState(workspace);
+            assertEquals("1: {B7 G7 O7 R7}\n2: {R4 R5 R6 R7}\n3: {B7 G7 R7}\n",
+                    game.table.toHighlightedString(workspace));
+        } else {
+            game.players.get(1).add(game.stock.draw());
+        }
     }
 }
