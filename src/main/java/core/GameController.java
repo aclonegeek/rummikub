@@ -2,6 +2,7 @@ package core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 
@@ -107,22 +109,43 @@ public class GameController {
             this.p4HandListView.setItems(this.model.getPlayers().get(3).getHandList());
         }
 
-        // TODO: Support only if player is a Human. And allow for multiple Humans!
-        this.p1HandListView.setOnDragDetected(event -> {
-                System.out.println("[HUMAN] Drag detected!");
+        // Handle dragging from hand for all Human players
+        List<ListView<Tile>> handListViews = Arrays.asList(p1HandListView,
+                                                           p2HandListView,
+                                                           p3HandListView,
+                                                           p4HandListView);
+        int index = 0;
+        for (ListView<Tile> listView : handListViews) {
+            if (this.model.getPlayers().get(index).getPlayerType().equals("StrategyHuman")) {
+                listView.setOnDragDetected(event -> {
+                        this.handleDragFromHand(event, listView);
+                    });
+            }
+            if (++index >= this.model.getNumPlayers()) {
+                break;
+            }
+        }
+    }
 
-                this.dragSource = DragSource.PLAYER;
-                Dragboard db = this.p1HandListView.startDragAndDrop(TransferMode.COPY);
-                ClipboardContent cc = new ClipboardContent();
-                System.out.println(this.p1HandListView.getSelectionModel().getSelectedItem().toString());
-                cc.putString(this.p1HandListView.getSelectionModel().getSelectedItem().toString());
-                db.setContent(cc);
-                event.consume();
-            });
+    private void handleDragFromHand(MouseEvent event, ListView<Tile> listView) {
+        System.out.println("[HUMAN] Drag detected!");
+
+        this.dragSource = DragSource.PLAYER;
+        Dragboard db = listView.startDragAndDrop(TransferMode.COPY);
+        ClipboardContent cc = new ClipboardContent();
+        cc.putString(listView.getSelectionModel().getSelectedItem().toString());
+        db.setContent(cc);
+        event.consume();
     }
 
     private void updateWorkspaceList() {
         this.workspaceList.clear();
+
+        if (this.workspace.isEmpty()) {
+            this.workspaceList.add(new Meld());
+            return;
+        }
+
         for (Meld meld : this.workspace) {
             this.workspaceList.add(meld);
         }
@@ -419,6 +442,7 @@ public class GameController {
 
             this.setNextCurrentPlayer();
             if (this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+                // TODO Move to function?
                 this.makeWorkspaceCopy();
                 this.model.createMemento(currentPlayer);
                 this.nextAIMoveButton.setDisable(true);
@@ -428,6 +452,9 @@ public class GameController {
         } else {
             this.makeWorkspaceCopy();
             this.model.createMemento(currentPlayer);
+            this.nextAIMoveButton.setDisable(true);
+            this.drawButton.setDisable(false);
+            this.finishButton.setDisable(true);
         }
     }
 
