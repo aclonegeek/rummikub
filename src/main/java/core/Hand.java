@@ -90,16 +90,16 @@ public class Hand {
         ArrayList<Tile> jokers = new ArrayList<>();
         for (int i = 0; i < this.hand.size(); i++) {
             if (this.hand.get(i).isJoker()) {
-                jokers.add(this.hand.remove(i));
+                jokers.add(this.hand.get(i));
             }
         }
-        
+        this.hand.removeIf(tile -> tile.isJoker());
+
         // Sort by colour
         int n = this.hand.size();
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
                 int colourVal = this.hand.get(j).getColour().getValue();
-
                 if (colourVal > this.hand.get(j + 1).getColour().getValue()) {
                     Tile temp = this.hand.get(j);
                     this.hand.set(j, this.hand.get(j + 1));
