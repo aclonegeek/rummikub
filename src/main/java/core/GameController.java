@@ -421,6 +421,10 @@ public class GameController {
         this.model.setNumPlayers(numPlayers);
     }
 
+    public void setRiggedAttributes(Stock riggedStock, Stock riggedDeciderStock, ArrayList<Hand> riggedHands) {
+        this.model.setRiggedData(riggedStock, riggedDeciderStock, riggedHands);
+    }
+
     public ArrayList<String> getPlayerNames() {
         ArrayList<String> names = new ArrayList<>(Arrays.asList(p1NameLabel.getText(), p2NameLabel.getText(), p3NameLabel.getText(), p4NameLabel.getText()));
         names.removeIf(n -> n.isEmpty());
