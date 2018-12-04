@@ -20,9 +20,9 @@
       </AnchorPane>
       <AnchorPane layoutY="100.0" prefHeight="520.0" prefWidth="126.0">
          <children>
-            <Label fx:id="p2NameLabel" layoutX="52.0" layoutY="486.0" rotate="270.0" />
-            <Label fx:id="p2StrategyLabel" layoutX="74.0" layoutY="486.0" rotate="270.0" />
-            <Label fx:id="p2HandCountLabel" layoutX="14.0" layoutY="486.0" />
+            <Label fx:id="p2NameLabel" layoutX="6.0" layoutY="400.0" />
+            <Label fx:id="p2StrategyLabel" layoutX="6.0" layoutY="422.0" />
+            <Label fx:id="p2HandCountLabel" layoutX="96.0" layoutY="400.0" />
             <ListView fx:id="p2HandListView" prefHeight="393.0" prefWidth="126.0" />
          </children>
       </AnchorPane>
@@ -36,9 +36,9 @@
       </AnchorPane>
       <AnchorPane layoutX="1154.0" layoutY="100.0" prefHeight="520.0" prefWidth="126.0">
          <children>
-            <Label fx:id="p4NameLabel" layoutX="24.0" layoutY="23.0" rotate="90.0" />
-            <Label fx:id="p4StrategyLabel" layoutX="2.0" layoutY="27.0" rotate="90.0" />
-            <Label fx:id="p4HandCountLabel" layoutX="73.0" layoutY="106.0" />
+            <Label fx:id="p4NameLabel" layoutX="4.0" layoutY="84.0" />
+            <Label fx:id="p4StrategyLabel" layoutX="4.0" layoutY="106.0" />
+            <Label fx:id="p4HandCountLabel" layoutX="96.0" layoutY="106.0" />
             <ListView fx:id="p4HandListView" layoutY="127.0" prefHeight="393.0" prefWidth="126.0" />
          </children>
       </AnchorPane>
