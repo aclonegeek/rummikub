@@ -17,6 +17,12 @@ public class GameModel {
 
     private GameMemento memento;
 
+    // Rigging related
+    private boolean riggedGame = false;
+    private Stock riggedStock;
+    private Stock riggedDeciderStock;
+    private ArrayList<Hand> riggedHands;
+
     public GameModel() {
         this.stock = new Stock();
         this.table = new Table();
@@ -25,8 +31,12 @@ public class GameModel {
     }
 
     public void setup() {
-        this.stock.populate();
-        this.stock.shuffle();
+        if (this.riggedGame) {
+            this.stock = this.riggedStock;
+        } else {
+            this.stock.populate();
+            this.stock.shuffle();
+        }
 
         // Create the players
         this.playerData.forEach((key, value) -> {
@@ -54,18 +64,31 @@ public class GameModel {
     }
 
     public void initialDraw() {
-        for (Player player : this.players) {
-            for (int i = 0; i < 14; i++) {
-                player.add(stock.draw());
+        if (this.riggedGame) {
+            for (int i = 0; i < this.numPlayers; i++) {
+                Player player = this.players.get(i);
+                player.setHand(this.riggedHands.get(i));
+                player.updateHandList();
             }
-            player.updateHandList();
+        } else {
+            for (Player player : this.players) {
+                for (int i = 0; i < 14; i++) {
+                    player.add(this.stock.draw());
+                }
+                player.updateHandList();
+            }
         }
     }
 
     public void determinePlayerOrder() {
-        Stock tempStock = new Stock();
-        tempStock.populateForDraw();
-        tempStock.shuffle();
+        Stock tempStock = null;
+        if (this.riggedGame) {
+            tempStock = this.riggedDeciderStock;
+        } else {
+            tempStock = new Stock();
+            tempStock.populateForDraw();
+            tempStock.shuffle();
+        }
 
         // Each player draws tile, keeping track of the player who draws the highest
         Player firstPlayer = this.players.get(0);
@@ -125,6 +148,13 @@ public class GameModel {
         while (namesIt.hasNext() && strategiesIt.hasNext()) {
             this.playerData.put(namesIt.next(), strategiesIt.next());
         }
+    }
+
+    public void setRiggedData(Stock riggedStock, Stock riggedDeciderStock, ArrayList<Hand> riggedHands) {
+        this.riggedGame = true;
+        this.riggedStock = riggedStock;
+        this.riggedDeciderStock = riggedDeciderStock;
+        this.riggedHands = riggedHands;
     }
 
     public boolean determineValidState() {
