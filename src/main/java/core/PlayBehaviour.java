@@ -189,30 +189,56 @@ public abstract class PlayBehaviour {
                 Tile firstTile = tempMeld.getTile(0);
                 Tile lastTile = tempMeld.getTile(n);
                 
+                boolean firstTilewasInHand = false;
+                boolean lastTilewasInHand = false;
+                if (firstTile.isOnTable() == false) { firstTilewasInHand = true; }
+                if (lastTile.isOnTable() == false) { lastTilewasInHand = true; }
+                
                 // If tempMeld is valid if first tile is removed, and that tile can be added to the potentialMeld: do it
                 // break because we now have a valid meld that can be added to the workspace
+                    
                 firstTile.setOnTable(false);
                 if (tempMeld.isValidIfRemoveTile(0) && potentialMeld.addTile(firstTile) != null) {
                     tempMeld.removeTile(0);
                     hand.remove(potentialMeld);
                     workspace.add(potentialMeld);
-                    firstTile.setOnTable(true);
+                    
+                    if (firstTilewasInHand) {
+                        firstTile.setOnTable(false);
+                    } else {
+                        firstTile.setOnTable(true);
+                    }
                     break;
+                }
+                
+                if (firstTilewasInHand) {
+                    firstTile.setOnTable(false);
+                } else {
+                    firstTile.setOnTable(true);
                 }
                 
                 // If tempMeld is valid if last tile is removed, and that tile can be added to the potentialMeld: do it
                 // break because we now have a valid meld that can be added to the workspace
                 lastTile.setOnTable(false);
                 if (tempMeld.isValidIfRemoveTile(n) && potentialMeld.addTile(lastTile) != null) {
-                    tempMeld.removeTile(n);
+                    lastTile = tempMeld.removeTile(n);
                     hand.remove(potentialMeld);
                     workspace.add(potentialMeld);
-                    lastTile.setOnTable(true);
+                    
+                    if (lastTilewasInHand) {
+                        lastTile.setOnTable(false);
+                    } else {
+                        lastTile.setOnTable(true);
+                    }
+                    
                     break;
                 }
-                
-                firstTile.setOnTable(true);
-                lastTile.setOnTable(true);
+     
+                if (lastTilewasInHand) {
+                    lastTile.setOnTable(false);
+                } else {
+                    lastTile.setOnTable(true);
+                }
             }
         }
 
@@ -238,6 +264,11 @@ public abstract class PlayBehaviour {
                 Tile firstTile = tempMeld.getTile(0);
                 Tile lastTile = tempMeld.getTile(n);
                 
+                boolean firstTilewasInHand = false;
+                boolean lastTilewasInHand = false;
+                if (firstTile.isOnTable() == false) { firstTilewasInHand = true; }
+                if (lastTile.isOnTable() == false) { lastTilewasInHand = true; }
+                
                 // If tempMeld is valid if first tile is removed, and that tile can be added to the potentialMeld: do it
                 firstTile.setOnTable(false);
                 if (tempMeld.isValidIfRemoveTile(0) && newMeld.addTile(firstTile) != null) {
@@ -245,6 +276,12 @@ public abstract class PlayBehaviour {
                     meldRemovedFrom = tempMeld;
                     tempMeld.removeTile(0);
                     hand.remove(tileRemoved);
+                }
+                
+                if (firstTilewasInHand) {
+                    firstTile.setOnTable(false);
+                } else {
+                    firstTile.setOnTable(true);
                 }
                 
                 // If tempMeld is valid if last tile is removed, and that tile can be added to the potentialMeld: do it
@@ -256,8 +293,12 @@ public abstract class PlayBehaviour {
                     hand.remove(tileRemoved);
                 }
                 
-                firstTile.setOnTable(true);
-                lastTile.setOnTable(true);
+                
+                if (lastTilewasInHand) {
+                    lastTile.setOnTable(false);
+                } else {
+                    lastTile.setOnTable(true);
+                }
             }
 
             // If newMeld is valid, add it to the table; otherwise, disregard it
