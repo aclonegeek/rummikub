@@ -3,6 +3,8 @@ package core;
 import java.util.ArrayList;
 
 import core.Globals.PlayerType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public abstract class Player implements PlayerSubject, PlayerObserver {
     protected Hand hand;
@@ -13,11 +15,14 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
     protected int lowestHandCount = 100;
     protected boolean drawing = false;
 
+    private ObservableList<Tile> handList;
+
     private ArrayList<PlayerObserver> observers;
 
     public Player() {
         this.observers = new ArrayList<>();
         this.hand = new Hand();
+        this.handList = FXCollections.observableArrayList();
     }
 
     abstract ArrayList<Meld> play(ArrayList<Meld> tableState);
@@ -29,6 +34,17 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
 
     public String getName() {
         return this.name;
+    }
+
+    public ObservableList<Tile> getHandList() {
+        return this.handList;
+    }
+
+    public void updateHandList() {
+        this.handList.clear();
+        for (int i = 0; i < this.hand.getSize(); i++) {
+            this.handList.add(this.hand.getTile(i));
+        }
     }
 
     public Hand getHand() {
