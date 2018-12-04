@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -18,15 +19,20 @@ public class Meld {
     private MeldType meldType;
     private boolean isLocked = false;
     private boolean isInitialMeld = false;
+    
+    // Highlighting
+    private int meldID;
 
     public Meld() {
         this.meld = new ArrayList<>();
         this.meldType = MeldType.INVALID;
+        this.generateMeldID();
     }
 
     public Meld(String meld) {
         this.meld = new ArrayList<>();
         this.meldType = MeldType.INVALID;
+        this.generateMeldID();
 
         if (meld.length() != 0) {
             for (String tile : meld.split(",")) {
@@ -37,12 +43,14 @@ public class Meld {
     
     public Meld(Meld meld) {
         this.meld = new ArrayList<>();
-        for (Tile tile : meld.meld) {
-            this.meld.add(new Tile(tile));
-        }
         this.meldType = meld.meldType;
         this.isLocked = meld.isLocked;
         this.isInitialMeld = meld.isInitialMeld;
+        this.meldID = meld.meldID;
+        
+        for (Tile tile : meld.meld) {
+            this.meld.add(new Tile(tile));
+        }
     }
     
     public Tile addTile(Tile tile) {
@@ -228,6 +236,13 @@ public class Meld {
             
             this.meld = tempMeld;
             this.meldType = tempMeldType;
+            
+            // Highlighting
+            for (Tile tile : this.meld) {
+                if (tile.getParentMeldID() == 0) {
+                    tile.setParentMeldID(this.meldID);
+                }
+            }
             
             // If there was a released joker, return it
             if (releasedJoker != null) {
@@ -430,6 +445,10 @@ public class Meld {
     public int getSize() {
         return this.meld.size();
     }
+    
+    public ArrayList<Tile> getMeld() {
+        return this.meld;
+    }
 
     public Tile getTile(int index) {
         return this.meld.get(index);
@@ -492,6 +511,25 @@ public class Meld {
             }
         }
         return true;
+    }
+    
+    public int getMeldID() {
+        return this.meldID;
+    }
+    
+    public void generateMeldID() {
+        Random rnd = new Random();
+        rnd.setSeed(this.hashCode());
+        this.meldID = rnd.nextInt();
+        
+        // Setting each of its tiles to its corresponding ID
+        for (Tile tile : this.meld) {
+            tile.setParentMeldID(this.meldID);
+        }
+    }
+    
+    public boolean hasChild(Tile tile) {
+        return this.meldID == tile.getParentMeldID();
     }
     
     public String toHighlightedString() {
