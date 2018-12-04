@@ -13,6 +13,10 @@ public class Tile {
     private ArrayList<Tile> alternateState;
     private boolean isJoker = false;
     private boolean isReplaced = false;
+    
+    // Highlighting
+    private boolean justMoved = false;
+    private int parentMeldID = 0;
 
     public Tile(Colour colour, int value) {
         this.colour = colour;
@@ -20,11 +24,13 @@ public class Tile {
     }
     
     public Tile(Tile tile) {
+        // State
         this.colour = tile.colour;
         this.value = tile.value;
         this.onTable = tile.onTable;
         this.isJoker = tile.isJoker;
         this.isReplaced = tile.isReplaced;
+        this.parentMeldID = tile.parentMeldID;
         
         if (this.isJoker) {
             alternateState = new ArrayList<>();
@@ -32,6 +38,9 @@ public class Tile {
                 alternateState.add(new Tile(alternateTile));
             }
         }
+        
+        // Highlighting
+        //this.fromMeld = tile.fromMeld;
     }
 
     public Tile(String tile) {
@@ -105,6 +114,39 @@ public class Tile {
     public boolean jokerEquals(Tile tile) {
         return (this.colour == tile.getColour() && this.value == tile.getValue())
                 || this.alternateState.stream().anyMatch(t -> t.equals(tile));
+    }
+    
+    public boolean isJustMoved() {
+        return this.justMoved;
+    }
+    
+    public void setIsJustMoved(boolean justMoved) {
+        this.justMoved = justMoved;
+    }
+    
+    public int getParentMeldID() {
+        return this.parentMeldID;
+    }
+    
+    public void setParentMeldID(int id) {
+        this.parentMeldID = id;
+    }
+    
+    public String toHighlightedString() {
+        String symbol = "";
+        
+        if (this.onTable == false && this.justMoved) {
+            symbol += "*!";
+        } else if (this.onTable == false) {
+            symbol += "*";
+        } else if (this.justMoved) {
+            symbol += "!";
+        }
+        
+        if (this.isJoker) {
+            return symbol + this.toString();
+        }
+        return symbol + this.toString();
     }
 
     @Override
