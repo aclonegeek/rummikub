@@ -1146,9 +1146,64 @@ public class GameTest extends TestCase {
         }
     }
     
+    // Intermediate 2: Split an existing meld into a new meld, remove tile from the split half and add it to two tiles just played
+    public void testTileHighlighting3() {
+        // Setting individual players
+        Player playerHuman = new PlayerHuman("Human");
+        Player player1 = new Player1("p1");
+        playerHuman.setInitialMove(false);
+        player1.setInitialMove(false);
+
+        // Setting player hands
+        Hand humanHand = new Hand("R7,B7,G7,G12,B12");
+        Hand p1Hand = new Hand("R7,R8,G11,G12");
+        playerHuman.setHand(humanHand);
+        player1.setHand(p1Hand);
+
+        // Setting player list
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(playerHuman, player1));
+
+        // Setting table
+        ArrayList<Meld> melds = new ArrayList<>();
+        Table table = new Table();
+        melds.add(new Meld("R7,B7,O7,G7"));
+        melds.add(new Meld("R4,R5,R6,R7,R8,R9,R10,R11,R12"));
+        table.setState(melds);
+
+        // Setting stock
+        ArrayList<Tile> tiles = new ArrayList<>();
+        tiles.add(new Tile("B1"));
+        tiles.add(new Tile("B2"));
+        tiles.add(new Tile("B3"));
+        Stock stock = new Stock(tiles);
+
+        // Initializing game
+        Game game = new Game(true);
+        game.rig(players, stock);
+        game.setup();
+        game.table = table;
+
+        // P1 plays
+        ArrayList<Meld> workspace = new ArrayList<>();
+        System.out.println(game.table.toString());
+        
+        workspace = game.players.get(1).play(game.table.getState());
+        System.out.println(game.table.toHighlightedString(workspace));
+        assertEquals("1: {B7 O7 G7 R7}\n2: {R4 R5 R6 R7 R8}\n3: {!R10 !R11 !R12}\n4: {*R7 *R8 !R9}\n",
+                game.table.toHighlightedString(workspace));
+        
+        if (workspace != null) {
+            game.table.setState(workspace);
+            assertEquals("1: {B7 O7 G7 R7}\n2: {R4 R5 R6 R7 R8}\n3: {R10 R11 R12}\n4: {R7 R8 R9}\n",
+                    game.table.toHighlightedString(workspace));
+        } else {
+            game.players.get(1).add(game.stock.draw());
+        }
+    }
+    
     // Complex: Highlighting meld just played, adding to it two tiles just moved then moving both back
     // then moving a tile just played from its current meld into a pre-existing meld (causing the *! sign)
-    public void testTileHighlighting3() {
+    public void testTileHighlighting4() {
         // Setting individual players
         Player playerHuman = new PlayerHuman("Human");
         Player player1 = new Player1("p1");
