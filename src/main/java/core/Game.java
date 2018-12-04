@@ -99,6 +99,7 @@ public class Game {
                 if (workspace == null) {
                     player.add(this.stock.draw());
                 } else {
+                    System.out.println("Highlighted Table:\n" + this.table.toHighlightedString(workspace));
                     this.table.setState(workspace);
                 }
                 
