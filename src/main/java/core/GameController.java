@@ -82,6 +82,8 @@ public class GameController {
     private Button drawButton;
     @FXML
     private Button finishButton;
+    @FXML
+    private Button nextAIMoveButton;
 
     @FXML
     private void initialize() {
@@ -339,8 +341,11 @@ public class GameController {
         this.initializeTable();
 
         if (!this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
-            this.playAI();
+            this.nextAIMoveButton.setDisable(false);
+            this.drawButton.setDisable(true);
+            this.finishButton.setDisable(true);
         } else {
+            this.nextAIMoveButton.setDisable(true);
             this.model.createMemento(currentPlayer);
         }
 
@@ -355,8 +360,16 @@ public class GameController {
                     this.currentPlayer.add(this.model.getStock().draw());
                     this.currentPlayer.updateHandList();
                 }
+                this.currentPlayer.drawing = true;
+                this.currentPlayer.notifyObservers();
+                this.currentPlayer.drawing = false;
+
                 this.setNextCurrentPlayer();
-                this.playAI();
+                if (!this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+                    this.drawButton.setDisable(true);
+                    this.finishButton.setDisable(true);
+                    this.nextAIMoveButton.setDisable(false);
+                }
             });
 
         this.finishButton.setOnAction(event -> {
@@ -364,17 +377,27 @@ public class GameController {
                 if (!this.model.determineValidState()) {
                     this.model.restoreMementoWithPenalty(currentPlayer);
                 }
-
                 this.makeWorkspaceCopy();
                 this.updateWorkspaceList();
                 this.currentPlayer.updateHandList();
+                this.currentPlayer.notifyObservers();
+
                 this.setNextCurrentPlayer();
-                this.playAI();
+                if (!this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+                    this.drawButton.setDisable(true);
+                    this.finishButton.setDisable(true);
+                    this.nextAIMoveButton.setDisable(false);
+                }
+            });
+
+        this.nextAIMoveButton.setOnAction(event -> {
+                this.nextPlayer();
             });
     }
 
-    private void playAI() {
-        while (!this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+    // Plays an AI if it's the next player, otherwise sets up Human stuff
+    private void nextPlayer() {
+        if (!this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
             this.workspace = this.currentPlayer.play(this.model.getTable().getState());
             if (workspace == null) {
                 this.currentPlayer.add(this.model.getStock().draw());
@@ -390,18 +413,22 @@ public class GameController {
             // 3. TODO: Timer
             if (this.currentPlayer.getHandSize() == 0) {
                 this.winner = this.currentPlayer;
-                break;
             } else if (this.model.getStock().getSize() == 0) {
                 this.determineWinner();
-                break;
             }
 
             this.setNextCurrentPlayer();
+            if (this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+                this.makeWorkspaceCopy();
+                this.model.createMemento(currentPlayer);
+                this.nextAIMoveButton.setDisable(true);
+                this.drawButton.setDisable(false);
+                this.finishButton.setDisable(true);
+            }
+        } else {
+            this.makeWorkspaceCopy();
+            this.model.createMemento(currentPlayer);
         }
-        this.makeWorkspaceCopy();
-        this.model.createMemento(currentPlayer);
-        this.drawButton.setDisable(false);
-        this.finishButton.setDisable(true);
     }
 
     private void setNextCurrentPlayer() {

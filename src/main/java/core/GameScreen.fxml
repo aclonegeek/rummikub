@@ -12,10 +12,10 @@
             <Label fx:id="p1NameLabel" layoutX="126.0" layoutY="14.0" />
             <Label fx:id="p1StrategyLabel" layoutX="126.0" layoutY="36.0" />
             <Label fx:id="p1HandCountLabel" layoutX="126.0" layoutY="71.0" />
-            <Button fx:id="drawButton" layoutX="1216.0" layoutY="9.0" mnemonicParsing="false" text="Draw" />
-            <Button layoutX="1216.0" layoutY="38.0" mnemonicParsing="false" text="Hint" />
-            <Button fx:id="finishButton" layoutX="1209.0" layoutY="66.0" mnemonicParsing="false" text="Finish" />
+            <Button fx:id="drawButton" layoutX="1159.0" layoutY="9.0" mnemonicParsing="false" text="Draw" />
+            <Button fx:id="finishButton" layoutX="1212.0" layoutY="9.0" mnemonicParsing="false" text="Finish" />
             <ListView fx:id="p1HandListView" layoutX="289.0" orientation="HORIZONTAL" prefHeight="100.0" prefWidth="864.0" />
+            <Button fx:id="nextAIMoveButton" layoutX="1167.0" layoutY="38.0" mnemonicParsing="false" text="Play Next AI" />
          </children>
       </AnchorPane>
       <AnchorPane layoutY="100.0" prefHeight="520.0" prefWidth="126.0">
