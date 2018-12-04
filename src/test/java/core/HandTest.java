@@ -151,4 +151,9 @@ public class HandTest extends TestCase {
         hand.remove(meld);
         assertEquals("[R4]", hand.toString());
     }
+    
+    public void testTwoJokers() {
+        Hand hand = new Hand("J,J,R1,R2,R3");
+        assertEquals("[J J R1 R2 R3]", hand.toString());
+    }
 }
