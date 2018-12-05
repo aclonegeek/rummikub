@@ -1081,5 +1081,14 @@ public class MeldTest extends TestCase {
         assertFalse(tilesAdded.isJoker());
         assertEquals(MeldType.RUN, meld.getMeldType());
         assertEquals("{G6 J G8 G9 G10 G11 G12 G13}", meld.toString());
+        
+        // Disallow a meld with two jokers
+        meld = new Meld("R1,R2,R3,J");
+        tileOnTable = new Tile("J");
+        tilesAdded = meld.addTile(tileOnTable);
+
+        assertNull(tilesAdded);
+        assertEquals(MeldType.RUN, meld.getMeldType());
+        assertEquals("{R1 R2 R3 J}", meld.toString());
     }
 }
