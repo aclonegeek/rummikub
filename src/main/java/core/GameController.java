@@ -324,6 +324,10 @@ public class GameController {
                     this.drawButton.setDisable(true);
                     this.finishButton.setDisable(true);
                     this.nextAIMoveButton.setDisable(false);
+                } else {
+                    this.drawButton.setDisable(false);
+                    this.finishButton.setDisable(true);
+                    this.nextAIMoveButton.setDisable(true);
                 }
             });
 
@@ -342,6 +346,10 @@ public class GameController {
                     this.drawButton.setDisable(true);
                     this.finishButton.setDisable(true);
                     this.nextAIMoveButton.setDisable(false);
+                } else {
+                    this.drawButton.setDisable(false);
+                    this.finishButton.setDisable(true);
+                    this.nextAIMoveButton.setDisable(true);
                 }
             });
 
