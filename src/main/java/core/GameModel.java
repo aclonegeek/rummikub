@@ -157,11 +157,12 @@ public class GameModel {
         if (removedTile != null) {
             // Only split the meld if it's not the first or last tile in the meld
             if (tileToRemoveIndex > 0 && tileToRemoveIndex < meld.getSize() - 1) {
-                Meld secondHalf = meld.splitMeld(tileToRemoveIndex - 1);
+                Meld secondHalf = meld.splitMeld(tileToRemoveIndex);
                 this.workspace.add(secondHalf);
             }
 
-            Meld newMeld = new Meld(removedTile.toString());
+            Meld newMeld = new Meld();
+            newMeld.addTile(removedTile);
             this.workspace.add(newMeld);
             this.updateWorkspaceList();
             return true;
@@ -195,7 +196,7 @@ public class GameModel {
         Tile removedTile = meld.removeTile(tileToRemoveIndex);
         if (removedTile != null) {
             if (tileToRemoveIndex > 0 && tileToRemoveIndex < meld.getSize() - 1) {
-                Meld secondHalf = meld.splitMeld(tileToRemoveIndex - 1);
+                Meld secondHalf = meld.splitMeld(tileToRemoveIndex);
                 this.workspace.add(secondHalf);
             }
 
