@@ -421,6 +421,10 @@ public class GameController {
         this.rigDrawButton.setOnAction(event -> {
                 this.model.rigDraw(this.stockChoiceBox.getSelectionModel().getSelectedIndex());
                 this.updateHandCountLabel();
+                if (this.enableTimer) {
+                    this.timer.cancel();
+                    this.timerLabel.setVisible(false);
+                }
                 this.nextPlayer(true);
             });
     }
