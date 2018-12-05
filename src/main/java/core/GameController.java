@@ -35,12 +35,6 @@ public class GameController {
     private DragDestination dragDestination;
 
     private GameModel model;
-    private ArrayList<Meld> workspace;
-    // TODO: Move to the model?
-    private Player currentPlayer;
-    private Player winner;
-
-    private ObservableList<Meld> workspaceList = FXCollections.observableArrayList();
 
     @FXML
     private Label p1NameLabel;
@@ -92,10 +86,10 @@ public class GameController {
         this.model = new GameModel();
 
         this.tableListView.setCellFactory(new Callback<ListView<Meld>, ListCell<Meld>>() {
-			@Override
-			public ListCell<Meld> call(ListView<Meld> param) {
-				return new MeldListCell();
-			}
+            @Override
+            public ListCell<Meld> call(ListView<Meld> param) {
+                return new MeldListCell();
+            }
             });
     }
 
@@ -138,23 +132,10 @@ public class GameController {
         event.consume();
     }
 
-    private void updateWorkspaceList() {
-        this.workspaceList.clear();
-
-        if (this.workspace.isEmpty()) {
-            this.workspaceList.add(new Meld());
-            return;
-        }
-
-        for (Meld meld : this.workspace) {
-            this.workspaceList.add(meld);
-        }
-    }
-
     private void initializeTable() {
         // This is needed to display the Table on start if the Human is playing first.
-        this.workspaceList.add(new Meld());
-        this.tableListView.setItems(this.workspaceList);
+        this.model.getWorkspaceList().add(new Meld());
+        this.tableListView.setItems(this.model.getWorkspaceList());
     }
 
     public class MeldListCell extends ListCell<Meld> {
@@ -185,38 +166,21 @@ public class GameController {
                     System.out.println("[MELDLIST] Dropping!");
 
                     Dragboard db = event.getDragboard();
+                    boolean success = false;
                     if (dragDestination == DragDestination.NEW_MELD && db.hasString()) {
                         if (dragSource == DragSource.PLAYER) {
                             System.out.println("[MELDLIST] Dropped FROM Player TO New Meld! " + db.getString());
-
-                            Tile tile = currentPlayer.getHand().remove(new Tile(db.getString()));
-                            workspace.add(new Meld(tile.toString()));
-                            currentPlayer.updateHandList();
-                            updateWorkspaceList();
+                            model.playNewMeldFromHand(db.getString());
+                            success = true;
                         } else if (dragSource == DragSource.MELD) {
                             System.out.println("[MELDLIST] Dropped FROM Existing Meld to New Meld!");
-
-                            String[] indices = db.getString().split(",");
-                            int meldIndex = Integer.parseInt(indices[0]);
-                            int tileToRemoveIndex = Integer.parseInt(indices[1]);
-                            Meld meld = workspace.get(meldIndex);
-
-                            Tile removedTile = meld.removeTile(tileToRemoveIndex);
-                            if (removedTile != null) {
-                                // Only split the meld if it's not the first or last tile in the meld
-                                if (tileToRemoveIndex > 0 && tileToRemoveIndex < meld.getSize() - 1) {
-                                    Meld secondHalf = meld.splitMeld(tileToRemoveIndex - 1);
-                                    workspace.add(secondHalf);
-                                }
-
-                                Meld newMeld = new Meld(removedTile.toString());
-                                workspace.add(newMeld);
-                                updateWorkspaceList();
-                            }
+                            success = model.playNewMeldFromExistingMeld(db.getString());
                         }
                         // The player should no longer be able to draw after playing
-                        drawButton.setDisable(true);
-                        finishButton.setDisable(false);
+                        if (success) {
+                            drawButton.setDisable(true);
+                            finishButton.setDisable(false);
+                        }
                     }
 
                     dragSource = DragSource.NONE;
@@ -232,10 +196,13 @@ public class GameController {
                 ClipboardContent cc = new ClipboardContent();
                 int tileToMoveIndex = this.tiles.getSelectionModel().getSelectedIndex();
 
-                // Determine which Meld it belongs to
-                String currentMeld = this.tilesList.toString().replace("[", "{").replace("]", "}").replace(",", "");
+                // Determine which Meld the tile the current player is selecting belongs to
+                String currentMeld = this.tilesList.toString()
+                    .replace("[", "{")
+                    .replace("]", "}")
+                    .replace(",", "");
                 int meldIndex = 0;
-                for (Meld meld : workspace) {
+                for (Meld meld : model.getWorkspace()) {
                     if (currentMeld.equals(meld.toString())) {
                         break;
                     }
@@ -268,62 +235,27 @@ public class GameController {
                     if (dragSource == DragSource.PLAYER) {
                         System.out.println("[TABLE TILE] Dropped From Player TO Existing Meld!");
 
-                        String currentMeld = this.tilesList.toString().replace("[", "{").replace("]", "}").replace(",", "");
-                        int index = 0;
-                        for (Meld meld : workspace) {
-                            if (currentMeld.equals(meld.toString())) {
-                                break;
-                            }
-                            index++;
-                        }
-
-                        Tile tile = currentPlayer.getHand().remove(new Tile(db.getString()));
-                        workspace.get(index).addTile(tile);
-                        currentPlayer.updateHandList();
-                        updateWorkspaceList();
-
+                        String meldToAddTo = this.tilesList.toString()
+                            .replace("[", "{")
+                            .replace("]", "}")
+                            .replace(",", "");
+                        model.playTileFromHandToExistingMeld(db.getString(), meldToAddTo);
                         drawButton.setDisable(true);
                         finishButton.setDisable(false);
                     } else if (dragSource == DragSource.MELD) {
                         System.out.println("[TABLE TILE] Dropped FROM Existing Meld TO Existing Meld!");
 
-                        String[] indices = db.getString().split(",");
-                        int meldIndex = Integer.parseInt(indices[0]);
-                        int tileToRemoveIndex = Integer.parseInt(indices[1]);
-                        Meld meld = workspace.get(meldIndex);
-
-                        Tile removedTile = meld.removeTile(tileToRemoveIndex);
-                        if (removedTile != null) {
-                            if (tileToRemoveIndex > 0 && tileToRemoveIndex < meld.getSize() - 1) {
-                                Meld secondHalf = meld.splitMeld(tileToRemoveIndex - 1);
-                                workspace.add(secondHalf);
-                            }
-
-                            String meldToAddToStr = this.tiles.getItems().toString()
-                                .replace("[", "{")
-                                .replace("]", "}")
-                                .replace(",", "");
-
-                            int index = 0;
-                            for (Meld m : tableListView.getItems()) {
-                                if (meldToAddToStr.equals(m.toString())) {
-                                    break;
-                                }
-                                index++;
-                            }
-
-                            Meld meldToAddTo = tableListView.getItems().get(index);
-                            Tile tile = meldToAddTo.addTile(removedTile);
-                            if (tile != null && tile.isJoker()) {
-                                if (tile.isJoker()) {
-                                    workspace.add(new Meld(tile.toString()));
-                                }
-                                updateWorkspaceList();
-
-                                // The player should no longer be able to draw after playing
-                                drawButton.setDisable(true);
-                                finishButton.setDisable(false);
-                            }
+                        String meldToAddToStr = this.tiles.getItems().toString()
+                            .replace("[", "{")
+                            .replace("]", "}")
+                            .replace(",", "");
+                        if (model.playTileFromMeldToExistingMeld(db.getString(), meldToAddToStr)) {
+                            // The player should no longer be able to draw after playing
+                            drawButton.setDisable(true);
+                            finishButton.setDisable(false);
+                        } else {
+                            drawButton.setDisable(false);
+                            finishButton.setDisable(true);
                         }
                     }
                 }
@@ -358,18 +290,18 @@ public class GameController {
         this.model.determinePlayerOrder();
         this.model.initialDraw();
 
-        this.makeWorkspaceCopy();
-        this.currentPlayer = this.model.getPlayers().get(0);
+        this.model.makeWorkspaceCopy();
+        this.model.setCurrentPlayer(this.model.getPlayers().get(0));
 
         this.initializeTable();
 
-        if (!this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+        if (!this.model.getCurrentPlayer().getPlayerType().equals("StrategyHuman")) {
             this.nextAIMoveButton.setDisable(false);
             this.drawButton.setDisable(true);
             this.finishButton.setDisable(true);
         } else {
             this.nextAIMoveButton.setDisable(true);
-            this.model.createMemento(currentPlayer);
+            this.model.createMemento();
         }
 
         this.setupPlayerButtons();
@@ -380,15 +312,15 @@ public class GameController {
                 if (this.model.getStock().getSize() == 0) {
                     System.out.println("[GAME] Stock is empty!");
                 } else {
-                    this.currentPlayer.add(this.model.getStock().draw());
-                    this.currentPlayer.updateHandList();
+                    this.model.getCurrentPlayer().add(this.model.getStock().draw());
+                    this.model.getCurrentPlayer().updateHandList();
                 }
-                this.currentPlayer.drawing = true;
-                this.currentPlayer.notifyObservers();
-                this.currentPlayer.drawing = false;
+                this.model.getCurrentPlayer().drawing = true;
+                this.model.getCurrentPlayer().notifyObservers();
+                this.model.getCurrentPlayer().drawing = false;
 
-                this.setNextCurrentPlayer();
-                if (!this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+                this.model.setCurrentPlayer(null);
+                if (!this.model.getCurrentPlayer().getPlayerType().equals("StrategyHuman")) {
                     this.drawButton.setDisable(true);
                     this.finishButton.setDisable(true);
                     this.nextAIMoveButton.setDisable(false);
@@ -396,17 +328,17 @@ public class GameController {
             });
 
         this.finishButton.setOnAction(event -> {
-                this.model.getTable().setState(this.workspace);
+                this.model.getTable().setState(this.model.getWorkspace());
                 if (!this.model.determineValidState()) {
-                    this.model.restoreMementoWithPenalty(currentPlayer);
+                    this.model.restoreMementoWithPenalty(this.model.getCurrentPlayer());
                 }
-                this.makeWorkspaceCopy();
-                this.updateWorkspaceList();
-                this.currentPlayer.updateHandList();
-                this.currentPlayer.notifyObservers();
+                this.model.makeWorkspaceCopy();
+                this.model.updateWorkspaceList();
+                this.model.getCurrentPlayer().updateHandList();
+                this.model.getCurrentPlayer().notifyObservers();
 
-                this.setNextCurrentPlayer();
-                if (!this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+                this.model.setCurrentPlayer(null);
+                if (!this.model.getCurrentPlayer().getPlayerType().equals("StrategyHuman")) {
                     this.drawButton.setDisable(true);
                     this.finishButton.setDisable(true);
                     this.nextAIMoveButton.setDisable(false);
@@ -420,55 +352,46 @@ public class GameController {
 
     // Plays an AI if it's the next player, otherwise sets up Human stuff
     private void nextPlayer() {
-        if (!this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
-            this.workspace = this.currentPlayer.play(this.model.getTable().getState());
-            if (workspace == null) {
-                this.currentPlayer.add(this.model.getStock().draw());
+        if (!this.model.getCurrentPlayer().getPlayerType().equals("StrategyHuman")) {
+            this.model.setWorkspace(this.model.getCurrentPlayer().play(this.model.getTable().getState()));
+            if (this.model.getWorkspace() == null) {
+                this.model.getCurrentPlayer().add(this.model.getStock().draw());
             } else {
-                this.model.getTable().setState(workspace);
-                this.updateWorkspaceList();
+                this.model.getTable().setState(this.model.getWorkspace());
+                this.model.updateWorkspaceList();
             }
-            this.currentPlayer.updateHandList();
+            this.model.getCurrentPlayer().updateHandList();
 
             // Check for winning conditions
             // 1. Player has a hand size of 0, OR
             // 2. The stock is empty, so the player with the smallest hand wins
             // 3. TODO: Timer
-            if (this.currentPlayer.getHandSize() == 0) {
-                this.winner = this.currentPlayer;
+            if (this.model.getCurrentPlayer().getHandSize() == 0) {
+                this.model.setWinner(this.model.getCurrentPlayer());
             } else if (this.model.getStock().getSize() == 0) {
                 this.determineWinner();
             }
 
-            this.setNextCurrentPlayer();
-            if (this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+            this.model.setCurrentPlayer(null);
+            if (this.model.getCurrentPlayer().getPlayerType().equals("StrategyHuman")) {
                 // TODO Move to function?
-                this.makeWorkspaceCopy();
-                this.model.createMemento(currentPlayer);
+                this.model.makeWorkspaceCopy();
+                this.model.createMemento();
                 this.nextAIMoveButton.setDisable(true);
                 this.drawButton.setDisable(false);
                 this.finishButton.setDisable(true);
             }
         } else {
-            this.makeWorkspaceCopy();
-            this.model.createMemento(currentPlayer);
+            this.model.makeWorkspaceCopy();
+            this.model.createMemento();
             this.nextAIMoveButton.setDisable(true);
             this.drawButton.setDisable(false);
             this.finishButton.setDisable(true);
         }
     }
 
-    private void setNextCurrentPlayer() {
-        int index = this.model.getPlayers().indexOf(this.currentPlayer);
-        if (index >= (this.model.getNumPlayers() - 1)) {
-            this.currentPlayer = this.model.getPlayers().get(0);
-        } else {
-            this.currentPlayer = this.model.getPlayers().get(index + 1);
-        }
-    }
-
     private void determineWinner() {
-        this.winner = null;
+
     }
 
     public void setNumPlayers(int numPlayers) {
@@ -506,14 +429,6 @@ public class GameController {
         for (String name : playerStrategies) {
             labels.get(counter).setText(name);
             counter++;
-        }
-    }
-
-    private void makeWorkspaceCopy() {
-        this.workspace = new ArrayList<Meld>();
-        for (Meld meld : this.model.getTable().getState()) {
-            Meld newMeld = new Meld(meld);
-            this.workspace.add(newMeld);
         }
     }
 }
