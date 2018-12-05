@@ -123,6 +123,18 @@ public class GameModel {
         }
         this.players = orderedPlayers;
         System.out.println(this.players.get(0).getName() + " goes first!");
+
+        // We also need to reorder the rigged hands
+        if (this.riggedGame) {
+            ArrayList<Hand> orderedRiggedHands = new ArrayList<>();
+            for (int i = firstPlayerIndex; i < this.players.size(); i++) {
+                orderedRiggedHands.add(this.riggedHands.get(i));
+            }
+            for (int i = 0; i < firstPlayerIndex; i++) {
+                orderedRiggedHands.add(this.riggedHands.get(i));
+            }
+            this.riggedHands = orderedRiggedHands;
+        }
     }
 
     // Play a new meld on the table
