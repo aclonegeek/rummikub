@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javafx.beans.value.ChangeListener;
@@ -195,6 +196,11 @@ public class StartMenuController {
         this.loadFileButton.setOnAction(event -> {
                 FileChooser fc = new FileChooser();
                 fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+                String currentPath = Paths.get("./src/test/resources").toAbsolutePath().normalize().toString();
+                File testPath = new File(currentPath);
+                if (testPath != null) {
+                    fc.setInitialDirectory(testPath);
+                }
                 File file = fc.showOpenDialog(null);
                 if (file == null) {
                     return;
