@@ -225,6 +225,81 @@ public class GameModel {
 		return null;
     }
 
+    public void finishHumanMove() {
+        this.table.setState(this.workspace);
+        if (!this.determineValidState()) {
+            this.restoreMementoWithPenalty(this.currentPlayer);
+        }
+        this.makeWorkspaceCopy();
+        this.updateWorkspaceList();
+        this.currentPlayer.updateHandList();
+        this.currentPlayer.notifyObservers();
+    }
+
+    public void playAI() {
+        if (!this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+            this.workspace = this.currentPlayer.play(this.table.getState());
+            if (this.workspace == null) {
+                this.draw();
+            } else {
+                this.table.toHighlightedString(this.workspace);
+                this.updateWorkspaceList();
+                this.currentPlayer.updateHandList();
+            }
+
+            // Check for winning conditions
+            // 1. Player has a hand size of 0, OR
+            // 2. The stock is empty, so the player with the smallest hand wins
+            if (this.currentPlayer.getHandSize() == 0) {
+                this.winner = this.currentPlayer;
+            } else if (this.stock.getSize() == 0) {
+                this.determineWinner();
+            }
+        }
+    }
+
+    public void draw() {
+        if (this.stock.getSize() == 0) {
+            System.out.println("[GAME] Stock is empty!");
+        } else {
+            Tile tile = this.stock.draw();
+            System.out.println("[GAME] " + this.currentPlayer.getName() + " drew " + tile.toString());
+            this.currentPlayer.add(tile);
+            this.currentPlayer.updateHandList();
+        }
+    }
+
+    public String nextPlayer(boolean drew) {
+        if (drew) {
+            if (this.currentPlayer.getPlayerType().equals(("StrategyHuman"))) {
+                this.currentPlayer.drawing = true;
+                this.currentPlayer.notifyObservers();
+                this.currentPlayer.drawing = false;
+            }
+        } else {
+            if (this.workspace != null) {
+                this.table.setState(this.workspace);
+                this.updateWorkspaceList();
+            }
+
+            if (this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+                this.currentPlayer.notifyObservers();
+            }
+        }
+
+        this.setCurrentPlayer(null);
+        if (this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+            this.makeWorkspaceCopy();
+            this.createMemento();
+        }
+
+        return this.currentPlayer.getPlayerType().toString();
+    }
+
+    public void determineWinner() {
+        
+    }
+
     public ArrayList<Meld> getWorkspace() {
         return this.workspace;
     }

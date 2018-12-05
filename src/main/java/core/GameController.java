@@ -3,7 +3,10 @@ package core;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,6 +38,15 @@ public class GameController {
     private DragDestination dragDestination;
 
     private GameModel model;
+
+    private int HIGHLIGHT_TIMER_LENGTH; // seconds
+    private int OPTIONAL_TIMER_LENGTH = -1; // seconds
+    private boolean showAIHands = false;
+
+    // Optional timer
+    private boolean enableTimer = false;
+    private Timer timer;
+    private int interval = 0;
 
     @FXML
     private Label p1NameLabel;
@@ -82,6 +94,9 @@ public class GameController {
     private Button nextAIMoveButton;
 
     @FXML
+    private Label timerLabel;
+
+    @FXML
     private void initialize() {
         this.model = new GameModel();
 
@@ -96,6 +111,10 @@ public class GameController {
     private void initializePlayerHands() {
         this.p1HandListView.setItems(this.model.getPlayers().get(0).getHandList());
         this.p2HandListView.setItems(this.model.getPlayers().get(1).getHandList());
+        if (this.model.getNumPlayers() >= 2) {
+            this.p3HandListView.setVisible(false);
+            this.p4HandListView.setVisible(false);
+        }
         if (this.model.getNumPlayers() >= 3) {
             this.p3HandListView.setItems(this.model.getPlayers().get(2).getHandList());
         }
@@ -114,6 +133,12 @@ public class GameController {
                 listView.setOnDragDetected(event -> {
                         this.handleDragFromHand(event, listView);
                     });
+            } else {
+                if (!this.showAIHands) {
+                    listView.setVisible(false);
+                } else {
+                    listView.setVisible(true);
+                }
             }
             if (++index >= this.model.getNumPlayers()) {
                 break;
@@ -131,19 +156,13 @@ public class GameController {
         event.consume();
     }
 
-    private void initializeTable() {
-        // This is needed to display the Table on start if the Human is playing first.
-        this.model.getWorkspaceList().add(new Meld());
-        this.tableListView.setItems(this.model.getWorkspaceList());
-    }
-
     public class MeldListCell extends ListCell<Meld> {
-        private ListView<Tile> tiles;
-        private ObservableList<Tile> tilesList;
+        private ListView<String> tiles;
+        private ObservableList<String> tilesList;
 
         public MeldListCell() {
             super();
-            this.tiles = new ListView<Tile>();
+            this.tiles = new ListView<>();
             this.tiles.setOrientation(Orientation.HORIZONTAL);
             this.tiles.setPrefHeight(30);
             this.tilesList = FXCollections.observableArrayList();
@@ -193,10 +212,7 @@ public class GameController {
                 int tileToMoveIndex = this.tiles.getSelectionModel().getSelectedIndex();
 
                 // Determine which Meld the tile the current player is selecting belongs to
-                String currentMeld = this.tilesList.toString()
-                    .replace("[", "{")
-                    .replace("]", "}")
-                    .replace(",", "");
+                String currentMeld = this.sanitizeString(this.tilesList.toString());
                 int meldIndex = 0;
                 for (Meld meld : model.getWorkspace()) {
                     if (currentMeld.equals(meld.toString())) {
@@ -229,17 +245,11 @@ public class GameController {
                 if (dragDestination == DragDestination.EXISTING_MELD && db.hasString()) {
                     if (dragSource == DragSource.PLAYER) {
                         // System.out.println("[TABLE TILE] Dropped From Player TO Existing Meld!");
-                        String meldToAddTo = this.tilesList.toString()
-                            .replace("[", "{")
-                            .replace("]", "}")
-                            .replace(",", "");
+                        String meldToAddTo = this.sanitizeString(this.tilesList.toString());
                         success = model.playTileFromHandToExistingMeld(db.getString(), meldToAddTo);
                     } else if (dragSource == DragSource.MELD) {
                         // System.out.println("[TABLE TILE] Dropped FROM Existing Meld TO Existing Meld!");
-                        String meldToAddToStr = this.tiles.getItems().toString()
-                            .replace("[", "{")
-                            .replace("]", "}")
-                            .replace(",", "");
+                        String meldToAddToStr = this.sanitizeString(this.tiles.getItems().toString());
                         success = model.playTileFromMeldToExistingMeld(db.getString(), meldToAddToStr);
                     }
                     if (success) {
@@ -253,6 +263,14 @@ public class GameController {
             });
         }
 
+        private String sanitizeString(String string) {
+            return string.replace("[", "{")
+                .replace("]", "}")
+                .replace(",", "")
+                .replace("*", "")
+                .replace("!", "");
+        }
+
         @Override
         protected void updateItem(Meld meld, boolean empty) {
             super.updateItem(meld, empty);
@@ -261,8 +279,9 @@ public class GameController {
             } else {
                 this.tiles.getItems().clear();
                 this.tilesList.clear();
+                model.getTable().toHighlightedString(model.getWorkspace());
                 for (int i = 0; i < meld.getSize(); i++) {
-                    tilesList.add(meld.getTile(i));
+                    this.tilesList.add(meld.getTile(i).toHighlightedString());
                 }
                 this.setGraphic(this.tiles);
             }
@@ -282,6 +301,7 @@ public class GameController {
         this.model.setCurrentPlayer(this.model.getPlayers().get(0));
 
         this.initializeTable();
+        this.initializeTimer();
 
         if (!this.model.getCurrentPlayer().getPlayerType().equals("StrategyHuman")) {
             this.nextAIMoveButton.setDisable(false);
@@ -290,105 +310,97 @@ public class GameController {
         } else {
             this.nextAIMoveButton.setDisable(true);
             this.model.createMemento();
+            if (this.enableTimer) {
+                this.restartTimer();
+            }
         }
 
         this.setupPlayerButtons();
     }
 
-    private void setupPlayerButtons() {
-        this.drawButton.setOnAction(event -> {
-                if (this.model.getStock().getSize() == 0) {
-                    System.out.println("[GAME] Stock is empty!");
-                } else {
-                    this.model.getCurrentPlayer().add(this.model.getStock().draw());
-                    this.model.getCurrentPlayer().updateHandList();
-                }
-                this.model.getCurrentPlayer().drawing = true;
-                this.model.getCurrentPlayer().notifyObservers();
-                this.model.getCurrentPlayer().drawing = false;
-
-                this.model.setCurrentPlayer(null);
-                if (!this.model.getCurrentPlayer().getPlayerType().equals("StrategyHuman")) {
-                    this.drawButton.setDisable(true);
-                    this.finishButton.setDisable(true);
-                    this.nextAIMoveButton.setDisable(false);
-                } else {
-                    this.drawButton.setDisable(false);
-                    this.finishButton.setDisable(true);
-                    this.nextAIMoveButton.setDisable(true);
-                }
-            });
-
-        this.finishButton.setOnAction(event -> {
-                this.model.getTable().setState(this.model.getWorkspace());
-                if (!this.model.determineValidState()) {
-                    this.model.restoreMementoWithPenalty(this.model.getCurrentPlayer());
-                }
-                this.model.makeWorkspaceCopy();
-                this.model.updateWorkspaceList();
-                this.model.getCurrentPlayer().updateHandList();
-                this.model.getCurrentPlayer().notifyObservers();
-
-                this.model.setCurrentPlayer(null);
-                this.model.createMemento();
-                if (!this.model.getCurrentPlayer().getPlayerType().equals("StrategyHuman")) {
-                    this.drawButton.setDisable(true);
-                    this.finishButton.setDisable(true);
-                    this.nextAIMoveButton.setDisable(false);
-                } else {
-                    this.drawButton.setDisable(false);
-                    this.finishButton.setDisable(true);
-                    this.nextAIMoveButton.setDisable(true);
-                }
-            });
-
-        this.nextAIMoveButton.setOnAction(event -> {
-                this.nextPlayer();
-            });
+    private void initializeTable() {
+        // This is needed to display the Table on start if the Human is playing first.
+        this.model.getWorkspaceList().add(new Meld());
+        this.tableListView.setItems(this.model.getWorkspaceList());
     }
 
-    // Plays an AI if it's the next player, otherwise sets up Human stuff
-    private void nextPlayer() {
-        if (!this.model.getCurrentPlayer().getPlayerType().equals("StrategyHuman")) {
-            this.model.setWorkspace(this.model.getCurrentPlayer().play(this.model.getTable().getState()));
-            if (this.model.getWorkspace() == null) {
-                this.model.getCurrentPlayer().add(this.model.getStock().draw());
-            } else {
-                this.model.getTable().setState(this.model.getWorkspace());
-                this.model.updateWorkspaceList();
-            }
-            this.model.getCurrentPlayer().updateHandList();
-
-            // Check for winning conditions
-            // 1. Player has a hand size of 0, OR
-            // 2. The stock is empty, so the player with the smallest hand wins
-            // 3. TODO: Timer
-            if (this.model.getCurrentPlayer().getHandSize() == 0) {
-                this.model.setWinner(this.model.getCurrentPlayer());
-            } else if (this.model.getStock().getSize() == 0) {
-                this.determineWinner();
-            }
-
-            this.model.setCurrentPlayer(null);
-            if (this.model.getCurrentPlayer().getPlayerType().equals("StrategyHuman")) {
-                // TODO Move to function?
-                this.model.makeWorkspaceCopy();
-                this.model.createMemento();
-                this.nextAIMoveButton.setDisable(true);
-                this.drawButton.setDisable(false);
-                this.finishButton.setDisable(true);
-            }
-        } else {
-            this.model.makeWorkspaceCopy();
-            this.model.createMemento();
-            this.nextAIMoveButton.setDisable(true);
-            this.drawButton.setDisable(false);
-            this.finishButton.setDisable(true);
+    private void initializeTimer() {
+        if (!this.enableTimer) {
+            this.timerLabel.setVisible(false);
         }
     }
 
-    private void determineWinner() {
+    private void restartTimer() {
+        this.interval = this.OPTIONAL_TIMER_LENGTH;
+        this.timerLabel.setVisible(true);
+        this.timerLabel.setText(String.valueOf(interval));
 
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    if (interval <= 0) {
+                        System.out.println("[GAME] " + model.getCurrentPlayer().getName() + " ran out of time!");
+                        timer.cancel();
+                        // Must be done on a separate thread.
+                        Platform.runLater(() -> finishHumanMove());
+                    }
+                    Platform.runLater(() -> timerLabel.setText(String.valueOf(interval)));
+                    interval--;
+                }
+            }, 0, 1000);
+    }
+
+    private void setupPlayerButtons() {
+        this.drawButton.setOnAction(event -> {
+                if (this.enableTimer) {
+                    this.timer.cancel();
+                    this.timerLabel.setVisible(false);
+                }
+                this.model.draw();
+                this.nextPlayer(true);
+            });
+
+        this.finishButton.setOnAction(event -> {
+                this.finishHumanMove();
+            });
+
+        this.nextAIMoveButton.setOnAction(event -> {
+                this.model.playAI();
+                new Thread(() -> {
+                        try {
+                            Thread.sleep(this.HIGHLIGHT_TIMER_LENGTH * 1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Platform.runLater(() -> this.nextPlayer(false));
+                }).start();
+            });
+    }
+
+    private void finishHumanMove() {
+        if (this.enableTimer) {
+            this.timer.cancel();
+            this.timerLabel.setVisible(false);
+        }
+
+        this.model.finishHumanMove();
+        this.nextPlayer(false);
+    }
+
+    private void nextPlayer(boolean drew) {
+        if (this.model.nextPlayer(drew).equals("StrategyHuman")) {
+            this.nextAIMoveButton.setDisable(true);
+            this.drawButton.setDisable(false);
+            this.finishButton.setDisable(true);
+            if (this.enableTimer) {
+                this.restartTimer();
+            }
+        } else {
+            this.drawButton.setDisable(true);
+            this.finishButton.setDisable(true);
+            this.nextAIMoveButton.setDisable(false);
+        }
     }
 
     public void setNumPlayers(int numPlayers) {
@@ -427,5 +439,14 @@ public class GameController {
             labels.get(counter).setText(name);
             counter++;
         }
+    }
+
+    public void setExtras(int highlightTimerLength, int optionalTimerLength, boolean showAIHands) {
+        this.HIGHLIGHT_TIMER_LENGTH = highlightTimerLength;
+        if (optionalTimerLength > 0) {
+            this.enableTimer = true;
+            this.OPTIONAL_TIMER_LENGTH = optionalTimerLength;
+        }
+        this.showAIHands = showAIHands;
     }
 }

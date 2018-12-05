@@ -16,6 +16,7 @@
             <Button fx:id="finishButton" layoutX="1212.0" layoutY="9.0" mnemonicParsing="false" text="Finish" />
             <ListView fx:id="p1HandListView" layoutX="289.0" orientation="HORIZONTAL" prefHeight="100.0" prefWidth="864.0" />
             <Button fx:id="nextAIMoveButton" layoutX="1167.0" layoutY="38.0" mnemonicParsing="false" text="Play Next AI" />
+            <Label fx:id="timerLabel" layoutX="14.0" layoutY="71.0" />
          </children>
       </AnchorPane>
       <AnchorPane layoutY="100.0" prefHeight="520.0" prefWidth="126.0">
