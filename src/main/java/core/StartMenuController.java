@@ -43,9 +43,16 @@ public class StartMenuController {
     private ChoiceBox<String> p4StrategyChoice;
 
     @FXML
-    private CheckBox enableRiggingCheckBox;
+    private TextField highlightTimerLength;
     @FXML
-    private CheckBox showPlayerHandsCheckBox;
+    private CheckBox optionalTimerCheckBox;
+    @FXML
+    private TextField optionalTimerLength;
+    @FXML
+    private CheckBox showAIHandsCheckBox;
+
+    @FXML
+    private CheckBox enableRiggingCheckBox;
 
     @FXML
     private Button loadFileButton;
@@ -77,6 +84,9 @@ public class StartMenuController {
         gameController.setNumPlayers(this.numPlayersChoice.getValue());
         gameController.setPlayerNames(this.getPlayerNames());
         gameController.setPlayerStrategies(this.getPlayerStrategies());
+        gameController.setExtras(this.getHighlightTimerLength(),
+                                 this.getOptionalTimerLength(),
+                                 this.showAIHandsCheckBox.isSelected());
         if (this.enableRiggingCheckBox.isSelected()) {
             gameController.setRiggedAttributes(this.getRiggedStock(this.stockField.getText()),
                                                this.getRiggedStock(this.deciderStockField.getText()),
@@ -86,7 +96,26 @@ public class StartMenuController {
         gameController.play();
     }
 
-    @FXML
+	private int getHighlightTimerLength() {
+        try {
+            return Integer.parseInt(this.highlightTimerLength.getText());
+        } catch (NumberFormatException e) {
+            return 3;
+        }
+	}
+
+	private int getOptionalTimerLength() {
+        if (this.optionalTimerCheckBox.isSelected()) {
+            try {
+                return Integer.parseInt(this.optionalTimerLength.getText());
+            } catch (NumberFormatException e) {
+                return -1;
+            }
+        }
+        return -1;
+	}
+
+	@FXML
     private void initialize() {
         ObservableList<Integer> numPlayers = FXCollections.observableArrayList(2, 3, 4);
         this.numPlayersChoice.setItems(numPlayers);
@@ -135,11 +164,20 @@ public class StartMenuController {
         this.p3StrategyChoice.setItems(strategies);
         this.p4StrategyChoice.setItems(strategies);
 
+        this.optionalTimerCheckBox.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+                if (newValue) {
+                    this.optionalTimerLength.setDisable(false);
+                } else {
+                    this.optionalTimerLength.setDisable(true);
+                }
+            });
+
         // Rigging fields
         this.enableRiggingFields(false);
         this.enableRiggingCheckBox.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
                 if (newValue) {
                     this.enableRiggingFields(true);
+                    this.showAIHandsCheckBox.setSelected(true);
                 } else {
                     this.enableRiggingFields(false);
                 }
@@ -204,8 +242,6 @@ public class StartMenuController {
 
     private void enableRiggingFields(boolean setting) {
         setting = !setting;
-        this.showPlayerHandsCheckBox.setDisable(setting);
-        this.showPlayerHandsCheckBox.setSelected(!setting);
         this.loadFileButton.setDisable(setting);
         this.stockField.setDisable(setting);
         this.deciderStockField.setDisable(setting);
