@@ -132,6 +132,9 @@ public class Meld {
         // Disallow adding multiple tiles containing a joker (affects console game only) TODO: Remove console game support
         if (tiles.size() > 1 && tiles.removeIf(t -> t.isJoker())) { return null; }
         
+        // Disallow two jokers in one meld
+        if (this.containsJoker() && tiles.get(0).isJoker()) { return null; } 
+        
         // Check if the tile being added is part of an initial meld (so the joker inside is not replaced by it right away)
         boolean meldIsFromHand = this.meld.stream().allMatch(t -> t.isOnTable() == false);
         if (meldIsFromHand && !tiles.get(0).isOnTable()) { this.isInitialMeld = true; }
