@@ -1,6 +1,28 @@
 package core;
 
 public class Globals {
+    // Optional rules
+    private static boolean cannotAddJokersToExistingMelds = false;
+    private static boolean lenientJokers = false;
+    
+    public static boolean getCannotAddJokersToExistingMelds() {
+        return cannotAddJokersToExistingMelds;
+    }
+    
+    public static boolean getLenientJokers() {
+        return lenientJokers;
+    }
+    
+    public static void setCannotAddJokersToExistingMelds() {
+        cannotAddJokersToExistingMelds = true;
+        lenientJokers = false;
+    }
+  
+    public static void setLenientJokers() {
+        cannotAddJokersToExistingMelds = false;
+        lenientJokers = true;
+    }
+    
     public static enum Colour {
         RED('R'), BLUE('B'), GREEN('G'), ORANGE('O');
         
