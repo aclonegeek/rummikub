@@ -310,6 +310,19 @@ public class GameModel {
         }
     }
 
+    public void rigDraw(int index) {
+        if (index == -1) {
+            System.out.println("[GAME] Invalid tile selected for rig draw.");
+            return;
+        }
+
+        Tile tile = this.stock.remove(index);
+        System.out.println("[GAME] " + this.currentPlayer.getName() + " rig drew " + tile.toString());
+        this.currentPlayer.add(tile);
+        this.currentPlayer.updateHandList();
+        this.updateStockList();
+    }
+
     public String nextPlayer(boolean drew) {
         if (drew) {
             if (this.currentPlayer.getPlayerType().equals(("StrategyHuman"))) {

@@ -345,6 +345,7 @@ public class GameController {
             this.finishButton.setDisable(true);
         } else {
             this.nextAIMoveButton.setDisable(true);
+            this.finishButton.setDisable(true);
             this.model.createMemento();
             if (this.enableTimer) {
                 this.restartTimer();
@@ -415,6 +416,12 @@ public class GameController {
                         }
                         Platform.runLater(() -> this.nextPlayer(false));
                 }).start();
+            });
+
+        this.rigDrawButton.setOnAction(event -> {
+                this.model.rigDraw(this.stockChoiceBox.getSelectionModel().getSelectedIndex());
+                this.updateHandCountLabel();
+                this.nextPlayer(true);
             });
     }
 

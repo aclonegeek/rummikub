@@ -33,6 +33,10 @@ public class Stock {
         this.stock.add(tile);
     }
 
+    public Tile remove(int index) {
+        return this.stock.remove(index);
+    }
+
     public int getSize() {
         return this.stock.size();
     }
