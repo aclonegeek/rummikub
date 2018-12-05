@@ -1,7 +1,9 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import core.Globals.PlayerType;
 import javafx.collections.FXCollections;
@@ -16,6 +18,7 @@ public class GameModel {
 
     private int numPlayers;
     private ArrayList<Pair<String, String>> playerData;
+    private Map<Player, Integer> playerScores;
 
     private GameMemento memento;
 
@@ -234,6 +237,10 @@ public class GameModel {
         this.updateWorkspaceList();
         this.currentPlayer.updateHandList();
         this.currentPlayer.notifyObservers();
+
+        if (this.currentPlayer.getHandSize() == 0) {
+            this.winner = this.currentPlayer;
+        }
     }
 
     public void playAI() {
@@ -261,6 +268,7 @@ public class GameModel {
     public void draw() {
         if (this.stock.getSize() == 0) {
             System.out.println("[GAME] Stock is empty!");
+            this.gameOver();
         } else {
             Tile tile = this.stock.draw();
             System.out.println("[GAME] " + this.currentPlayer.getName() + " drew " + tile.toString());
@@ -296,8 +304,44 @@ public class GameModel {
         return this.currentPlayer.getPlayerType().toString();
     }
 
+    public boolean gameOver() {
+        if (this.stock.getSize() == 0 && this.winner == null) {
+            this.determineWinner();
+        }
+
+        if (this.winner != null) {
+            this.determinePlayerScores();
+            System.out.println("[GAME] " + this.winner.getName() + " won!");
+            System.out.println("[GAME] Scores:");
+            for (Player player : this.players) {
+                System.out.println("\t" + player.getName() + ": " + this.playerScores.get(player));
+            }
+            return true;
+        }
+
+        return false;
+    }
+
     public void determineWinner() {
-        
+        int lowestHandCount = this.players.get(0).getHandSize();
+        winner = this.players.get(0);
+        for (Player player : this.players.subList(1, this.players.size())) {
+            if (player.getHandSize() < lowestHandCount) {
+                lowestHandCount = player.getHandSize();
+                winner = player;
+            }
+        }
+    }
+
+    private void determinePlayerScores() {
+        this.playerScores = new HashMap<Player, Integer>();
+        this.playerScores.put(this.winner, 0);
+        for (Player player : this.players) {
+            if (player != this.winner) {
+                this.playerScores.put(player, player.getScore() * -1);
+                this.playerScores.put(this.winner, this.playerScores.get(this.winner) + player.getScore());
+            }
+        }
     }
 
     public ArrayList<Meld> getWorkspace() {

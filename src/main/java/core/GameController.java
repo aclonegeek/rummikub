@@ -392,12 +392,16 @@ public class GameController {
             this.timer.cancel();
             this.timerLabel.setVisible(false);
         }
-
         this.model.finishHumanMove();
         this.nextPlayer(false);
     }
 
     private void nextPlayer(boolean drew) {
+        if (this.model.gameOver()) {
+            this.gameOver();
+            return;
+        }
+
         if (this.model.nextPlayer(drew).equals("StrategyHuman")) {
             this.nextAIMoveButton.setDisable(true);
             this.drawButton.setDisable(false);
@@ -413,6 +417,20 @@ public class GameController {
         this.currentPlayerLabel.setText(this.model.getCurrentPlayer().getName());
     }
 
+    private void gameOver() {
+        this.tableListView.setDisable(true);
+        this.p1HandListView.setDisable(true);
+        this.p2HandListView.setDisable(true);
+        this.p3HandListView.setDisable(true);
+        this.p4HandListView.setDisable(true);
+        this.drawButton.setDisable(true);
+        this.finishButton.setDisable(true);
+        this.nextAIMoveButton.setDisable(true);
+    }
+
+    /*
+     * Stuff to set and pass to the model.
+     */
     public void setNumPlayers(int numPlayers) {
         this.model.setNumPlayers(numPlayers);
     }
