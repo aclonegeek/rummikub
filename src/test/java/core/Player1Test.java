@@ -82,6 +82,7 @@ public class Player1Test extends TestCase {
         p1.setInitialMove(false);
         p1.setHand(hand4);
         assertEquals("[{R7 R8 R9}, {R11 R12 R13}, {B10 O10 R10}]", p1.play(workspace4).toString());
+        assertEquals("[]", p1.getHand().toString());
     }
 
     public void testToString() {
