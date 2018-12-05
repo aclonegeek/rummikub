@@ -1,7 +1,7 @@
 numPlayers:2
-stock:R12,R11,R10,R9,R8
+stock:R12,R11,R10,R9,R13,G1,G2,G3,B1,B2,B3
 deciderStock:R11,R10
-p1:Mikey:StrategyHuman:B10,R10,O10,J,O11,O1
-p2:Spits:StrategyHuman:O9,O10,J,G10,O1
+p1:Mikey:StrategyHuman:R10,B10,J,O10,B8,B10
+p2:Spits:StrategyHuman:B11,B12,B13,G10
 p3:
 p4:
