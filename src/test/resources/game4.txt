@@ -1,0 +1,7 @@
+numPlayers:4
+stock:O1,O2,O3,O4
+deciderStock:R11,R10,R9,R8
+p1:p1:Strategy1:B7,B8,B9,B10,G6,G7,O6,O8
+p2:p2:Strategy2:R9,R10,R11,R13,R7,R1,R2,R3
+p3:p3.1:Strategy3:R8,R12,B13,G13,O13,O1,O2,O4,O5
+p4:p3.2:Strategy3:B6,B11,G8,G9,G10,G11,O3,O4
