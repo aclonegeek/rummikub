@@ -237,6 +237,7 @@ public abstract class PlayBehaviour {
                             splitMeld.removeTile(0);
                             workspace.add(splitMeld);
                             workspace.add(potentialMeld);
+                            hand.remove(potentialMeld);
                         }
                     }
                 }

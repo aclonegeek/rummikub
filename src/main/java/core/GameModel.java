@@ -217,14 +217,12 @@ public class GameModel {
     }
 
     private Meld findMatchingMeld(String meldToFind) {
-        Meld meld = null;
         for (Meld m : this.workspace) {
             if (meldToFind.equals(m.toString())) {
-                meld = m;
-                break;
+                return m;
             }
         }
-        return meld;
+		return null;
     }
 
     public ArrayList<Meld> getWorkspace() {

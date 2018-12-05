@@ -205,6 +205,7 @@ public class StartMenuController {
     private void enableRiggingFields(boolean setting) {
         setting = !setting;
         this.showPlayerHandsCheckBox.setDisable(setting);
+        this.showPlayerHandsCheckBox.setSelected(!setting);
         this.loadFileButton.setDisable(setting);
         this.stockField.setDisable(setting);
         this.deciderStockField.setDisable(setting);
