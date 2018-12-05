@@ -388,11 +388,20 @@ public class GameController {
     }
 
     private void finishHumanMove() {
+        boolean timerExpiredAndNoMove = false;
         if (this.enableTimer) {
             this.timer.cancel();
             this.timerLabel.setVisible(false);
+            if (this.model.noMove()) {
+                timerExpiredAndNoMove = true;
+            }
         }
-        this.model.finishHumanMove();
+
+        if (timerExpiredAndNoMove) {
+            this.model.finishHumanMoveTimerExpiry();
+        } else {
+            this.model.finishHumanMove();
+        }
         this.nextPlayer(false);
     }
 

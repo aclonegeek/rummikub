@@ -233,6 +233,7 @@ public class GameModel {
         if (!this.determineValidState()) {
             this.restoreMementoWithPenalty(this.currentPlayer);
         }
+
         this.makeWorkspaceCopy();
         this.updateWorkspaceList();
         this.currentPlayer.updateHandList();
@@ -241,6 +242,32 @@ public class GameModel {
         if (this.currentPlayer.getHandSize() == 0) {
             this.winner = this.currentPlayer;
         }
+    }
+
+    public void finishHumanMoveTimerExpiry() {
+        this.draw();
+    }
+
+    public boolean noMove() {
+        this.table.setState(this.workspace);
+        ArrayList<Meld> currentWorkspace = this.table.getState();
+        if (!this.determineValidState()) {
+            currentWorkspace = this.workspace;
+        }
+
+        int previousWorkspaceTileCount = this.countTiles(this.memento.getTableState().getState());
+        int currentWorkspaceTileCount = this.countTiles(currentWorkspace);
+        return previousWorkspaceTileCount == currentWorkspaceTileCount;
+    }
+
+    private int countTiles(ArrayList<Meld> melds) {
+        int count = 0;
+        for (Meld meld : melds) {
+            for (int i = 0; i < meld.getSize(); i++) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public void playAI() {
@@ -454,9 +481,14 @@ public class GameModel {
     protected void restoreMementoWithPenalty(Player player) {
         this.table = this.memento.getTableState();
         player.setHand(this.memento.getHandState());
-        if (this.stock.getSize() > 0) { player.add(this.stock.draw()); }
-        if (this.stock.getSize() > 0) { player.add(this.stock.draw()); }
-        if (this.stock.getSize() > 0) { player.add(this.stock.draw()); }
+        for (int i = 0; i < 3; i++) {
+            if (this.stock.getSize() <= 0) {
+                break;
+            }
+            Tile tile = this.stock.draw();
+            System.out.println("[GAME] " + player.getName() + " drew " + tile.toString());
+            player.add(tile);
+        }
 
         // Reset lowest hand counts
         int newLowestHandCount = 100;
