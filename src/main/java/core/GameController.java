@@ -122,8 +122,7 @@ public class GameController {
     }
 
     private void handleDragFromHand(MouseEvent event, ListView<Tile> listView) {
-        System.out.println("[HUMAN] Drag detected!");
-
+        // System.out.println("[HUMAN] Drag detected!");
         this.dragSource = DragSource.PLAYER;
         Dragboard db = listView.startDragAndDrop(TransferMode.COPY);
         ClipboardContent cc = new ClipboardContent();
@@ -151,8 +150,7 @@ public class GameController {
             this.tiles.setItems(tilesList);
 
             this.setOnDragOver(event -> {
-                    System.out.println("[MELDLIST] Drag over!");
-
+                    // System.out.println("[MELDLIST] Drag over!");
                     dragDestination = DragDestination.NEW_MELD;
                     Dragboard db = event.getDragboard();
                     if (db.hasString()) {
@@ -163,17 +161,16 @@ public class GameController {
 
             // Playing a new meld from hand or an existing meld
             this.setOnDragDropped(event -> {
-                    System.out.println("[MELDLIST] Dropping!");
-
+                    // System.out.println("[MELDLIST] Dropping!");
                     Dragboard db = event.getDragboard();
                     boolean success = false;
                     if (dragDestination == DragDestination.NEW_MELD && db.hasString()) {
                         if (dragSource == DragSource.PLAYER) {
-                            System.out.println("[MELDLIST] Dropped FROM Player TO New Meld! " + db.getString());
+                            // System.out.println("[MELDLIST] Dropped FROM Player TO New Meld! " + db.getString());
                             model.playNewMeldFromHand(db.getString());
                             success = true;
                         } else if (dragSource == DragSource.MELD) {
-                            System.out.println("[MELDLIST] Dropped FROM Existing Meld to New Meld!");
+                            // System.out.println("[MELDLIST] Dropped FROM Existing Meld to New Meld!");
                             success = model.playNewMeldFromExistingMeld(db.getString());
                         }
                         // The player should no longer be able to draw after playing
@@ -189,8 +186,7 @@ public class GameController {
 
         // Dragging a tile from an existing meld
         this.tiles.setOnDragDetected(event -> {
-                System.out.println("[TABLE TILE] Drag FROM Existing Meld detected!");
-
+                // System.out.println("[TABLE TILE] Drag FROM Existing Meld detected!");
                 dragSource = DragSource.MELD;
                 Dragboard db = this.tiles.startDragAndDrop(TransferMode.COPY);
                 ClipboardContent cc = new ClipboardContent();
@@ -216,9 +212,8 @@ public class GameController {
 
         // Dragging over a tile in an existing meld on the table
         this.tiles.setOnDragOver(event -> {
+                // System.out.println("[TABLE TILE] Drag over!");
                 dragDestination = DragDestination.EXISTING_MELD;
-
-                System.out.println("[TABLE TILE] Drag over!");
                 Dragboard db = event.getDragboard();
                 if (db.hasString()) {
                     event.acceptTransferModes(TransferMode.COPY);
@@ -228,22 +223,19 @@ public class GameController {
 
         // Adding a tile from the player's hand to an existing meld
         this.tiles.setOnDragDropped(event -> {
-                System.out.println("[TABLE TILE] Dropping!");
-
+                // System.out.println("[TABLE TILE] Dropping!");
                 Dragboard db = event.getDragboard();
                 boolean success = false;
                 if (dragDestination == DragDestination.EXISTING_MELD && db.hasString()) {
                     if (dragSource == DragSource.PLAYER) {
-                        System.out.println("[TABLE TILE] Dropped From Player TO Existing Meld!");
-
+                        // System.out.println("[TABLE TILE] Dropped From Player TO Existing Meld!");
                         String meldToAddTo = this.tilesList.toString()
                             .replace("[", "{")
                             .replace("]", "}")
                             .replace(",", "");
                         success = model.playTileFromHandToExistingMeld(db.getString(), meldToAddTo);
                     } else if (dragSource == DragSource.MELD) {
-                        System.out.println("[TABLE TILE] Dropped FROM Existing Meld TO Existing Meld!");
-
+                        // System.out.println("[TABLE TILE] Dropped FROM Existing Meld TO Existing Meld!");
                         String meldToAddToStr = this.tiles.getItems().toString()
                             .replace("[", "{")
                             .replace("]", "}")
