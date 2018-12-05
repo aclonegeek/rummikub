@@ -130,6 +130,7 @@ public class GameController {
         int index = 0;
         for (ListView<Tile> listView : handListViews) {
             if (this.model.getPlayers().get(index).getPlayerType().equals("StrategyHuman")) {
+                listView.setVisible(true);
                 listView.setOnDragDetected(event -> {
                         this.handleDragFromHand(event, listView);
                     });
