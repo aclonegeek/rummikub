@@ -52,23 +52,6 @@ public class Strategy4 extends PlayBehaviour {
     
     // Plays all the tiles it can but only if their values already appear on the table
     public ArrayList<Meld> determineRegularMove(Hand hand, ArrayList<Meld> workspace) {
-        // Make copy of hand that only includes tiles with values already on table
-        Hand filteredHand = new Hand();
-        for (int i = 0; i < hand.getSize(); i++) {
-            Tile tile = hand.getTile(i);
-            for (Meld meld : workspace) {
-                if (meld.containsTileValue(tile)) {
-                    filteredHand.add(tile);
-                    break;
-                }
-            }
-        }
-        
-        Hand filteredHandCopy = new Hand();
-        for (int i = 0; i < filteredHand.getSize(); i++) {
-            filteredHandCopy.add(filteredHand.getTile(i));
-        }
-        
         // Make deep copy of workspace
         ArrayList<Meld> workspaceCopy = new ArrayList<Meld>();
         for (Meld meld : workspace) {
@@ -76,18 +59,11 @@ public class Strategy4 extends PlayBehaviour {
         }
         
         for (int i = 0; i < 3; i++) {
-            workspace = this.playUsingHand(filteredHand, workspace);
-            workspace = this.playUsingHandAndTable_AddToPotentialMeldsInHand(filteredHand, workspace);
-            workspace = this.playUsingHandAndTable_AddToTilesInHand(filteredHand, workspace);
-            workspace = this.playUsingHandAndTable_AddToMeldsOnTable(filteredHand, workspace);
+            workspace = this.playUsingHandWithPriority(hand, workspace);
+            workspace = this.playUsingHandAndTable_AddToPotentialMeldsInHand(hand, workspace);
+            workspace = this.playUsingHandAndTable_AddToTilesInHand(hand, workspace);
+            workspace = this.playUsingHandAndTable_AddToMeldsOnTable(hand, workspace);
             workspace = this.rearrangeWorkspace(workspace);
-        }
-        
-        // Remove tiles from hand that were removed from filteredHand
-        for (int i = 0; i < filteredHandCopy.getSize(); i++) {
-            if (!filteredHand.containsTile(filteredHandCopy.getTile(i))) {
-                hand.remove(filteredHandCopy.getTile(i));
-            }
         }
         
         if (tilesAddedToWorkspace(workspace, workspaceCopy)) {
