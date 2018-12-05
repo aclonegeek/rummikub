@@ -2,6 +2,8 @@ package core;
 
 import java.util.ArrayList;
 
+import core.Meld.MeldType;
+
 public abstract class PlayBehaviour {
 
     abstract ArrayList<Meld> determineInitialMove(Hand hand, ArrayList<Meld> workspace);
@@ -133,6 +135,29 @@ public abstract class PlayBehaviour {
             return null;
         }
     }
+    
+    // Get a list of duplicate tiles, ignoring jokers
+    protected ArrayList<Tile> getDuplicateTiles(ArrayList<Meld> workspace) {
+        ArrayList<Tile> tiles = new ArrayList<>();
+        ArrayList<Tile> duplicateTiles = new ArrayList<>();
+        for (Meld meld : workspace) {
+            for (int i = 0; i < meld.getSize(); i++) {
+                tiles.add(meld.getTile(i));
+            }
+        }
+        
+        for (int i = 0; i < tiles.size(); i++) {
+            for (int j = i + 1; j < tiles.size(); j++) {
+                if (tiles.get(i).getColour().equals(tiles.get(j).getColour()) 
+                    && tiles.get(i).getValue() == tiles.get(j).getValue()
+                    && !tiles.get(i).isJoker()) {
+                    duplicateTiles.add(tiles.get(i));
+                }
+            }
+        }
+        
+        return duplicateTiles;
+    }
 
     // Plays using only tiles in hand
     protected ArrayList<Meld> playUsingHand(Hand hand, ArrayList<Meld> workspace) {
@@ -147,6 +172,38 @@ public abstract class PlayBehaviour {
             }
         }
 
+        return workspace;
+    }
+    
+    // Play using only tiles in hand, giving priority to sets for which workspace contains duplicate tiles of that value
+    // ex. if table contains {R1,R2,R3} and {R2,O2,G2} it will prioritize tiles with value 2
+    protected ArrayList<Meld> playUsingHandWithPriority(Hand hand, ArrayList<Meld> workspace) {
+        ArrayList<Tile> duplicateTiles = getDuplicateTiles(workspace);
+        while (hand.getSize() > 0) {
+            // First play any sets which contain values in duplicateTiles (ie. if R2 in duplicateTiles, prioritize sets of type 2)
+            ArrayList<Meld> currentMelds = this.createMeldsFromHand(hand);
+            for (Meld meld : currentMelds) {
+                if (meld.getMeldType() == MeldType.SET) {
+                    for (Tile tile : duplicateTiles) {
+                        if (meld.getTile(0).getValue() == tile.getValue()) {
+                            workspace.add(meld);
+                            hand.remove(meld);
+                        }
+                    }
+                }
+            }
+            
+            // Then just play largest melds, as in playUsingHand()
+            currentMelds = this.createMeldsFromHand(hand);
+            Meld largestMeld = this.getLargestMeld(currentMelds);
+            if (largestMeld != null) {
+                workspace.add(largestMeld);
+                hand.remove(largestMeld);
+            } else {
+                break;
+            }
+        }
+        
         return workspace;
     }
 

@@ -65,7 +65,7 @@ public class Game {
         // Register each player that uses Strategy3 or Strategy4 as observers of the other players
         for (Player player : this.players) {
             for (Player otherPlayer : this.players) {
-                if (otherPlayer != player && (otherPlayer.getPlayerType().equals(PlayerType.PLAYER3) || otherPlayer.getPlayerType().equals(PlayerType.PLAYER4))) {
+                if (otherPlayer != player && (otherPlayer.getPlayerType().equals(PlayerType.PLAYER3))) {
                     player.registerObserver(otherPlayer);
                 }
             }

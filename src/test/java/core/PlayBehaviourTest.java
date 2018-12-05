@@ -212,6 +212,40 @@ public class PlayBehaviourTest extends TestCase {
         assertEquals("[R4]", hand1.toString());
     }
     
+    // Case where player creates melds from tiles in hand with priority
+    public void testPlayUsingHandWithPriority1() {
+        Strategy4 strategy4 = new Strategy4();
+        
+        // 2 is prioritized
+        ArrayList<Meld> workspace1 = new ArrayList<>();
+        workspace1.add(new Meld("R1,R2,R3"));
+        workspace1.add(new Meld("G2,R2,B2"));
+        Hand hand1 = new Hand("B2,G2,O2,B3,B4,B5,B6");
+        assertEquals("[{R1 R2 R3}, {G2 R2 B2}, {B2 G2 O2}, {B3 B4 B5 B6}]", strategy4.playUsingHandWithPriority(hand1, workspace1).toString());
+        
+        // 10 and 3 are prioritized
+        ArrayList<Meld> workspace2 = new ArrayList<>();
+        workspace2.add(new Meld("B10,G10,O10"));
+        workspace2.add(new Meld("O10,O11,O12"));
+        workspace2.add(new Meld("R1,R2,R3"));
+        workspace2.add(new Meld("R3,R4,R5"));
+        Hand hand2 = new Hand("G3,B3,O3,R4,R5,R6,R7,R8,R9,R10,G10,B10,O1");
+        assertEquals("[{B10 G10 O10}, {O10 O11 O12}, {R1 R2 R3}, {R3 R4 R5}, {R10 B10 G10}, {B3 G3 O3}, {R4 R5 R6 R7 R8 R9}]", strategy4.playUsingHandWithPriority(hand2, workspace2).toString());
+        assertEquals("[O1]", hand2.toString());
+    }
+    
+    // Case where player creates melds from tiles in hand with priority, with jokers
+    public void testPlayUsingHandWithPriority2() {
+        Strategy4 strategy4 = new Strategy4();
+        
+        ArrayList<Meld> workspace1 = new ArrayList<>();
+        workspace1.add(new Meld("R1,R2,R3"));
+        workspace1.add(new Meld("G2,R2,B2"));
+        Hand hand1 = new Hand("B2,G2,J,B3,B4,B5,B6");
+        
+        assertEquals("[{R1 R2 R3}, {G2 R2 B2}, {B2 G2 J}, {B3 B4 B5 B6}]", strategy4.playUsingHandWithPriority(hand1, workspace1).toString());
+    }
+    
     // Cases where player adds tiles on table to potential melds in hand (making them valid)
     public void testPlayUsingHandAndTable2() {
         Strategy2 strategy2 = new Strategy2();
@@ -408,5 +442,23 @@ public class PlayBehaviourTest extends TestCase {
         oldWorkspace3.add(new Meld("R1,R2,R3"));
         oldWorkspace3.add(new Meld("G1,O1,B1"));
         assertFalse(strategy1.tilesAddedToWorkspace(newWorkspace3, oldWorkspace3));
+    }
+    
+    public void testGetDuplicateTiles() {
+        Strategy1 strategy1 = new Strategy1();
+        ArrayList<Meld> workspace1 = new ArrayList<>();
+        workspace1.add(new Meld("R1,R2,R3,J"));
+        workspace1.add(new Meld("O2,R2,G2"));
+        workspace1.add(new Meld("G2,G3,G4"));
+        workspace1.add(new Meld("G10,G11,J"));
+        assertEquals("[R2, G2]", strategy1.getDuplicateTiles(workspace1).toString());
+        
+       ArrayList<Meld> workspace2 = new ArrayList<>();
+       workspace2.add(new Meld("R1,R2,R3"));
+       workspace2.add(new Meld("R4,R5,R6"));
+       assertEquals("[]", strategy1.getDuplicateTiles(workspace2).toString());
+       
+       ArrayList<Meld> workspace3 = new ArrayList<>();
+       assertEquals("[]", strategy1.getDuplicateTiles(workspace3).toString());
     }
 }

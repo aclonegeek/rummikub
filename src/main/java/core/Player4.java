@@ -24,14 +24,7 @@ public class Player4 extends Player {
         ArrayList<Meld> workspace = new ArrayList<>();
         if (this.initialMove) {
             workspace = this.playBehaviour.determineInitialMove(hand, tableCopy);
-        } else if (this.hand.getSize() - this.lowestHandCount >= 3) {
-            // If a player is beating player 3 by 3 or more tiles, will play all that it can (Strategy 1)
-            this.playBehaviour = new Strategy1();
-            workspace = this.playBehaviour.determineRegularMove(hand, tableCopy);
         } else {
-            // Otherwise, they will play only using tiles with values alredy on the table (Strategy 4)
-            // Because if the value is not already on the table, there is a higher chance they can create a set using this tile
-            this.playBehaviour = new Strategy4();
             workspace = this.playBehaviour.determineRegularMove(hand, tableCopy);
         }  
         if (workspace != null) {
