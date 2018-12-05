@@ -43,7 +43,11 @@ public class Table {
         this.melds.removeIf(m -> m.getSize() == 0);
         
         for (Meld meld : melds) {
+            // Give each meld a new ID
             meld.generateMeldID();
+            
+            // Set each initial meld on the table
+            meld.setIsInitialMeld(false);
             
             // Lock melds that contain a joker
             if (meld.containsJoker()) { meld.setIsLocked(true); }
