@@ -28,7 +28,7 @@ public abstract class Player implements PlayerSubject, PlayerObserver {
     abstract ArrayList<Meld> play(ArrayList<Meld> tableState);
 
     public void add(Tile tile) {
-        System.out.println(this.name + " drew " + tile.toString());
+        // System.out.println(this.name + " drew " + tile.toString());
         this.hand.add(tile);
     }
 

@@ -6,42 +6,64 @@ import java.util.Iterator;
 import java.util.Map;
 
 import core.Globals.PlayerType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.util.Pair;
 
 public class GameModel {
     private Stock stock;
+    private ArrayList<Player> playersOldOrder;
     private ArrayList<Player> players;
     private Table table;
+    private ArrayList<Meld> workspace;
 
     private int numPlayers;
-    private Map<String, String> playerData;
+    private ArrayList<Pair<String, String>> playerData;
+    private Map<Player, Integer> playerScores;
 
     private GameMemento memento;
+
+    private Player currentPlayer;
+    private Player winner;
+
+    // Rigging related
+    private boolean riggedGame = false;
+    private Stock riggedStock;
+    private Stock riggedDeciderStock;
+    private ArrayList<Hand> riggedHands;
+
+    private ObservableList<Tile> stockList = FXCollections.observableArrayList();
+    private ObservableList<Meld> workspaceList = FXCollections.observableArrayList();
 
     public GameModel() {
         this.stock = new Stock();
         this.table = new Table();
         this.players = new ArrayList<>();
-        this.playerData = new HashMap<String, String>();
+        this.playerData = new ArrayList<>();
     }
 
     public void setup() {
-        this.stock.populate();
-        this.stock.shuffle();
+        if (this.riggedGame) {
+            this.stock = this.riggedStock;
+        } else {
+            this.stock.populate();
+            this.stock.shuffle();
+        }
 
         // Create the players
-        this.playerData.forEach((key, value) -> {
-                if (value == "StrategyHuman") {
-                    this.players.add(new PlayerHuman(key));
-                } else if (value == "Strategy1") {
-                    this.players.add(new Player1(key));
-                } else if (value == "Strategy2") {
-                    this.players.add(new Player2(key));
-                } else if (value == "Strategy3") {
-                    this.players.add(new Player3(key));
-                } else {
-                    this.players.add(new Player4(key));
-                }
-            });
+        for (Pair<String, String> data : this.playerData) {
+            if (data.getValue() == "StrategyHuman") {
+                this.players.add(new PlayerHuman(data.getKey()));
+            } else if (data.getValue() == "Strategy1") {
+                this.players.add(new Player1(data.getKey()));
+            } else if (data.getValue() == "Strategy2") {
+                this.players.add(new Player2(data.getKey()));
+            } else if (data.getValue() == "Strategy3") {
+                this.players.add(new Player3(data.getKey()));
+            } else {
+                this.players.add(new Player4(data.getKey()));
+            }
+        }
 
         // Register each player that uses Strategy3 or Strategy4 as observers of the other players
         for (Player player : this.players) {
@@ -54,18 +76,32 @@ public class GameModel {
     }
 
     public void initialDraw() {
-        for (Player player : this.players) {
-            for (int i = 0; i < 14; i++) {
-                player.add(stock.draw());
+        if (this.riggedGame) {
+            for (int i = 0; i < this.numPlayers; i++) {
+                Player player = this.players.get(i);
+                player.setHand(this.riggedHands.get(i));
+                player.updateHandList();
             }
-            player.updateHandList();
+        } else {
+            for (Player player : this.players) {
+                for (int i = 0; i < 14; i++) {
+                    player.add(this.stock.draw());
+                }
+                player.updateHandList();
+            }
         }
+        this.updateStockList();
     }
 
     public void determinePlayerOrder() {
-        Stock tempStock = new Stock();
-        tempStock.populateForDraw();
-        tempStock.shuffle();
+        Stock tempStock = null;
+        if (this.riggedGame) {
+            tempStock = this.riggedDeciderStock;
+        } else {
+            tempStock = new Stock();
+            tempStock.populateForDraw();
+            tempStock.shuffle();
+        }
 
         // Each player draws tile, keeping track of the player who draws the highest
         Player firstPlayer = this.players.get(0);
@@ -83,6 +119,7 @@ public class GameModel {
         }
 
         // Create new ArrayList with firstPlayer at index 0, other players maintaining relative positions
+        this.playersOldOrder = this.players;
         ArrayList<Player> orderedPlayers = new ArrayList<>();
         int firstPlayerIndex = this.players.indexOf(firstPlayer);
         for (int i = firstPlayerIndex; i < this.players.size(); i++) {
@@ -93,6 +130,309 @@ public class GameModel {
         }
         this.players = orderedPlayers;
         System.out.println(this.players.get(0).getName() + " goes first!");
+
+        // We also need to reorder the rigged hands
+        if (this.riggedGame) {
+            ArrayList<Hand> orderedRiggedHands = new ArrayList<>();
+            for (int i = firstPlayerIndex; i < this.players.size(); i++) {
+                orderedRiggedHands.add(this.riggedHands.get(i));
+            }
+            for (int i = 0; i < firstPlayerIndex; i++) {
+                orderedRiggedHands.add(this.riggedHands.get(i));
+            }
+            this.riggedHands = orderedRiggedHands;
+        }
+    }
+
+    // Play a new meld on the table
+    public void playNewMeldFromHand(String tile) {
+        Tile t = this.currentPlayer.getHand().remove(new Tile(tile));
+        this.workspace.add(new Meld(t.toString()));
+        this.currentPlayer.updateHandList();
+        this.updateWorkspaceList();
+    }
+
+    // Play a new meld on the table from an already existing meld
+    // Data is formatted as meldIndex,tileToRemoveIndex
+    public boolean playNewMeldFromExistingMeld(String data) {
+        String[] indices = data.split(",");
+        int meldIndex = Integer.parseInt(indices[0]);
+        int tileToRemoveIndex = Integer.parseInt(indices[1]);
+        Meld meld = this.workspace.get(meldIndex);
+
+        Tile removedTile = meld.removeTile(tileToRemoveIndex);
+        if (removedTile != null) {
+            // Only split the meld if it's not the first or last tile in the meld
+            if (tileToRemoveIndex > 0 && tileToRemoveIndex < meld.getSize() - 1) {
+                Meld secondHalf = meld.splitMeld(tileToRemoveIndex);
+                this.workspace.add(secondHalf);
+            }
+
+            Meld newMeld = new Meld();
+            newMeld.addTile(removedTile);
+            this.workspace.add(newMeld);
+            this.updateWorkspaceList();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean playTileFromHandToExistingMeld(String tileToAdd, String meldToAddTo) {
+        Meld meld = this.findMatchingMeld(meldToAddTo);
+        Tile tile = this.currentPlayer.getHand().remove(new Tile(tileToAdd));
+        Tile possibleJoker = meld.addTile(tile);
+        if (possibleJoker != null && possibleJoker.isJoker()) {
+            Meld replacedJoker = new Meld();
+            replacedJoker.addTile(possibleJoker);
+            this.workspace.add(replacedJoker);
+        } else if (possibleJoker == null) {
+            this.currentPlayer.getHand().add(tile);
+            return false;
+        }
+        this.currentPlayer.updateHandList();
+        this.updateWorkspaceList();
+        return true;
+    }
+
+    public boolean playTileFromMeldToExistingMeld(String data, String meldToAddToStr) {
+        String[] indices = data.split(",");
+        int meldIndex = Integer.parseInt(indices[0]);
+        int tileToRemoveIndex = Integer.parseInt(indices[1]);
+
+        Meld meld = this.workspace.get(meldIndex);
+        Tile removedTile = meld.removeTile(tileToRemoveIndex);
+        if (removedTile != null) {
+            if (tileToRemoveIndex > 0 && tileToRemoveIndex < meld.getSize() - 1) {
+                Meld secondHalf = meld.splitMeld(tileToRemoveIndex);
+                this.workspace.add(secondHalf);
+            }
+
+            Meld meldToAddTo = this.findMatchingMeld(meldToAddToStr);
+            Tile possibleJoker = meldToAddTo.addTile(removedTile);
+            if (possibleJoker != null) {
+                if (possibleJoker.isJoker()) {
+                    Meld replacedJoker = new Meld();
+                    replacedJoker.addTile(possibleJoker);
+                    this.workspace.add(replacedJoker);
+                }
+
+                this.updateWorkspaceList();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Meld findMatchingMeld(String meldToFind) {
+        for (Meld m : this.workspace) {
+            if (meldToFind.equals(m.toString())) {
+                return m;
+            }
+        }
+		return null;
+    }
+
+    public void finishHumanMove() {
+        this.table.setState(this.workspace);
+        if (!this.determineValidState()) {
+            this.restoreMementoWithPenalty(this.currentPlayer);
+        }
+
+        this.makeWorkspaceCopy();
+        this.updateWorkspaceList();
+        this.currentPlayer.updateHandList();
+        this.currentPlayer.notifyObservers();
+
+        if (this.currentPlayer.getHandSize() == 0) {
+            this.winner = this.currentPlayer;
+        }
+    }
+
+    public void finishHumanMoveTimerExpiry() {
+        this.draw();
+    }
+
+    public boolean noMove() {
+        this.table.setState(this.workspace);
+        ArrayList<Meld> currentWorkspace = this.table.getState();
+        if (!this.determineValidState()) {
+            currentWorkspace = this.workspace;
+        }
+
+        int previousWorkspaceTileCount = this.countTiles(this.memento.getTableState().getState());
+        int currentWorkspaceTileCount = this.countTiles(currentWorkspace);
+        return previousWorkspaceTileCount == currentWorkspaceTileCount;
+    }
+
+    private int countTiles(ArrayList<Meld> melds) {
+        int count = 0;
+        for (Meld meld : melds) {
+            for (int i = 0; i < meld.getSize(); i++) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void playAI() {
+        if (!this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+            this.workspace = this.currentPlayer.play(this.table.getState());
+            if (this.workspace == null) {
+                this.draw();
+                this.updateStockList();
+            } else {
+                this.table.toHighlightedString(this.workspace);
+                this.updateWorkspaceList();
+                this.currentPlayer.updateHandList();
+            }
+
+            // Check for winning conditions
+            // 1. Player has a hand size of 0, OR
+            // 2. The stock is empty, so the player with the smallest hand wins
+            if (this.currentPlayer.getHandSize() == 0) {
+                this.winner = this.currentPlayer;
+            } else if (this.stock.getSize() == 0) {
+                this.determineWinner();
+            }
+        }
+    }
+
+    public void draw() {
+        if (this.stock.getSize() == 0) {
+            System.out.println("[GAME] Stock is empty!");
+            this.gameOver();
+        } else {
+            Tile tile = this.stock.draw();
+            System.out.println("[GAME] " + this.currentPlayer.getName() + " drew " + tile.toString());
+            this.currentPlayer.add(tile);
+            this.currentPlayer.updateHandList();
+            this.updateStockList();
+        }
+    }
+
+    public void rigDraw(int index) {
+        if (index == -1) {
+            System.out.println("[GAME] Invalid tile selected for rig draw.");
+            return;
+        }
+
+        Tile tile = this.stock.remove(index);
+        System.out.println("[GAME] " + this.currentPlayer.getName() + " rig drew " + tile.toString());
+        this.currentPlayer.add(tile);
+        this.currentPlayer.updateHandList();
+        this.updateStockList();
+    }
+
+    public String nextPlayer(boolean drew) {
+        if (drew) {
+            if (this.currentPlayer.getPlayerType().equals(("StrategyHuman"))) {
+                this.currentPlayer.drawing = true;
+                this.currentPlayer.notifyObservers();
+                this.currentPlayer.drawing = false;
+            }
+        } else {
+            if (this.workspace != null) {
+                this.table.setState(this.workspace);
+                this.updateWorkspaceList();
+            }
+
+            if (this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+                this.currentPlayer.notifyObservers();
+            }
+        }
+
+        this.setCurrentPlayer(null);
+        if (this.currentPlayer.getPlayerType().equals("StrategyHuman")) {
+            this.makeWorkspaceCopy();
+            this.createMemento();
+        }
+
+        return this.currentPlayer.getPlayerType().toString();
+    }
+
+    public boolean gameOver() {
+        if (this.stock.getSize() == 0 && this.winner == null) {
+            this.determineWinner();
+        }
+
+        if (this.winner != null) {
+            this.determinePlayerScores();
+            System.out.println("[GAME] " + this.winner.getName() + " won!");
+            System.out.println("[GAME] Scores:");
+            for (Player player : this.players) {
+                System.out.println("\t" + player.getName() + ": " + this.playerScores.get(player));
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    public void determineWinner() {
+        int lowestHandCount = this.players.get(0).getHandSize();
+        winner = this.players.get(0);
+        for (Player player : this.players.subList(1, this.players.size())) {
+            if (player.getHandSize() < lowestHandCount) {
+                lowestHandCount = player.getHandSize();
+                winner = player;
+            }
+        }
+    }
+
+    private void determinePlayerScores() {
+        this.playerScores = new HashMap<Player, Integer>();
+        this.playerScores.put(this.winner, 0);
+        for (Player player : this.players) {
+            if (player != this.winner) {
+                this.playerScores.put(player, player.getScore() * -1);
+                this.playerScores.put(this.winner, this.playerScores.get(this.winner) + player.getScore());
+            }
+        }
+    }
+
+    public ArrayList<Meld> getWorkspace() {
+        return this.workspace;
+    }
+
+    public void setWorkspace(ArrayList<Meld> workspace) {
+        this.workspace = workspace;
+    }
+
+    private void updateWorkspaceList() {
+        this.workspaceList.clear();
+
+        if (this.workspace.isEmpty()) {
+            this.workspaceList.add(new Meld());
+            return;
+        }
+
+        for (Meld meld : this.workspace) {
+            this.workspaceList.add(meld);
+        }
+    }
+
+    private void updateStockList() {
+        this.stockList.clear();
+
+        for (Tile tile : this.stock.getStock()) {
+            this.stockList.add(tile);
+        }
+    }
+
+    public void makeWorkspaceCopy() {
+        this.workspace = new ArrayList<Meld>();
+        for (Meld meld : this.table.getState()) {
+            Meld newMeld = new Meld(meld);
+            this.workspace.add(newMeld);
+        }
+    }
+
+    public ObservableList<Tile> getStockList() {
+        return this.stockList;
+    }
+
+    public ObservableList<Meld> getWorkspaceList() {
+        return this.workspaceList;
     }
 
     public int getNumPlayers() {
@@ -105,6 +445,35 @@ public class GameModel {
 
     public ArrayList<Player> getPlayers() {
         return this.players;
+    }
+
+    public ArrayList<Player> getPlayersOldOrder() {
+        return this.playersOldOrder;
+    }
+
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player player) {
+        if (player != null) {
+            this.currentPlayer = player;
+        } else {
+            int index = this.players.indexOf(this.currentPlayer);
+            if (index >= (this.numPlayers - 1)) {
+                this.currentPlayer = this.players.get(0);
+            } else {
+                this.currentPlayer = this.players.get(index + 1);
+            }
+        }
+    }
+
+    public Player getWinner() {
+        return this.winner;
+    }
+
+    public void setWinner(Player player) {
+        this.winner = player;
     }
 
     public Stock getStock() {
@@ -123,8 +492,15 @@ public class GameModel {
         Iterator<String> namesIt = playerNames.iterator();
         Iterator<String> strategiesIt = playerStrategies.iterator();
         while (namesIt.hasNext() && strategiesIt.hasNext()) {
-            this.playerData.put(namesIt.next(), strategiesIt.next());
+            this.playerData.add(new Pair<>(namesIt.next(), strategiesIt.next()));
         }
+    }
+
+    public void setRiggedData(Stock riggedStock, Stock riggedDeciderStock, ArrayList<Hand> riggedHands) {
+        this.riggedGame = true;
+        this.riggedStock = riggedStock;
+        this.riggedDeciderStock = riggedDeciderStock;
+        this.riggedHands = riggedHands;
     }
 
     public boolean determineValidState() {
@@ -132,17 +508,22 @@ public class GameModel {
     }
 
     // Create GameMemento representing game state (table and current player's hand)
-    protected void createMemento(Player player) {
-        this.memento = new GameMemento(this.table, player.getHand());
+    protected void createMemento() {
+        this.memento = new GameMemento(this.table, this.currentPlayer.getHand());
     }
 
     // Restore state (table and current player's hand)
     protected void restoreMementoWithPenalty(Player player) {
         this.table = this.memento.getTableState();
         player.setHand(this.memento.getHandState());
-        if (this.stock.getSize() > 0) { player.add(this.stock.draw()); }
-        if (this.stock.getSize() > 0) { player.add(this.stock.draw()); }
-        if (this.stock.getSize() > 0) { player.add(this.stock.draw()); }
+        for (int i = 0; i < 3; i++) {
+            if (this.stock.getSize() <= 0) {
+                break;
+            }
+            Tile tile = this.stock.draw();
+            System.out.println("[GAME] " + player.getName() + " drew " + tile.toString());
+            player.add(tile);
+        }
 
         // Reset lowest hand counts
         int newLowestHandCount = 100;

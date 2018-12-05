@@ -1,7 +1,0 @@
-numPlayers:2
-stock:R12,R11,R10,R9,R8
-deciderStock:R11,R10
-p1:Mikey:StrategyHuman:R1,R2,R3,J,O11,O1
-p2:Spits:StrategyHuman:O3,B3,J,G10,O1,R4
-p3:
-p4:

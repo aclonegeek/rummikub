@@ -30,12 +30,10 @@ public class Player1 extends Player {
         if (workspace != null) {
             this.initialMove = false;
             this.drawing = false;
-            System.out.println(this.name + " played tiles");
         } else {
             this.drawing = true;
         }
         this.notifyObservers();
-        System.out.println(this.toString());
         return workspace;
     }
 }

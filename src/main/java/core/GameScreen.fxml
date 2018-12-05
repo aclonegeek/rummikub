@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.GameController">
@@ -11,18 +13,24 @@
          <children>
             <Label fx:id="p1NameLabel" layoutX="126.0" layoutY="14.0" />
             <Label fx:id="p1StrategyLabel" layoutX="126.0" layoutY="36.0" />
-            <Label fx:id="p1HandCountLabel" layoutX="126.0" layoutY="71.0" />
-            <Button fx:id="drawButton" layoutX="1216.0" layoutY="9.0" mnemonicParsing="false" text="Draw" />
-            <Button layoutX="1216.0" layoutY="38.0" mnemonicParsing="false" text="Hint" />
-            <Button fx:id="finishButton" layoutX="1209.0" layoutY="66.0" mnemonicParsing="false" text="Finish" />
+            <Label fx:id="p1HandCountLabel" layoutX="260.0" layoutY="15.0" />
+            <Button fx:id="drawButton" layoutX="1159.0" layoutY="9.0" mnemonicParsing="false" text="Draw" />
+            <Button fx:id="finishButton" layoutX="1212.0" layoutY="9.0" mnemonicParsing="false" text="Finish" />
+            <Button fx:id="nextAIMoveButton" layoutX="1167.0" layoutY="38.0" mnemonicParsing="false" text="Play Next AI" />
             <ListView fx:id="p1HandListView" layoutX="289.0" orientation="HORIZONTAL" prefHeight="100.0" prefWidth="864.0" />
+            <Label layoutX="14.0" layoutY="55.0" text="Current Player" />
+            <Label fx:id="currentPlayerLabel" layoutX="14.0" layoutY="75.0" />
+            <Label fx:id="timerTextLabel" layoutX="1184.0" layoutY="71.0" text="Timer:" visible="false" />
+            <Label fx:id="timerLabel" layoutX="1235.0" layoutY="71.0" prefHeight="14.0" prefWidth="20.0" />
+            <ChoiceBox fx:id="stockChoiceBox" layoutX="15.0" layoutY="2.0" prefHeight="24.0" prefWidth="76.0" />
+            <Button fx:id="rigDrawButton" layoutX="14.0" layoutY="29.0" mnemonicParsing="false" text="Rig Draw" />
          </children>
       </AnchorPane>
       <AnchorPane layoutY="100.0" prefHeight="520.0" prefWidth="126.0">
          <children>
-            <Label fx:id="p2NameLabel" layoutX="52.0" layoutY="486.0" rotate="270.0" />
-            <Label fx:id="p2StrategyLabel" layoutX="74.0" layoutY="486.0" rotate="270.0" />
-            <Label fx:id="p2HandCountLabel" layoutX="14.0" layoutY="486.0" />
+            <Label fx:id="p2NameLabel" layoutX="6.0" layoutY="400.0" />
+            <Label fx:id="p2StrategyLabel" layoutX="6.0" layoutY="422.0" />
+            <Label fx:id="p2HandCountLabel" layoutX="96.0" layoutY="400.0" />
             <ListView fx:id="p2HandListView" prefHeight="393.0" prefWidth="126.0" />
          </children>
       </AnchorPane>
@@ -30,18 +38,19 @@
          <children>
             <Label fx:id="p3NameLabel" layoutX="126.0" layoutY="50.0" />
             <Label fx:id="p3StrategyLabel" layoutX="126.0" layoutY="72.0" />
-            <Label fx:id="p3HandCountLabel" layoutX="126.0" layoutY="14.0" />
+            <Label fx:id="p3HandCountLabel" layoutX="250.0" layoutY="75.0" />
             <ListView fx:id="p3HandListView" layoutX="276.0" orientation="HORIZONTAL" prefHeight="100.0" prefWidth="878.0" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="1154.0" layoutY="100.0" prefHeight="520.0" prefWidth="126.0">
          <children>
-            <Label fx:id="p4NameLabel" layoutX="24.0" layoutY="23.0" rotate="90.0" />
-            <Label fx:id="p4StrategyLabel" layoutX="2.0" layoutY="27.0" rotate="90.0" />
-            <Label fx:id="p4HandCountLabel" layoutX="73.0" layoutY="106.0" />
+            <Label fx:id="p4NameLabel" layoutX="4.0" layoutY="84.0" />
+            <Label fx:id="p4StrategyLabel" layoutX="4.0" layoutY="106.0" />
+            <Label fx:id="p4HandCountLabel" layoutX="96.0" layoutY="106.0" />
             <ListView fx:id="p4HandListView" layoutY="127.0" prefHeight="393.0" prefWidth="126.0" />
          </children>
       </AnchorPane>
-      <ListView fx:id="tableListView" layoutX="126.0" layoutY="100.0" prefHeight="520.0" prefWidth="1028.0" />
+      <ListView fx:id="tableListView" layoutX="126.0" layoutY="100.0" prefHeight="520.0" prefWidth="580.0" />
+      <TextArea fx:id="outputArea" editable="false" layoutX="706.0" layoutY="100.0" prefHeight="520.0" prefWidth="448.0" />
    </children>
 </AnchorPane>

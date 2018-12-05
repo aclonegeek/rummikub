@@ -31,18 +31,15 @@ public class Player2 extends Player {
         } else {
             this.drawing = true;
             this.notifyObservers();
-            System.out.println(this.toString());
             return null;
         }
         if (workspace != null) {
             this.initialMove = false;
             this.drawing = false;
-            System.out.println(this.name + " played tiles");
         } else {
             this.drawing = true;
         }
         this.notifyObservers();
-        System.out.println(this.toString());
         return workspace;
     }
 }
