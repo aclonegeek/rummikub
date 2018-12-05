@@ -174,7 +174,9 @@ public class GameModel {
         Tile tile = this.currentPlayer.getHand().remove(new Tile(tileToAdd));
         Tile possibleJoker = meld.addTile(tile);
         if (possibleJoker != null && possibleJoker.isJoker()) {
-            this.workspace.add(new Meld(possibleJoker.toString()));
+            Meld replacedJoker = new Meld();
+            replacedJoker.addTile(possibleJoker);
+            this.workspace.add(replacedJoker);
         } else if (possibleJoker == null) {
             this.currentPlayer.getHand().add(tile);
             return false;
@@ -198,10 +200,12 @@ public class GameModel {
             }
 
             Meld meldToAddTo = this.findMatchingMeld(meldToAddToStr);
-            Tile tile = meldToAddTo.addTile(removedTile);
-            if (tile != null) {
-                if (tile.isJoker()) {
-                    this.workspace.add(new Meld(tile.toString()));
+            Tile possibleJoker = meldToAddTo.addTile(removedTile);
+            if (possibleJoker != null) {
+                if (possibleJoker.isJoker()) {
+                    Meld replacedJoker = new Meld();
+                    replacedJoker.addTile(possibleJoker);
+                    this.workspace.add(replacedJoker);
                 }
 
                 this.updateWorkspaceList();
