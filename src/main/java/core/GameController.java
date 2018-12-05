@@ -94,6 +94,10 @@ public class GameController {
     private Button nextAIMoveButton;
 
     @FXML
+    private Label currentPlayerLabel;
+    @FXML
+    private Label timerTextLabel;
+    @FXML
     private Label timerLabel;
 
     @FXML
@@ -300,6 +304,7 @@ public class GameController {
 
         this.model.makeWorkspaceCopy();
         this.model.setCurrentPlayer(this.model.getPlayers().get(0));
+        this.currentPlayerLabel.setText(this.model.getCurrentPlayer().getName());
 
         this.initializeTable();
         this.initializeTimer();
@@ -328,6 +333,8 @@ public class GameController {
     private void initializeTimer() {
         if (!this.enableTimer) {
             this.timerLabel.setVisible(false);
+        } else {
+            this.timerTextLabel.setVisible(true);
         }
     }
 
@@ -402,6 +409,7 @@ public class GameController {
             this.finishButton.setDisable(true);
             this.nextAIMoveButton.setDisable(false);
         }
+        this.currentPlayerLabel.setText(this.model.getCurrentPlayer().getName());
     }
 
     public void setNumPlayers(int numPlayers) {

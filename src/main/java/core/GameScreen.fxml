@@ -14,9 +14,12 @@
             <Label fx:id="p1HandCountLabel" layoutX="126.0" layoutY="71.0" />
             <Button fx:id="drawButton" layoutX="1159.0" layoutY="9.0" mnemonicParsing="false" text="Draw" />
             <Button fx:id="finishButton" layoutX="1212.0" layoutY="9.0" mnemonicParsing="false" text="Finish" />
-            <ListView fx:id="p1HandListView" layoutX="289.0" orientation="HORIZONTAL" prefHeight="100.0" prefWidth="864.0" />
             <Button fx:id="nextAIMoveButton" layoutX="1167.0" layoutY="38.0" mnemonicParsing="false" text="Play Next AI" />
-            <Label fx:id="timerLabel" layoutX="14.0" layoutY="71.0" />
+            <ListView fx:id="p1HandListView" layoutX="289.0" orientation="HORIZONTAL" prefHeight="100.0" prefWidth="864.0" />
+            <Label layoutX="14.0" layoutY="55.0" text="Current Player" />
+            <Label fx:id="currentPlayerLabel" layoutX="14.0" layoutY="75.0" />
+            <Label fx:id="timerTextLabel" layoutX="1184.0" layoutY="71.0" text="Timer:" visible="false" />
+            <Label fx:id="timerLabel" layoutX="1235.0" layoutY="71.0" prefHeight="14.0" prefWidth="20.0" />
          </children>
       </AnchorPane>
       <AnchorPane layoutY="100.0" prefHeight="520.0" prefWidth="126.0">
