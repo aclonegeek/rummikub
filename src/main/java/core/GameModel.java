@@ -171,8 +171,11 @@ public class GameModel {
 
     public void playTileFromHandToExistingMeld(String tileToAdd, String meldToAddTo) {
         Meld meld = this.findMatchingMeld(meldToAddTo);
-        Tile t = this.currentPlayer.getHand().remove(new Tile(tileToAdd));
-        meld.addTile(t);
+        Tile tile = this.currentPlayer.getHand().remove(new Tile(tileToAdd));
+        Tile possibleJoker = meld.addTile(tile);
+        if (possibleJoker != null && possibleJoker.isJoker()) {
+            this.workspace.add(new Meld(possibleJoker.toString()));
+        }
         this.currentPlayer.updateHandList();
         this.updateWorkspaceList();
     }
