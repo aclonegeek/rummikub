@@ -231,6 +231,7 @@ public class GameController {
                 System.out.println("[TABLE TILE] Dropping!");
 
                 Dragboard db = event.getDragboard();
+                boolean success = false;
                 if (dragDestination == DragDestination.EXISTING_MELD && db.hasString()) {
                     if (dragSource == DragSource.PLAYER) {
                         System.out.println("[TABLE TILE] Dropped From Player TO Existing Meld!");
@@ -239,9 +240,7 @@ public class GameController {
                             .replace("[", "{")
                             .replace("]", "}")
                             .replace(",", "");
-                        model.playTileFromHandToExistingMeld(db.getString(), meldToAddTo);
-                        drawButton.setDisable(true);
-                        finishButton.setDisable(false);
+                        success = model.playTileFromHandToExistingMeld(db.getString(), meldToAddTo);
                     } else if (dragSource == DragSource.MELD) {
                         System.out.println("[TABLE TILE] Dropped FROM Existing Meld TO Existing Meld!");
 
@@ -249,14 +248,11 @@ public class GameController {
                             .replace("[", "{")
                             .replace("]", "}")
                             .replace(",", "");
-                        if (model.playTileFromMeldToExistingMeld(db.getString(), meldToAddToStr)) {
-                            // The player should no longer be able to draw after playing
-                            drawButton.setDisable(true);
-                            finishButton.setDisable(false);
-                        } else {
-                            drawButton.setDisable(false);
-                            finishButton.setDisable(true);
-                        }
+                        success = model.playTileFromMeldToExistingMeld(db.getString(), meldToAddToStr);
+                    }
+                    if (success) {
+                        drawButton.setDisable(true);
+                        finishButton.setDisable(false);
                     }
                 }
 

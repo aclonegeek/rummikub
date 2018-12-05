@@ -169,15 +169,19 @@ public class GameModel {
         return false;
     }
 
-    public void playTileFromHandToExistingMeld(String tileToAdd, String meldToAddTo) {
+    public boolean playTileFromHandToExistingMeld(String tileToAdd, String meldToAddTo) {
         Meld meld = this.findMatchingMeld(meldToAddTo);
         Tile tile = this.currentPlayer.getHand().remove(new Tile(tileToAdd));
         Tile possibleJoker = meld.addTile(tile);
         if (possibleJoker != null && possibleJoker.isJoker()) {
             this.workspace.add(new Meld(possibleJoker.toString()));
+        } else if (possibleJoker == null) {
+            this.currentPlayer.getHand().add(tile);
+            return false;
         }
         this.currentPlayer.updateHandList();
         this.updateWorkspaceList();
+        return true;
     }
 
     public boolean playTileFromMeldToExistingMeld(String data, String meldToAddToStr) {
