@@ -32,6 +32,7 @@ public class GameModel {
     private Stock riggedDeciderStock;
     private ArrayList<Hand> riggedHands;
 
+    private ObservableList<Tile> stockList = FXCollections.observableArrayList();
     private ObservableList<Meld> workspaceList = FXCollections.observableArrayList();
 
     public GameModel() {
@@ -89,6 +90,7 @@ public class GameModel {
                 player.updateHandList();
             }
         }
+        this.updateStockList();
     }
 
     public void determinePlayerOrder() {
@@ -277,6 +279,7 @@ public class GameModel {
             this.workspace = this.currentPlayer.play(this.table.getState());
             if (this.workspace == null) {
                 this.draw();
+                this.updateStockList();
             } else {
                 this.table.toHighlightedString(this.workspace);
                 this.updateWorkspaceList();
@@ -303,6 +306,7 @@ public class GameModel {
             System.out.println("[GAME] " + this.currentPlayer.getName() + " drew " + tile.toString());
             this.currentPlayer.add(tile);
             this.currentPlayer.updateHandList();
+            this.updateStockList();
         }
     }
 
@@ -381,7 +385,7 @@ public class GameModel {
         this.workspace = workspace;
     }
 
-    public void updateWorkspaceList() {
+    private void updateWorkspaceList() {
         this.workspaceList.clear();
 
         if (this.workspace.isEmpty()) {
@@ -394,12 +398,24 @@ public class GameModel {
         }
     }
 
+    private void updateStockList() {
+        this.stockList.clear();
+
+        for (Tile tile : this.stock.getStock()) {
+            this.stockList.add(tile);
+        }
+    }
+
     public void makeWorkspaceCopy() {
         this.workspace = new ArrayList<Meld>();
         for (Meld meld : this.table.getState()) {
             Meld newMeld = new Meld(meld);
             this.workspace.add(newMeld);
         }
+    }
+
+    public ObservableList<Tile> getStockList() {
+        return this.stockList;
     }
 
     public ObservableList<Meld> getWorkspaceList() {

@@ -40,10 +40,8 @@ public class Player3 extends Player {
         }
         if (workspace != null) {
             this.initialMove = false;
-            System.out.println(this.name + " played tiles");
         }
         this.lowestHandCount = 100;
-        System.out.println(this.toString());
         return workspace;
     }
 }

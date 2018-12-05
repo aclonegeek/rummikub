@@ -49,6 +49,8 @@ public class StartMenuController {
     @FXML
     private TextField optionalTimerLength;
     @FXML
+    private ChoiceBox<String> jokerRules;
+    @FXML
     private CheckBox showAIHandsCheckBox;
 
     @FXML
@@ -171,6 +173,13 @@ public class StartMenuController {
                     this.optionalTimerLength.setDisable(true);
                 }
             });
+
+        ObservableList<String> jokerRulesList = FXCollections.observableArrayList();
+        jokerRulesList.add("Default");
+        jokerRulesList.add("No Plays to Existing Melds");
+        jokerRulesList.add("No Restrictions");
+        this.jokerRules.setItems(jokerRulesList);
+        this.jokerRules.getSelectionModel().selectFirst();
 
         // Rigging fields
         this.enableRiggingFields(false);
