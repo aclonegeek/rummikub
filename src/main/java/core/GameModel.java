@@ -4,23 +4,31 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import core.Globals.PlayerType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 public class GameModel {
     private Stock stock;
     private ArrayList<Player> players;
     private Table table;
+    private ArrayList<Meld> workspace;
 
     private int numPlayers;
     private ArrayList<Pair<String, String>> playerData;
 
     private GameMemento memento;
 
+    private Player currentPlayer;
+    private Player winner;
+
     // Rigging related
     private boolean riggedGame = false;
     private Stock riggedStock;
     private Stock riggedDeciderStock;
     private ArrayList<Hand> riggedHands;
+
+    private ObservableList<Meld> workspaceList = FXCollections.observableArrayList();
 
     public GameModel() {
         this.stock = new Stock();
@@ -117,6 +125,117 @@ public class GameModel {
         System.out.println(this.players.get(0).getName() + " goes first!");
     }
 
+    // Play a new meld on the table
+    public void playNewMeldFromHand(String tile) {
+        Tile t = this.currentPlayer.getHand().remove(new Tile(tile));
+        this.workspace.add(new Meld(t.toString()));
+        this.currentPlayer.updateHandList();
+        this.updateWorkspaceList();
+    }
+
+    // Play a new meld on the table from an already existing meld
+    // Data is formatted as meldIndex,tileToRemoveIndex
+    public boolean playNewMeldFromExistingMeld(String data) {
+        String[] indices = data.split(",");
+        int meldIndex = Integer.parseInt(indices[0]);
+        int tileToRemoveIndex = Integer.parseInt(indices[1]);
+        Meld meld = this.workspace.get(meldIndex);
+
+        Tile removedTile = meld.removeTile(tileToRemoveIndex);
+        if (removedTile != null) {
+            // Only split the meld if it's not the first or last tile in the meld
+            if (tileToRemoveIndex > 0 && tileToRemoveIndex < meld.getSize() - 1) {
+                Meld secondHalf = meld.splitMeld(tileToRemoveIndex - 1);
+                this.workspace.add(secondHalf);
+            }
+
+            Meld newMeld = new Meld(removedTile.toString());
+            this.workspace.add(newMeld);
+            this.updateWorkspaceList();
+            return true;
+        }
+        return false;
+    }
+
+    public void playTileFromHandToExistingMeld(String tileToAdd, String meldToAddTo) {
+        Meld meld = this.findMatchingMeld(meldToAddTo);
+        Tile t = this.currentPlayer.getHand().remove(new Tile(tileToAdd));
+        meld.addTile(t);
+        this.currentPlayer.updateHandList();
+        this.updateWorkspaceList();
+    }
+
+    public boolean playTileFromMeldToExistingMeld(String data, String meldToAddToStr) {
+        String[] indices = data.split(",");
+        int meldIndex = Integer.parseInt(indices[0]);
+        int tileToRemoveIndex = Integer.parseInt(indices[1]);
+
+        Meld meld = this.workspace.get(meldIndex);
+        Tile removedTile = meld.removeTile(tileToRemoveIndex);
+        if (removedTile != null) {
+            if (tileToRemoveIndex > 0 && tileToRemoveIndex < meld.getSize() - 1) {
+                Meld secondHalf = meld.splitMeld(tileToRemoveIndex - 1);
+                this.workspace.add(secondHalf);
+            }
+
+            Meld meldToAddTo = this.findMatchingMeld(meldToAddToStr);
+            Tile tile = meldToAddTo.addTile(removedTile);
+            if (tile != null) {
+                if (tile.isJoker()) {
+                    this.workspace.add(new Meld(tile.toString()));
+                }
+
+                this.updateWorkspaceList();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Meld findMatchingMeld(String meldToFind) {
+        Meld meld = null;
+        for (Meld m : this.workspace) {
+            if (meldToFind.equals(m.toString())) {
+                meld = m;
+                break;
+            }
+        }
+        return meld;
+    }
+
+    public ArrayList<Meld> getWorkspace() {
+        return this.workspace;
+    }
+
+    public void setWorkspace(ArrayList<Meld> workspace) {
+        this.workspace = workspace;
+    }
+
+    public void updateWorkspaceList() {
+        this.workspaceList.clear();
+
+        if (this.workspace.isEmpty()) {
+            this.workspaceList.add(new Meld());
+            return;
+        }
+
+        for (Meld meld : this.workspace) {
+            this.workspaceList.add(meld);
+        }
+    }
+
+    public void makeWorkspaceCopy() {
+        this.workspace = new ArrayList<Meld>();
+        for (Meld meld : this.table.getState()) {
+            Meld newMeld = new Meld(meld);
+            this.workspace.add(newMeld);
+        }
+    }
+
+    public ObservableList<Meld> getWorkspaceList() {
+        return this.workspaceList;
+    }
+
     public int getNumPlayers() {
         return this.numPlayers;
     }
@@ -127,6 +246,31 @@ public class GameModel {
 
     public ArrayList<Player> getPlayers() {
         return this.players;
+    }
+
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player player) {
+        if (player != null) {
+            this.currentPlayer = player;
+        } else {
+            int index = this.players.indexOf(this.currentPlayer);
+            if (index >= (this.numPlayers - 1)) {
+                this.currentPlayer = this.players.get(0);
+            } else {
+                this.currentPlayer = this.players.get(index + 1);
+            }
+        }
+    }
+
+    public Player getWinner() {
+        return this.winner;
+    }
+
+    public void setWinner(Player player) {
+        this.winner = player;
     }
 
     public Stock getStock() {
@@ -161,8 +305,8 @@ public class GameModel {
     }
 
     // Create GameMemento representing game state (table and current player's hand)
-    protected void createMemento(Player player) {
-        this.memento = new GameMemento(this.table, player.getHand());
+    protected void createMemento() {
+        this.memento = new GameMemento(this.table, this.currentPlayer.getHand());
     }
 
     // Restore state (table and current player's hand)
