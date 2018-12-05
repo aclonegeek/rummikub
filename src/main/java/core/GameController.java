@@ -377,6 +377,7 @@ public class GameController {
                 this.model.playAI();
                 new Thread(() -> {
                         try {
+                            this.nextAIMoveButton.setDisable(true);
                             Thread.sleep(this.HIGHLIGHT_TIMER_LENGTH * 1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
