@@ -342,6 +342,7 @@ public class GameController {
                 this.model.getCurrentPlayer().notifyObservers();
 
                 this.model.setCurrentPlayer(null);
+                this.model.createMemento();
                 if (!this.model.getCurrentPlayer().getPlayerType().equals("StrategyHuman")) {
                     this.drawButton.setDisable(true);
                     this.finishButton.setDisable(true);
