@@ -111,7 +111,7 @@ public class StartMenuController {
             try {
                 return Integer.parseInt(this.optionalTimerLength.getText());
             } catch (NumberFormatException e) {
-                return -1;
+                return 120;
             }
         }
         return -1;
