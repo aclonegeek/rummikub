@@ -301,6 +301,7 @@ public class GameController {
         this.initializePlayerHands();
         this.model.determinePlayerOrder();
         this.model.initialDraw();
+        this.updateHandCountLabel();
 
         this.model.makeWorkspaceCopy();
         this.model.setCurrentPlayer(this.model.getPlayers().get(0));
@@ -375,6 +376,7 @@ public class GameController {
 
         this.nextAIMoveButton.setOnAction(event -> {
                 this.model.playAI();
+                this.updateHandCountLabel();
                 new Thread(() -> {
                         try {
                             this.nextAIMoveButton.setDisable(true);
@@ -406,6 +408,7 @@ public class GameController {
     }
 
     private void nextPlayer(boolean drew) {
+        this.updateHandCountLabel();
         if (this.model.gameOver()) {
             this.gameOver();
             return;
@@ -424,6 +427,17 @@ public class GameController {
             this.nextAIMoveButton.setDisable(false);
         }
         this.currentPlayerLabel.setText(this.model.getCurrentPlayer().getName());
+    }
+
+    private void updateHandCountLabel() {
+        this.p1HandCountLabel.setText(String.valueOf(this.model.getPlayersOldOrder().get(0).getHandSize()));
+        this.p2HandCountLabel.setText(String.valueOf(this.model.getPlayersOldOrder().get(1).getHandSize()));
+        if (this.model.getNumPlayers() >= 3) {
+            this.p3HandCountLabel.setText(String.valueOf(this.model.getPlayersOldOrder().get(2).getHandSize()));
+        }
+        if (this.model.getNumPlayers() >= 4) {
+            this.p4HandCountLabel.setText(String.valueOf(this.model.getPlayersOldOrder().get(3).getHandSize()));
+        }
     }
 
     private void gameOver() {

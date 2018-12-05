@@ -12,6 +12,7 @@ import javafx.util.Pair;
 
 public class GameModel {
     private Stock stock;
+    private ArrayList<Player> playersOldOrder;
     private ArrayList<Player> players;
     private Table table;
     private ArrayList<Meld> workspace;
@@ -116,6 +117,7 @@ public class GameModel {
         }
 
         // Create new ArrayList with firstPlayer at index 0, other players maintaining relative positions
+        this.playersOldOrder = this.players;
         ArrayList<Player> orderedPlayers = new ArrayList<>();
         int firstPlayerIndex = this.players.indexOf(firstPlayer);
         for (int i = firstPlayerIndex; i < this.players.size(); i++) {
@@ -414,6 +416,10 @@ public class GameModel {
 
     public ArrayList<Player> getPlayers() {
         return this.players;
+    }
+
+    public ArrayList<Player> getPlayersOldOrder() {
+        return this.playersOldOrder;
     }
 
     public Player getCurrentPlayer() {
