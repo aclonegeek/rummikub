@@ -2,25 +2,18 @@ package core;
 
 public class Globals {
     // Optional rules
-    private static boolean cannotAddJokersToExistingMelds = false;
-    private static boolean lenientJokers = false;
-    
-    public static boolean getCannotAddJokersToExistingMelds() {
-        return cannotAddJokersToExistingMelds;
+    public static enum JokerRules {
+        DEFAULT, LENIENT, NO_EXISTING_MELDS;
     }
     
-    public static boolean getLenientJokers() {
-        return lenientJokers;
+    private static JokerRules jokerRules = JokerRules.DEFAULT;
+    
+    public static JokerRules getJokerRules() {
+        return jokerRules;
     }
     
-    public static void setCannotAddJokersToExistingMelds() {
-        cannotAddJokersToExistingMelds = true;
-        lenientJokers = false;
-    }
-  
-    public static void setLenientJokers() {
-        cannotAddJokersToExistingMelds = false;
-        lenientJokers = true;
+    public static void setJokerRules(JokerRules rule) {
+        jokerRules = rule;
     }
     
     public static enum Colour {

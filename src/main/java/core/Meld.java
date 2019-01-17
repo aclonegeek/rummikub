@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import core.Globals.Colour;
+import core.Globals.JokerRules;
 
 public class Meld {
     public enum MeldType {
@@ -22,10 +23,6 @@ public class Meld {
     
     // Highlighting
     private int meldID;
-    
-    // Optional joker rules
-    private boolean cannotAddJokerToExistingMeld    = Globals.getCannotAddJokersToExistingMelds();
-    private boolean lenientJokers                   = Globals.getLenientJokers();
 
     public Meld() {
         this.meld = new ArrayList<>();
@@ -140,7 +137,7 @@ public class Meld {
         if (this.containsJoker() && tiles.get(0).isJoker()) { return null; }
         
         // Disallow adding a tile to a full meld with a joker if Lenient Jokers are allowed
-        if (lenientJokers) {
+        if (Globals.getJokerRules() == JokerRules.LENIENT) {
             if (this.meld.size() == 13 && this.meldType == MeldType.RUN) { return null; }
             if (this.meld.size() == 4 && this.meldType == MeldType.SET)  { return null; }   
         }
@@ -163,7 +160,7 @@ public class Meld {
             if (this.meld.size() == 4 && this.meldType == MeldType.SET)  { return null; }
             
             if (tiles.get(0).isJoker()) {
-                if (cannotAddJokerToExistingMeld && this.isInitialMeld == false) {
+                if (Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS && this.isInitialMeld == false) {
                     return null;
                 }
                 
@@ -191,7 +188,7 @@ public class Meld {
             
             // Adding tile to a meld with a joker and one or more tiles
             if (this.meld.size() > 0) {
-                if (lenientJokers == false) {
+                if (Globals.getJokerRules() != JokerRules.LENIENT) {
                     // Check if the joker can be replaced as long as its not part of an initial move
                     if (!this.isInitialMeld && joker.jokerEquals(tile)) {
                         // If this tile is on the table but is being added to a meld that is locked 
@@ -249,7 +246,7 @@ public class Meld {
         if (tempMeldType != MeldType.INVALID && tempMeld.size() < 3 || tempMeldType == MeldType.RUN || tempMeldType == MeldType.SET) {
             Collections.sort(tempMeld, Comparator.comparingInt(Tile::getValue)); // Sort numerically
             
-            if (lenientJokers == false) {
+            if (Globals.getJokerRules() != JokerRules.LENIENT) {
                 // Lock the meld if a joker from the hand was added
                 this.isLocked = this.determineLockedMeld(tempMeld);
             }
@@ -427,7 +424,7 @@ public class Meld {
     
     // Locked meld = meld with a joker that has not been replaced yet
     private boolean determineLockedMeld(ArrayList<Tile> meld) {
-        if (lenientJokers == false) {
+        if (Globals.getJokerRules() != JokerRules.LENIENT) {
             for (Tile tile : meld) {
                 if (tile.isJoker() && tile.isReplaced() == false) {
                     return true;
@@ -438,7 +435,7 @@ public class Meld {
     }
     
     public boolean isLocked() {
-        if (lenientJokers == false) {
+        if (Globals.getJokerRules() != JokerRules.LENIENT) {
             // This meld is locked if it has a joker which has not been replaced by a tile from the hand
             return this.meld.stream().anyMatch(t -> t.isJoker() && !t.isReplaced());   
         }
@@ -446,7 +443,7 @@ public class Meld {
     }
     
     public void setIsLocked(boolean isLocked) {
-        if (lenientJokers == false) {
+        if (Globals.getJokerRules() != JokerRules.LENIENT) {
             // Lock this meld manually by looking for a joker and setting isReplaced
             for (Tile tile : this.meld) {
                 if (tile.isJoker()) {
@@ -565,13 +562,5 @@ public class Meld {
     @Override
     public String toString() {
         return this.meld.stream().map(Object::toString).collect(Collectors.joining(" ", "{", "}"));
-    }
-    
-    public boolean getCannotAddJokerToExistingMeld() {
-        return this.cannotAddJokerToExistingMeld;
-    }
-    
-    public void setCannotAddJokerToExistingMeld(boolean b) {
-        this.cannotAddJokerToExistingMeld = b;
     }
 }
