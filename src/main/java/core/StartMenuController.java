@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.sql.Array;
 import java.util.ArrayList;
 
+import core.Globals.JokerRules;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -89,7 +91,8 @@ public class StartMenuController {
         gameController.setPlayerStrategies(this.getPlayerStrategies());
         gameController.setExtras(this.getHighlightTimerLength(),
                                  this.getOptionalTimerLength(),
-                                 this.showAIHandsCheckBox.isSelected());
+                                 this.showAIHandsCheckBox.isSelected(),
+                                 this.getSelectedJokerRule());
         if (this.enableRiggingCheckBox.isSelected()) {
             gameController.setRiggedAttributes(this.getRiggedStock(this.stockField.getText()),
                                                this.getRiggedStock(this.deciderStockField.getText()),
@@ -97,6 +100,17 @@ public class StartMenuController {
         }
 
         gameController.play();
+    }
+    
+    private JokerRules getSelectedJokerRule() {    
+        if (this.jokerRules.getValue().equals("Default")) {
+            return JokerRules.DEFAULT;
+        } else if (this.jokerRules.getValue().equals("No Plays to Existing Melds")) {
+            return JokerRules.NO_EXISTING_MELDS;
+        } else if (this.jokerRules.getValue().equals("No Restrictions")) {
+            return JokerRules.LENIENT;
+        }
+        return JokerRules.DEFAULT;
     }
 
 	private int getHighlightTimerLength() {
