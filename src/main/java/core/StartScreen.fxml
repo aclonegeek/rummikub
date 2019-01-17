@@ -1,32 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.StartMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.StartMenuController">
    <children>
-      <Label layoutX="229.0" layoutY="6.0" text="RUMMIKUB" AnchorPane.bottomAnchor="180.0" AnchorPane.leftAnchor="229.0" AnchorPane.rightAnchor="228.0" AnchorPane.topAnchor="6.0" />
-      <Label layoutX="14.0" layoutY="30.0" text="# of players:" />
-      <Label layoutX="10.0" layoutY="59.0" text="Player 1 Name:" />
-      <ChoiceBox fx:id="numPlayersChoice" layoutX="115.0" layoutY="25.0" prefHeight="24.0" prefWidth="13.0" />
-      <Label layoutX="10.0" layoutY="93.0" text="Player 2 Name:" />
-      <Label layoutX="10.0" layoutY="128.0" text="Player 3 Name:" />
-      <Label layoutX="10.0" layoutY="161.0" text="Player 4 Name:" />
-      <TextField fx:id="p1NameField" layoutX="115.0" layoutY="54.0" />
-      <TextField fx:id="p2NameField" layoutX="115.0" layoutY="88.0" />
-      <TextField fx:id="p3NameField" layoutX="115.0" layoutY="123.0" />
-      <TextField fx:id="p4NameField" layoutX="115.0" layoutY="156.0" />
-      <Label layoutX="241.0" layoutY="59.0" text="Player 1 Strategy:" />
-      <Label layoutX="241.0" layoutY="93.0" text="Player 2 Strategy:" />
-      <Label layoutX="241.0" layoutY="128.0" text="Player 3 Strategy:" />
-      <Label layoutX="241.0" layoutY="161.0" text="Player 4 Strategy:" />
-      <Button fx:id="playButton" layoutX="235.0" layoutY="187.0" mnemonicParsing="false" onAction="#handlePlayButtonPressed" text="Play" />
-      <ChoiceBox fx:id="p1StrategyChoice" layoutX="373.0" layoutY="54.0" prefHeight="24.0" prefWidth="132.0" />
-      <ChoiceBox fx:id="p2StrategyChoice" layoutX="373.0" layoutY="88.0" prefHeight="24.0" prefWidth="132.0" />
-      <ChoiceBox fx:id="p3StrategyChoice" layoutX="373.0" layoutY="123.0" prefHeight="24.0" prefWidth="132.0" />
-      <ChoiceBox fx:id="p4StrategyChoice" layoutX="373.0" layoutY="156.0" prefHeight="24.0" prefWidth="132.0" />
+      <Label layoutX="236.0" layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="93.0" text="RUMMIKUB" AnchorPane.bottomAnchor="674.0" AnchorPane.leftAnchor="236.0" AnchorPane.rightAnchor="191.0" AnchorPane.topAnchor="-1.0" />
+      <Label layoutX="183.0" layoutY="41.0" text="# of players:" />
+      <ChoiceBox fx:id="numPlayersChoice" layoutX="282.0" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="39.0" />
+      <Label layoutX="167.0" layoutY="74.0" text="Name" />
+      <Label layoutX="311.0" layoutY="74.0" text="Strategy" />
+      <Label layoutX="93.0" layoutY="107.0" text="P1" />
+      <Label layoutX="93.0" layoutY="147.0" text="P2" />
+      <Label layoutX="93.0" layoutY="187.0" text="P3" />
+      <Label layoutX="93.0" layoutY="227.0" text="P4" />
+      <TextField fx:id="p1NameField" layoutX="117.0" layoutY="102.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="132.0" />
+      <TextField fx:id="p2NameField" layoutX="117.0" layoutY="142.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="132.0" />
+      <TextField fx:id="p3NameField" disable="true" layoutX="117.0" layoutY="182.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="132.0" />
+      <TextField fx:id="p4NameField" disable="true" layoutX="117.0" layoutY="222.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="132.0" />
+      <ChoiceBox fx:id="p1StrategyChoice" layoutX="276.0" layoutY="98.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="132.0" />
+      <ChoiceBox fx:id="p2StrategyChoice" layoutX="276.0" layoutY="138.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="132.0" />
+      <ChoiceBox fx:id="p3StrategyChoice" disable="true" layoutX="276.0" layoutY="178.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="132.0" />
+      <ChoiceBox fx:id="p4StrategyChoice" disable="true" layoutX="276.0" layoutY="218.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="132.0" />
+      <Label layoutX="143.0" layoutY="270.0" text="Highlight Timer" />
+      <TextField fx:id="highlightTimerLength" layoutX="274.0" layoutY="265.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="55.0" promptText="secs" />
+      <CheckBox fx:id="optionalTimerCheckBox" layoutX="127.0" layoutY="299.0" mnemonicParsing="false" text="Optional Timer" />
+      <TextField fx:id="optionalTimerLength" disable="true" layoutX="274.0" layoutY="296.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="55.0" promptText="secs" />
+      <Label layoutX="175.0" layoutY="333.0" text="Joker Rules" />
+      <ChoiceBox fx:id="jokerRules" layoutX="274.0" layoutY="324.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="238.0" />
+      <CheckBox fx:id="showAIHandsCheckBox" layoutX="198.0" layoutY="369.0" mnemonicParsing="false" text="Show AI Hands" />
+      <Separator layoutY="395.0" prefHeight="14.0" prefWidth="520.0" />
+      <Label layoutX="233.0" layoutY="409.0" text="RIGGING" />
+      <CheckBox fx:id="enableRiggingCheckBox" layoutX="17.0" layoutY="427.0" mnemonicParsing="false" text="Enable Rigging" />
+      <Button fx:id="loadFileButton" layoutX="17.0" layoutY="453.0" mnemonicParsing="false" text="Load..." />
+      <Label layoutX="17.0" layoutY="491.0" text="Stock:" />
+      <TextField fx:id="stockField" layoutX="69.0" layoutY="486.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="446.0" />
+      <Label layoutX="17.0" layoutY="521.0" text="Decider Stock:" />
+      <TextField fx:id="deciderStockField" layoutX="127.0" layoutY="516.0" prefHeight="24.0" prefWidth="388.0" />
+      <Label layoutX="17.0" layoutY="551.0" text="P1 Hand:" />
+      <TextField fx:id="p1HandField" layoutX="82.0" layoutY="546.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="433.0" />
+      <Label layoutX="17.0" layoutY="581.0" text="P2 Hand:" />
+      <TextField fx:id="p2HandField" layoutX="82.0" layoutY="576.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="433.0" />
+      <Label layoutX="17.0" layoutY="611.0" text="P3 Hand:" />
+      <TextField fx:id="p3HandField" disable="true" layoutX="82.0" layoutY="606.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="433.0" />
+      <Label layoutX="17.0" layoutY="641.0" text="P4 Hand:" />
+      <TextField fx:id="p4HandField" disable="true" layoutX="82.0" layoutY="636.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="433.0" />
+      <Button fx:id="playButton" layoutX="234.0" layoutY="670.0" mnemonicParsing="false" onAction="#handlePlayButtonPressed" text="Play" />
    </children>
 </AnchorPane>

@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.2" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="core.Meld" project="rummikub" file="/rummikub/src/main/java/core/Meld.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="711" width="252" x="170" y="2915"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="core.Strategy1" project="rummikub" 
+    file="/rummikub/src/main/java/core/Strategy1.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="333" x="1640" y="2915"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="core.Strategy2" project="rummikub" 
+    file="/rummikub/src/main/java/core/Strategy2.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="333" x="1267" y="2915"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="core.Player1" project="rummikub" file="/rummikub/src/main/java/core/Player1.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="215" x="1412" y="2488"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="core.Player2" project="rummikub" file="/rummikub/src/main/java/core/Player2.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="215" x="1923" y="2488"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="core.Player3" project="rummikub" file="/rummikub/src/main/java/core/Player3.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="215" x="2586" y="2488"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="core.Player4" project="rummikub" file="/rummikub/src/main/java/core/Player4.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="215" x="2841" y="2488"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="8" language="java" name="core.PlayerSubject" project="rummikub" 
+    file="/rummikub/src/main/java/core/PlayerSubject.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="216" x="1667" y="2488"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="9" language="java" name="core.Stock" project="rummikub" file="/rummikub/src/main/java/core/Stock.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1340" y="2069"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="core.Table" project="rummikub" file="/rummikub/src/main/java/core/Table.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="225" width="233" x="210" y="2488"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="core.GameController" project="rummikub" 
+    file="/rummikub/src/main/java/core/GameController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="945" width="294" x="303" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="core.Player" project="rummikub" file="/rummikub/src/main/java/core/Player.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="531" width="237" x="894" y="1917"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="core.PlayerHuman" project="rummikub" 
+    file="/rummikub/src/main/java/core/PlayerHuman.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="215" x="2178" y="2488"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="core.Tile" project="rummikub" file="/rummikub/src/main/java/core/Tile.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="613" y="3283"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="15" language="java" name="core.Globals.PlayerType" project="rummikub" 
+    file="/rummikub/src/main/java/core/Globals.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="225" width="162" x="483" y="2488"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="16" language="java" name="core.StrategyHuman" project="rummikub" 
+    file="/rummikub/src/main/java/core/StrategyHuman.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="333" x="894" y="2915"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="core.Hand" project="rummikub" file="/rummikub/src/main/java/core/Hand.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="279" width="148" x="685" y="2488"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="core.GameController.MeldListCell" project="rummikub" 
+    file="/rummikub/src/main/java/core/GameController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="181" x="211" y="1022"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="core.Globals" project="rummikub" file="/rummikub/src/main/java/core/Globals.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="87" x="41" y="1917"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="core.View" project="rummikub" file="/rummikub/src/main/java/core/View.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="153" y="220"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="21" language="java" name="core.PlayerObserver" project="rummikub" 
+    file="/rummikub/src/main/java/core/PlayerObserver.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="113" x="2433" y="2488"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="22" language="java" name="core.GameMemento" project="rummikub" 
+    file="/rummikub/src/main/java/core/GameMemento.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="158" x="485" y="1917"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="core.Game" project="rummikub" file="/rummikub/src/main/java/core/Game.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2046" y="799"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="core.GameModel" project="rummikub" 
+    file="/rummikub/src/main/java/core/GameModel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1050" y="473"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="core.PlayBehaviour" project="rummikub" 
+    file="/rummikub/src/main/java/core/PlayBehaviour.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="387" width="478" x="894" y="2488"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="core.Strategy4" project="rummikub" 
+    file="/rummikub/src/main/java/core/Strategy4.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="333" x="2013" y="2915"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" name="core.Main" project="rummikub" file="/rummikub/src/main/java/core/Main.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="152" y="84"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="28" language="java" name="core.StartMenuController" project="rummikub" 
+    file="/rummikub/src/main/java/core/StartMenuController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="155" y="656"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="29">    
+    <bendpoint x="330" y="2817"/>    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="30" name="tableList"/>      
+      <multiplicity id="31" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="32">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="15"/>  
+  </nesting>  
+  <association id="33">    
+    <bendpoint x="632" y="2922"/>    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="34" name="hand"/>      
+      <multiplicity id="35" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="36">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="37">    
+    <bendpoint x="1442" y="1629"/>    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="38" name="stock"/>      
+      <multiplicity id="39" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="40">    
+    <bendpoint x="126" y="2365"/>    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="41" name="table"/>      
+      <multiplicity id="42" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="43">    
+    <bendpoint x="1832" y="2388"/>    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <association id="44">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="45" name="alternateState"/>      
+      <multiplicity id="46" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="47">    
+    <bendpoint x="2489" y="2253"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="48" name="observers"/>      
+      <multiplicity id="49" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="50">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <association id="51">    
+    <bendpoint x="863" y="2488"/>    
+    <bendpoint x="863" y="2915"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="52" name="handList"/>      
+      <multiplicity id="53" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="54">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="55">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="56" name="model"/>      
+      <multiplicity id="57" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="58">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="8"/>  
+  </realization>  
+  <association id="59">    
+    <bendpoint x="660" y="2096"/>    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="60" name="table"/>      
+      <multiplicity id="61" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="62">    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="63" name="players"/>      
+      <multiplicity id="64" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="65">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <nesting id="66">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="18"/>  
+  </nesting>  
+  <association id="67">    
+    <bendpoint x="1328" y="1490"/>    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="68" name="riggedPlayers"/>      
+      <multiplicity id="69" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="70">    
+    <bendpoint x="1605" y="1696"/>    
+    <bendpoint x="1568" y="1862"/>    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="71" name="riggedStock"/>      
+      <multiplicity id="72" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="73">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="74">    
+    <bendpoint x="3086" y="2488"/>    
+    <bendpoint x="3086" y="2915"/>    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="75" name="stock"/>      
+      <multiplicity id="76" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="77">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <association id="78">    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="79" name="memento"/>      
+      <multiplicity id="80" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="81">    
+    <bendpoint x="592" y="2289"/>    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="82" name="savedHand"/>      
+      <multiplicity id="83" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="84">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <association id="85">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="86" name="meld"/>      
+      <multiplicity id="87" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="88">    
+    <bendpoint x="426" y="2817"/>    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="89" name="melds"/>      
+      <multiplicity id="90" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="91">    
+    <bendpoint x="310" y="2261"/>    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="92" name="savedTable"/>      
+      <multiplicity id="93" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="94">    
+    <bendpoint x="565" y="2374"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="95" name="playerType"/>      
+      <multiplicity id="96" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="97">    
+    <bendpoint x="1228" y="1724"/>    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="98" name="stock"/>      
+      <multiplicity id="99" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="100">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <generalization id="101">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="102">    
+    <bendpoint x="865" y="2444"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="103" name="hand"/>      
+      <multiplicity id="104" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="105">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="106" name="playBehaviour"/>      
+      <multiplicity id="107" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="108">    
+    <bendpoint x="974" y="1904"/>    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="109" name="players"/>      
+      <multiplicity id="110" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="false" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

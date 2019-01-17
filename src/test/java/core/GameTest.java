@@ -1195,12 +1195,12 @@ public class GameTest extends TestCase {
         
         workspace = game.players.get(1).play(game.table.getState());
         System.out.println(game.table.toHighlightedString(workspace));
-        assertEquals("1: {B7 O7 G7 R7}\n2: {R4 R5 R6 R7 R8}\n3: {!R10 !R11 !R12}\n4: {*R7 *R8 !R9}\n",
+        assertEquals("1: {R7 B7 O7 G7}\n2: {R4 R5 R6 R7 R8}\n3: {!R10 !R11 !R12}\n4: {*R7 *R8 !R9}\n",
                 game.table.toHighlightedString(workspace));
         
         if (workspace != null) {
             game.table.setState(workspace);
-            assertEquals("1: {B7 O7 G7 R7}\n2: {R4 R5 R6 R7 R8}\n3: {R10 R11 R12}\n4: {R7 R8 R9}\n",
+            assertEquals("1: {R7 B7 O7 G7}\n2: {R4 R5 R6 R7 R8}\n3: {R10 R11 R12}\n4: {R7 R8 R9}\n",
                     game.table.toHighlightedString(workspace));
         } else {
             game.players.get(1).add(game.stock.draw());

@@ -29,6 +29,14 @@ public class Stock {
         this.stock.removeIf(t -> existing.contains(t));
     }
 
+    public void add(Tile tile) {
+        this.stock.add(tile);
+    }
+
+    public Tile remove(int index) {
+        return this.stock.remove(index);
+    }
+
     public int getSize() {
         return this.stock.size();
     }
