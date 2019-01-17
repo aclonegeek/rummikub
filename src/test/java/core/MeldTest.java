@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 import java.util.ArrayList;
 
 import core.Globals.Colour;
+import core.Globals.JokerRules;
 import core.Meld.MeldType;
 import junit.framework.TestCase;
 
@@ -434,7 +435,7 @@ public class MeldTest extends TestCase {
 
     public void testIsValidIfRemoveTile() {
         // Skip this test if the joker rules were modified
-        if (Globals.getLenientJokers() || Globals.getCannotAddJokersToExistingMelds()) { return; }
+        if (Globals.getJokerRules() == JokerRules.LENIENT || Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) { return; }
         
         Meld meld1 = new Meld("R1,R2,R3,R4");
         assertTrue(meld1.isValidIfRemoveTile(0));
@@ -455,7 +456,7 @@ public class MeldTest extends TestCase {
     // Add a joker to a RUN
     public void testAddJokerRun() {
         // Skip this test if the joker rules were modified
-        if (Globals.getLenientJokers() || Globals.getCannotAddJokersToExistingMelds()) { return; }
+        if (Globals.getJokerRules() == JokerRules.LENIENT || Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) { return; }
         
         Meld meld;
         ArrayList<Tile> meldTiles;
@@ -484,7 +485,7 @@ public class MeldTest extends TestCase {
     // Add a joker to a potential RUN
     public void testAddJokerPotentialRun() {
         // Skip this test if the joker rules were modified
-        if (Globals.getLenientJokers() || Globals.getCannotAddJokersToExistingMelds()) { return; }
+        if (Globals.getJokerRules() == JokerRules.LENIENT || Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) { return; }
         
         Meld meld;
         ArrayList<Tile> meldTiles;
@@ -525,7 +526,7 @@ public class MeldTest extends TestCase {
     // Add a joker to a SET
     public void testAddJokerSet() {
         // Skip this test if the joker rules were modified
-        if (Globals.getLenientJokers() || Globals.getCannotAddJokersToExistingMelds()) { return; }
+        if (Globals.getJokerRules() == JokerRules.LENIENT || Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) { return; }
         
         Meld meld;
         ArrayList<Tile> meldTiles;
@@ -545,7 +546,7 @@ public class MeldTest extends TestCase {
     // Add a joker to a potential SET
     public void testAddJokerPotentialSet() {
         // Skip this test if the joker rules were modified
-        if (Globals.getLenientJokers() || Globals.getCannotAddJokersToExistingMelds()) { return; }
+        if (Globals.getJokerRules() == JokerRules.LENIENT || Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) { return; }
         
         Meld meld;
         ArrayList<Tile> meldTiles;
@@ -565,7 +566,7 @@ public class MeldTest extends TestCase {
     // Add a joker to a single tile to make it a potential meld
     public void testAddJokerValidPotentialMeld() {
         // Skip this test if the joker rules were modified
-        if (Globals.getLenientJokers() || Globals.getCannotAddJokersToExistingMelds()) { return; }
+        if (Globals.getJokerRules() == JokerRules.LENIENT || Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) { return; }
         
         Meld meld;
         ArrayList<Tile> meldTiles;
@@ -594,7 +595,7 @@ public class MeldTest extends TestCase {
     // Replace a joker in a RUN
     public void testReplaceJokerRun() {
         // Skip this test if the joker rules were modified
-        if (Globals.getLenientJokers() || Globals.getCannotAddJokersToExistingMelds()) { return; }
+        if (Globals.getJokerRules() == JokerRules.LENIENT || Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) { return; }
         
         Meld meld;
         ArrayList<Tile> meldTiles;
@@ -704,7 +705,7 @@ public class MeldTest extends TestCase {
     // Replace a joker in a SET
     public void testReplaceJokerSet() {
         // Skip this test if the joker rules were modified
-        if (Globals.getLenientJokers() || Globals.getCannotAddJokersToExistingMelds()) { return; }
+        if (Globals.getJokerRules() == JokerRules.LENIENT || Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) { return; }
         
         Meld meld;
         ArrayList<Tile> meldTiles;
@@ -802,7 +803,7 @@ public class MeldTest extends TestCase {
     // Add a tile to a meld with an irreplaceable joker
     public void testIrreplaceableJoker() {
         // Skip this test if the joker rules were modified
-        if (Globals.getLenientJokers() || Globals.getCannotAddJokersToExistingMelds()) { return; }
+        if (Globals.getJokerRules() == JokerRules.LENIENT || Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) { return; }
         
         Meld meld;
         ArrayList<Tile> meldTiles;
@@ -925,7 +926,7 @@ public class MeldTest extends TestCase {
     // Remove a joker from a meld 
     public void testRemoveJoker() {
         // Skip this test if the joker rules were modified
-        if (Globals.getLenientJokers() || Globals.getCannotAddJokersToExistingMelds()) { return; }
+        if (Globals.getJokerRules() == JokerRules.LENIENT || Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) { return; }
         
         Meld meld;
         Tile removedTile;
@@ -980,7 +981,7 @@ public class MeldTest extends TestCase {
     // Split a meld with a joker
     public void testSplitMeldWithJoker() {
         // Skip this test if the joker rules were modified
-        if (Globals.getLenientJokers() || Globals.getCannotAddJokersToExistingMelds()) { return; }
+        if (Globals.getJokerRules() == JokerRules.LENIENT || Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) { return; }
         
         Meld meld = new Meld();
 
@@ -1010,7 +1011,7 @@ public class MeldTest extends TestCase {
     // Test the restrictions on jokers and/or melds with jokers
     public void testJokerRestrictions() {
         // Skip this test if the joker rules were modified
-        if (Globals.getLenientJokers() || Globals.getCannotAddJokersToExistingMelds()) { return; }
+        if (Globals.getJokerRules() == JokerRules.LENIENT || Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) { return; }
         
         Meld meld;
         Tile removedTile;
@@ -1138,7 +1139,7 @@ public class MeldTest extends TestCase {
     
     // Optional rule (Bonus)
     public void testCannotAddJokerToExistingMeld() {
-        if (Globals.getCannotAddJokersToExistingMelds()) {
+        if (Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS) {
             Meld meld;
             Tile releasedJoker;
             
@@ -1165,7 +1166,7 @@ public class MeldTest extends TestCase {
     
     // Optional rule (Bonus)
     public void testLenientJokers() {
-        if (Globals.getLenientJokers()) {
+        if (Globals.getJokerRules() == JokerRules.LENIENT) {
             Meld meld;
             Tile releasedJoker;
             
