@@ -1,6 +1,21 @@
 package core;
 
 public class Globals {
+    // Optional rules
+    public static enum JokerRules {
+        DEFAULT, LENIENT, NO_EXISTING_MELDS;
+    }
+    
+    private static JokerRules jokerRules = JokerRules.DEFAULT;
+    
+    public static JokerRules getJokerRules() {
+        return jokerRules;
+    }
+    
+    public static void setJokerRules(JokerRules rule) {
+        jokerRules = rule;
+    }
+    
     public static enum Colour {
         RED('R'), BLUE('B'), GREEN('G'), ORANGE('O');
         

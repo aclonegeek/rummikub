@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import core.Globals.Colour;
+import core.Globals.JokerRules;
 
 public class Meld {
     public enum MeldType {
@@ -60,7 +61,7 @@ public class Meld {
     }
 
     public Tile removeTile(int index) {
-        if (this.isLocked) { return null; }
+        if (!this.isInitialMeld && this.isLocked) { return null; }
         if (index < 0 || index >= this.meld.size()) {
             return null;
         }
@@ -97,7 +98,7 @@ public class Meld {
     }
 
     public Meld splitMeld(int index) {
-        if (this.isLocked || index <= 0 || index >= this.meld.size()) { return null; }
+        if ((!this.isInitialMeld && this.isLocked) || index <= 0 || index >= this.meld.size()) { return null; }
 
         Meld newMeld = new Meld();
         ArrayList<Tile> secondHalf = new ArrayList<>();
@@ -133,7 +134,13 @@ public class Meld {
         if (tiles.size() > 1 && tiles.removeIf(t -> t.isJoker())) { return null; }
         
         // Disallow two jokers in one meld
-        if (this.containsJoker() && tiles.get(0).isJoker()) { return null; } 
+        if (this.containsJoker() && tiles.get(0).isJoker()) { return null; }
+        
+        // Disallow adding a tile to a full meld with a joker if Lenient Jokers are allowed
+        if (Globals.getJokerRules() == JokerRules.LENIENT) {
+            if (this.meld.size() == 13 && this.meldType == MeldType.RUN) { return null; }
+            if (this.meld.size() == 4 && this.meldType == MeldType.SET)  { return null; }   
+        }
         
         // Check if the tile being added is part of an initial meld (so the joker inside is not replaced by it right away)
         boolean meldIsFromHand = this.meld.stream().allMatch(t -> t.isOnTable() == false);
@@ -153,6 +160,10 @@ public class Meld {
             if (this.meld.size() == 4 && this.meldType == MeldType.SET)  { return null; }
             
             if (tiles.get(0).isJoker()) {
+                if (Globals.getJokerRules() == JokerRules.NO_EXISTING_MELDS && this.isInitialMeld == false) {
+                    return null;
+                }
+                
                 tempMeld.addAll(this.meld);
                 Tile joker = this.determineJokerType(tiles.get(0), tempMeld);
                 tempMeld.add(joker);
@@ -177,24 +188,25 @@ public class Meld {
             
             // Adding tile to a meld with a joker and one or more tiles
             if (this.meld.size() > 0) {
-                // Check if the joker can be replaced as long as its not part of an initial move
-                if (!this.isInitialMeld && joker.jokerEquals(tile)) {
-                    // If this tile is on the table but is being added to a meld that is locked 
-                    if (tile.onTable && this.isLocked) { 
-                        // Add the joker back
-                        joker = this.determineJokerType(joker, tempMeld);
-                        this.meld.add(joker);
-                        this.buildMeld(this.meld, releasedJoker);
-                        return null;
-                    }
-                    // Otherwise this meld is not locked or the tile being added is from the hand
-                    // In both cases, replace the joker
-                    releasedJoker = jokers.remove(0);
-                    tempMeld.add(tile);
-                    tempMeld.addAll(this.meld);
-                    return this.buildMeld(tempMeld, releasedJoker);
+                if (Globals.getJokerRules() != JokerRules.LENIENT) {
+                    // Check if the joker can be replaced as long as its not part of an initial move
+                    if (!this.isInitialMeld && joker.jokerEquals(tile)) {
+                        // If this tile is on the table but is being added to a meld that is locked 
+                        if (tile.onTable && this.isLocked) { 
+                            // Add the joker back
+                            joker = this.determineJokerType(joker, tempMeld);
+                            this.meld.add(joker);
+                            this.buildMeld(this.meld, releasedJoker);
+                            return null;
+                        }
+                        // Otherwise this meld is not locked or the tile being added is from the hand
+                        // In both cases, replace the joker
+                        releasedJoker = jokers.remove(0);
+                        tempMeld.add(tile);
+                        tempMeld.addAll(this.meld);
+                        return this.buildMeld(tempMeld, releasedJoker);
+                    } 
                 }
-                
                 
                 // Otherwise the joker can't be replaced. Check if the tile can still be added to the meld
                 tempMeld.addAll(this.meld);
@@ -234,8 +246,10 @@ public class Meld {
         if (tempMeldType != MeldType.INVALID && tempMeld.size() < 3 || tempMeldType == MeldType.RUN || tempMeldType == MeldType.SET) {
             Collections.sort(tempMeld, Comparator.comparingInt(Tile::getValue)); // Sort numerically
             
-            // Lock the meld if a joker from the hand was added
-            this.isLocked = this.determineLockedMeld(tempMeld);
+            if (Globals.getJokerRules() != JokerRules.LENIENT) {
+                // Lock the meld if a joker from the hand was added
+                this.isLocked = this.determineLockedMeld(tempMeld);
+            }
             
             this.meld = tempMeld;
             this.meldType = tempMeldType;
@@ -410,28 +424,34 @@ public class Meld {
     
     // Locked meld = meld with a joker that has not been replaced yet
     private boolean determineLockedMeld(ArrayList<Tile> meld) {
-        for (Tile tile : meld) {
-            if (tile.isJoker() && tile.isReplaced() == false) {
-                return true;
-            }
+        if (Globals.getJokerRules() != JokerRules.LENIENT) {
+            for (Tile tile : meld) {
+                if (tile.isJoker() && tile.isReplaced() == false) {
+                    return true;
+                }
+            }   
         }
         return false;
     }
     
     public boolean isLocked() {
-        // This meld is locked if it has a joker which has not been replaced by a tile from the hand
-        return this.meld.stream().anyMatch(t -> t.isJoker() && !t.isReplaced());
+        if (Globals.getJokerRules() != JokerRules.LENIENT) {
+            // This meld is locked if it has a joker which has not been replaced by a tile from the hand
+            return this.meld.stream().anyMatch(t -> t.isJoker() && !t.isReplaced());   
+        }
+        return false;
     }
     
     public void setIsLocked(boolean isLocked) {
-        // Lock this meld manually by looking for a joker and setting isReplaced
-        for (Tile tile : this.meld) {
-            if (tile.isJoker()) {
-                tile.setIsReplaced(!isLocked);
-                this.isLocked = isLocked;
-            }
+        if (Globals.getJokerRules() != JokerRules.LENIENT) {
+            // Lock this meld manually by looking for a joker and setting isReplaced
+            for (Tile tile : this.meld) {
+                if (tile.isJoker()) {
+                    tile.setIsReplaced(!isLocked);
+                    this.isLocked = isLocked;
+                }
+            }   
         }
-
     }
     
     public boolean isInitialMeld() {

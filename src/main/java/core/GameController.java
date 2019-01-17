@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import core.Globals.JokerRules;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -534,12 +535,13 @@ public class GameController {
         }
     }
 
-    public void setExtras(int highlightTimerLength, int optionalTimerLength, boolean showAIHands) {
+    public void setExtras(int highlightTimerLength, int optionalTimerLength, boolean showAIHands, JokerRules jokerRules) {
         this.HIGHLIGHT_TIMER_LENGTH = highlightTimerLength;
         if (optionalTimerLength > 0) {
             this.enableTimer = true;
             this.OPTIONAL_TIMER_LENGTH = optionalTimerLength;
         }
         this.showAIHands = showAIHands;
+        Globals.setJokerRules(jokerRules); 
     }
 }
