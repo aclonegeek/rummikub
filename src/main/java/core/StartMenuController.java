@@ -103,9 +103,7 @@ public class StartMenuController {
     }
     
     private JokerRules getSelectedJokerRule() {    
-        if (this.jokerRules.getValue().equals("Default")) {
-            return JokerRules.DEFAULT;
-        } else if (this.jokerRules.getValue().equals("No Plays to Existing Melds")) {
+        if (this.jokerRules.getValue().equals("No Plays to Existing Melds")) {
             return JokerRules.NO_EXISTING_MELDS;
         } else if (this.jokerRules.getValue().equals("No Restrictions")) {
             return JokerRules.LENIENT;
