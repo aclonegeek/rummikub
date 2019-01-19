@@ -7,4 +7,3 @@ Note:
 
 Videos:
 https://drive.google.com/drive/folders/1G9W3ytIjplh61CGegOpnRvRcfTFxyloE?usp=sharing
-- See attached video_script.pdf for more information.
